@@ -1,0 +1,64 @@
+syntax = 'proto3';
+
+package proto.market;
+
+service Security {
+    rpc fetchInfo(Stocks) returns (InfoResponse) {}
+    rpc fetchRealtimeQuote(Stocks) returns (QuoteResponse) {}
+    // rpc fetchDelayedQuote(Stocks) returns (QuoteResponse) {}
+}
+
+// service Chart {
+    // rpc fetchTick(Stock) returns () {}
+    // rpc fetchDayK(Stock) returns () {}
+    // rpc fetchWeekK(Stock) returns () {}
+    // rpc fetchMonthK(Stock) returns () {}
+    // rpc fetchQuarterK(Stock) returns () {}
+    // rpc fetchYearK(Stock) returns () {}
+// }
+
+message Stock {
+    string exchange_code = 1;
+    string stock_code = 2;
+}
+
+message Quotation {
+    string price = 1;
+    string open = 2;
+    string close = 3;
+    string average = 4;
+    string day_high = 5;
+    string day_low = 6;
+    string last_close = 7;
+}
+
+message Info {
+    string name = 1;
+    string type = 2
+    int32 board_lot = 3;
+}
+
+message Status {
+    int32 code = 1;
+    string msg = 2;
+}
+
+message Stocks {
+    repeated Stock stocks = 1;
+}
+
+message QuoteResponse {    
+    message Data {
+        map<string, Quotation> quotes = 1;
+    }
+    Status status = 1;
+    Data data = 2;
+}
+
+message InfoResponse {    
+    message Data {
+        map<string, Info> Info = 1;
+    }
+    Status status = 1;
+    Data data = 2;
+}

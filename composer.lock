@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ab1e6b065c4d965edef586055c2087ff",
+    "content-hash": "1e567b76e6ad155b9daf47a6584070cf",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -421,6 +421,100 @@
                 "trusted proxy"
             ],
             "time": "2020-02-22T01:51:47+00:00"
+        },
+        {
+            "name": "google/protobuf",
+            "version": "v3.11.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/protocolbuffers/protobuf-php.git",
+                "reference": "a5001eb559dcaac0bf6d8c7edc52b3828c618185"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/a5001eb559dcaac0bf6d8c7edc52b3828c618185",
+                "reference": "a5001eb559dcaac0bf6d8c7edc52b3828c618185",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=4.8.0"
+            },
+            "suggest": {
+                "ext-bcmath": "Need to support JSON deserialization"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Google\\Protobuf\\": "src/Google/Protobuf",
+                    "GPBMetadata\\Google\\Protobuf\\": "src/GPBMetadata/Google/Protobuf"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "proto library for PHP",
+            "homepage": "https://developers.google.com/protocol-buffers/",
+            "keywords": [
+                "proto"
+            ],
+            "time": "2020-02-14T22:17:05+00:00"
+        },
+        {
+            "name": "grpc/grpc",
+            "version": "1.27.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/grpc/grpc-php.git",
+                "reference": "a461cb1a975dde305c73168aa4494b90c3801c62"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/grpc/grpc-php/zipball/a461cb1a975dde305c73168aa4494b90c3801c62",
+                "reference": "a461cb1a975dde305c73168aa4494b90c3801c62",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "google/auth": "^v1.3.0"
+            },
+            "suggest": {
+                "ext-protobuf": "For better performance, install the protobuf C extension.",
+                "google/protobuf": "To get started using grpc quickly, install the native protobuf library."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Grpc\\": "src/lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "gRPC library for PHP",
+            "homepage": "https://grpc.io",
+            "keywords": [
+                "rpc"
+            ],
+            "time": "2020-01-23T19:27:18+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -1457,6 +1551,120 @@
             "time": "2017-02-14T16:28:37+00:00"
         },
         {
+            "name": "psr/http-factory",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-factory.git",
+                "reference": "12ac7fcd07e5b077433f5f2bee95b3a771bf61be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-factory/zipball/12ac7fcd07e5b077433f5f2bee95b3a771bf61be",
+                "reference": "12ac7fcd07e5b077433f5f2bee95b3a771bf61be",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.0.0",
+                "psr/http-message": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for PSR-7 HTTP message factories",
+            "keywords": [
+                "factory",
+                "http",
+                "message",
+                "psr",
+                "psr-17",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "time": "2019-04-30T12:38:16+00:00"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP messages",
+            "homepage": "https://github.com/php-fig/http-message",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "time": "2016-08-06T14:39:51+00:00"
+        },
+        {
             "name": "psr/log",
             "version": "1.1.3",
             "source": {
@@ -1735,6 +1943,158 @@
                 "uuid"
             ],
             "time": "2020-02-21T04:36:14+00:00"
+        },
+        {
+            "name": "spiral/goridge",
+            "version": "v2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spiral/goridge.git",
+                "reference": "22c9d3e001630c4fbd2a463773d9afe12e014327"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spiral/goridge/zipball/22c9d3e001630c4fbd2a463773d9afe12e014327",
+                "reference": "22c9d3e001630c4fbd2a463773d9afe12e014327",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "goridge",
+            "autoload": {
+                "psr-4": {
+                    "Spiral\\Goridge\\": "php-src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anton Titov / Wolfy-J",
+                    "email": "wolfy.jd@gmail.com"
+                }
+            ],
+            "description": "High-performance PHP-to-Golang RPC bridge",
+            "time": "2020-03-23T14:23:40+00:00"
+        },
+        {
+            "name": "spiral/php-grpc",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spiral/php-grpc.git",
+                "reference": "5a491129cf0795f66a93c2303d8b49bae03e93b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spiral/php-grpc/zipball/5a491129cf0795f66a93c2303d8b49bae03e93b2",
+                "reference": "5a491129cf0795f66a93c2303d8b49bae03e93b2",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-json": "*",
+                "google/protobuf": "^3.7",
+                "php": "^7.2",
+                "spiral/roadrunner": "^1.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~7.0",
+                "spiral/code-style": "^1.0"
+            },
+            "type": "server",
+            "autoload": {
+                "psr-4": {
+                    "Spiral\\GRPC\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anton Titov / Wolfy-J",
+                    "email": "wolfy.jd@gmail.com"
+                }
+            ],
+            "description": "High-Performance GRPC server for PHP applications",
+            "time": "2020-01-27T15:26:52+00:00"
+        },
+        {
+            "name": "spiral/roadrunner",
+            "version": "v1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spiral/roadrunner.git",
+                "reference": "7b2e5d9ffcffd539cbff431855b775f1f8901f73"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spiral/roadrunner/zipball/7b2e5d9ffcffd539cbff431855b775f1f8901f73",
+                "reference": "7b2e5d9ffcffd539cbff431855b775f1f8901f73",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": "^7.1",
+                "psr/http-factory": "^1.0",
+                "psr/http-message": "^1.0",
+                "spiral/goridge": "^2.0",
+                "symfony/console": "^2.5.0 || ^3.0.0 || ^4.0.0 || ^5.0.0",
+                "zendframework/zend-diactoros": "^1.3 || ^2.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "~0.12"
+            },
+            "bin": [
+                "bin/rr"
+            ],
+            "type": "server",
+            "autoload": {
+                "psr-4": {
+                    "Spiral\\RoadRunner\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anton Titov / Wolfy-J",
+                    "email": "wolfy.jd@gmail.com"
+                },
+                {
+                    "name": "RoadRunner Community",
+                    "homepage": "https://github.com/spiral/roadrunner/graphs/contributors"
+                }
+            ],
+            "description": "High-performance PHP application server, load-balancer and process manager written in Golang",
+            "time": "2020-03-23T14:39:27+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -3581,6 +3941,80 @@
                 "environment"
             ],
             "time": "2020-04-12T15:18:03+00:00"
+        },
+        {
+            "name": "zendframework/zend-diactoros",
+            "version": "2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-diactoros.git",
+                "reference": "de5847b068362a88684a55b0dbb40d85986cfa52"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/de5847b068362a88684a55b0dbb40d85986cfa52",
+                "reference": "de5847b068362a88684a55b0dbb40d85986cfa52",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": "^7.1",
+                "psr/http-factory": "^1.0",
+                "psr/http-message": "^1.0"
+            },
+            "provide": {
+                "psr/http-factory-implementation": "1.0",
+                "psr/http-message-implementation": "1.0"
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "ext-dom": "*",
+                "ext-libxml": "*",
+                "http-interop/http-factory-tests": "^0.5.0",
+                "php-http/psr7-integration-tests": "dev-master",
+                "phpunit/phpunit": "^7.0.2",
+                "zendframework/zend-coding-standard": "~1.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1.x-dev",
+                    "dev-develop": "2.2.x-dev",
+                    "dev-release-1.8": "1.8.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/functions/create_uploaded_file.php",
+                    "src/functions/marshal_headers_from_sapi.php",
+                    "src/functions/marshal_method_from_sapi.php",
+                    "src/functions/marshal_protocol_version_from_sapi.php",
+                    "src/functions/marshal_uri_from_sapi.php",
+                    "src/functions/normalize_server.php",
+                    "src/functions/normalize_uploaded_files.php",
+                    "src/functions/parse_cookie_header.php"
+                ],
+                "psr-4": {
+                    "Zend\\Diactoros\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "PSR HTTP Message implementations",
+            "keywords": [
+                "http",
+                "psr",
+                "psr-7"
+            ],
+            "abandoned": "laminas/laminas-diactoros",
+            "time": "2019-11-13T19:16:13+00:00"
         }
     ],
     "packages-dev": [

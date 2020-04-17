@@ -34,7 +34,7 @@ message Quotation {
 
 message Info {
     string name = 1;
-    string type = 2
+    string type = 2;
     int32 board_lot = 3;
 }
 

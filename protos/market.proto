@@ -3,19 +3,23 @@ syntax = 'proto3';
 package proto.market;
 
 service Security {
-    rpc fetchInfo(Stocks) returns (InfoResponse) {}
+    // 获取股票信息
+    rpc fetchInfo(Stock) returns (InfoResponse) {}
+    
+    // 获取股票报价（实时）
     rpc fetchRealtimeQuote(Stocks) returns (QuoteResponse) {}
+    
+    // 获取股票报价（延迟）
     // rpc fetchDelayedQuote(Stocks) returns (QuoteResponse) {}
 }
 
-// service Chart {
-    // rpc fetchTick(Stock) returns () {}
-    // rpc fetchDayK(Stock) returns () {}
-    // rpc fetchWeekK(Stock) returns () {}
-    // rpc fetchMonthK(Stock) returns () {}
-    // rpc fetchQuarterK(Stock) returns () {}
-    // rpc fetchYearK(Stock) returns () {}
-// }
+service Chart {
+    // 获取股票某天分时图
+    // rpc fetchTicks(TickRequest) returns (TickResponse) {}
+    
+    // 获取股票K线图（暂时先默认日K）
+    rpc fetchKCharts(KChartRequest) returns (KChartResponse) {}
+}
 
 message Stock {
     string exchange_code = 1;
@@ -38,6 +42,28 @@ message Info {
     int32 board_lot = 3;
 }
 
+message Tick {
+    string price = 1;
+    string average = 2;
+    string chg_ratio = 3;
+    string chg_sum = 4;
+    string volume = 5;
+    string turnover = 6;
+    string time = 7;
+}
+
+message KChart {
+    string open = 1;
+    string close = 2;
+    string high = 3;
+    string low = 4;
+    string chg_sum = 5;
+    string chg_ratio = 6;
+    string volume = 7;
+    string turnover = 8;
+    string date = 9;
+}
+
 message Status {
     int32 code = 1;
     string msg = 2;
@@ -57,7 +83,35 @@ message QuoteResponse {
 
 message InfoResponse {    
     message Data {
-        map<string, Info> Info = 1;
+        map<string, Info> info = 1;
+    }
+    Status status = 1;
+    Data data = 2;
+}
+
+message TickRequest {
+    Stock stock = 1;
+    string date = 2;    // yyyy-mm-dd
+}
+
+message TickResponse {
+    message Data {
+        map<string, Tick> Ticks = 1;
+    }
+    Status status = 1;
+    Data data = 2;
+}
+
+message KChartRequest {
+    Stock stock = 1;
+    int32 page = 2;     // start from 1
+    int32 size = 3;     // default 20
+    string type = 4;    // default day
+}
+
+message KChartResponse {
+    message Data {
+        map<string, KChart> kcharts = 1;
     }
     Status status = 1;
     Data data = 2;

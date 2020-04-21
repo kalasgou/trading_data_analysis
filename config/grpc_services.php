@@ -1,5 +1,9 @@
 <?php
 
 return [
-    \Proto\Greeting\GreeterInterface::class => \App\Services\GreeterService::class,
+    'quotation' => [
+        \Proto\Market\SecurityInterface::class => \App\Services\gRPC\SecurityService::class,
+    ],
+    'indicator' => [
+    ]
 ];

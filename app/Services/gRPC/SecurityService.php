@@ -22,7 +22,7 @@ class SecurityService implements SecurityInterface
         
     }
     
-    public function fetchInfo(ContextInterface $ctx, Stock $in): InfoResponse
+    public function fetchInfo(ContextInterface $ctx, Stocks $in): InfoResponse
     {
         
     }
@@ -40,7 +40,11 @@ class SecurityService implements SecurityInterface
                     'average' => $info['average'],
                     'day_high' => $info['day_high'],
                     'day_low' => $info['day_low'],
-                    'last_close' => $info['close_price']
+                    'last_close' => $info['close_price'],
+                    'chg_sum' => $info['chg_sum'],
+                    'chg_ratio' => round($info['chg_sum'] * 100, 2),
+                    'last_trade_ts' => $info['last_trade_ts'],
+                    'trade_status' => 'none'
                 ]);            
                 $quotes["{$stock->getExchangeCode()}_{$stock->getStockCode()}"] = $quote;
             }

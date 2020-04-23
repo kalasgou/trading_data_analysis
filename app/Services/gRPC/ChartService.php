@@ -9,6 +9,10 @@ use Proto\Market\KChart;
 use Proto\Market\KChartRequest;
 use Proto\Market\KChartResponse;
 use Proto\Market\KChartResponse\Data as KChartRespData;
+use Proto\Market\Tick;
+use Proto\Market\TickRequest;
+use Proto\Market\TickResponse;
+use Proto\Market\TickResponse\Data as TickRespData;
 use App\Facades\TickSrvc;
 use App\Facades\KChartSrvc;
 

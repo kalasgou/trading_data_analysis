@@ -13,6 +13,15 @@ interface ChartInterface extends GRPC\ServiceInterface
 
     /**
     * @param GRPC\ContextInterface $ctx
+    * @param TickRequest $in
+    * @return TickResponse
+    *
+    * @throws GRPC\Exception\InvokeException
+    */
+    public function fetchTicks(GRPC\ContextInterface $ctx, TickRequest $in): TickResponse;
+
+    /**
+    * @param GRPC\ContextInterface $ctx
     * @param KChartRequest $in
     * @return KChartResponse
     *

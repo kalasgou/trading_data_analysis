@@ -13,12 +13,12 @@ interface SecurityInterface extends GRPC\ServiceInterface
 
     /**
     * @param GRPC\ContextInterface $ctx
-    * @param Stock $in
+    * @param Stocks $in
     * @return InfoResponse
     *
     * @throws GRPC\Exception\InvokeException
     */
-    public function fetchInfo(GRPC\ContextInterface $ctx, Stock $in): InfoResponse;
+    public function fetchInfo(GRPC\ContextInterface $ctx, Stocks $in): InfoResponse;
 
     /**
     * @param GRPC\ContextInterface $ctx

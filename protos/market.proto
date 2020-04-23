@@ -4,7 +4,7 @@ package proto.market;
 
 service Security {
     // 搜索股票
-    // rpc search(Criteria) returns (InfoResponse) {}
+    rpc search(Criteria) returns (InfoResponse) {}
 
     // 获取股票信息
     rpc fetchInfo(Stocks) returns (InfoResponse) {}
@@ -25,7 +25,9 @@ service Chart {
 }
 
 message Stock {
+    // 交易所代码
     string exchange_code = 1;
+    // 股票代码
     string stock_code = 2;
 }
 
@@ -36,34 +38,65 @@ message Criteria {
 }
 
 message Quotation {
+    // 当前价格
     string price = 1;
+    // 当日开市价
     string open = 2;
+    // 当日收市价
     string close = 3;
+    // 当日均价
     string average = 4;
+    // 当日最高价
     string day_high = 5;
+    // 当日最低价
     string day_low = 6;
+    // 上一交易日收市价
     string last_close = 7;
+    // 当日涨跌额
+    string chg_sum = 8;
+    // 当日涨跌幅(%)
+    string chg_ratio = 9;
+    // 最后成交时间（时间戳）
+    string last_trade_ts = 10;
+    // 交易状态（待定）
+    string trade_status 
 }
 
 message Tick {
+    // 价格
     string price = 1;
+    // 均价
     string average = 2;
+    // 涨跌额
     string chg_ratio = 3;
+    // 涨跌幅
     string chg_sum = 4;
+    // 成交量（股数）
     string volume = 5;
+    // 成交额
     string turnover = 6;
+    // 时间点，格式 2020/04/23 17:28
     string time = 7;
 }
 
 message KChart {
+    // 开盘价
     string open = 1;
+    // 收盘价
     string close = 2;
+    // 最高价
     string high = 3;
+    // 最低价
     string low = 4;
+    // 涨跌额
     string chg_sum = 5;
+    // 涨跌幅
     string chg_ratio = 6;
+    // 成交量（股数）
     string volume = 7;
+    // 成交额
     string turnover = 8;
+    // 日期，格式yyyy/mm/dd
     string date = 9;
 }
 
@@ -77,14 +110,23 @@ message Stocks {
 }
 
 message StockInfo {
+    // 交易所代码
     string exchange_code = 1;
+    // 市场代码
     string market_code = 2;
+    // 股票产品类型
     string prdt_type = 3;
+    // 股票代码
     string stock_code = 4;
+    // 股票名称
     string stock_name = 5;
+    // 股票ISIN码
     string ISIN = 6;
+    // 股票交易货币
     string currency = 7;
+    // 每手交易股数
     int32 board_lot = 8;
+    // 股票交易状态
     int32 status = 9;
 }
 

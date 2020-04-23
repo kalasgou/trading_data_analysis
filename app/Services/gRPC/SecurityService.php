@@ -22,7 +22,7 @@ class SecurityService implements SecurityInterface
         
     }
     
-    public function fetchInfo(ContextInterface $ctx, Stocks $in): InfoResponse
+    public function fetchInfo(ContextInterface $ctx, Stock $in): InfoResponse
     {
         
     }
@@ -31,7 +31,7 @@ class SecurityService implements SecurityInterface
     {
         $quotes = [];
         foreach ($in->getStocks() as $stock) {
-            $info = QuoteDL::getInfo($stock->getExchangeCode(), $stock->getStockCode());
+            $info = QuoteRT::getInfo($stock->getExchangeCode(), $stock->getStockCode());
             if ($info) {
                 $quote = new Quotation([
                     'price' => $info['nominal_price'],

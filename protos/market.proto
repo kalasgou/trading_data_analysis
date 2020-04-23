@@ -3,8 +3,11 @@ syntax = 'proto3';
 package proto.market;
 
 service Security {
+    // 搜索股票
+    // rpc search(Criteria) returns (InfoResponse) {}
+
     // 获取股票信息
-    rpc fetchInfo(Stock) returns (InfoResponse) {}
+    rpc fetchInfo(Stocks) returns (InfoResponse) {}
     
     // 获取股票报价（实时）
     rpc fetchRealtimeQuote(Stocks) returns (QuoteResponse) {}
@@ -15,7 +18,7 @@ service Security {
 
 service Chart {
     // 获取股票某天分时图
-    // rpc fetchTicks(TickRequest) returns (TickResponse) {}
+    rpc fetchTicks(TickRequest) returns (TickResponse) {}
     
     // 获取股票K线图（暂时先默认日K）
     rpc fetchKCharts(KChartRequest) returns (KChartResponse) {}
@@ -26,6 +29,12 @@ message Stock {
     string stock_code = 2;
 }
 
+message Criteria {
+    string keywords = 1;
+    string prdt_type = 2;
+    string exchange_code = 3;
+}
+
 message Quotation {
     string price = 1;
     string open = 2;
@@ -34,12 +43,6 @@ message Quotation {
     string day_high = 5;
     string day_low = 6;
     string last_close = 7;
-}
-
-message Info {
-    string name = 1;
-    string type = 2;
-    int32 board_lot = 3;
 }
 
 message Tick {
@@ -73,6 +76,18 @@ message Stocks {
     repeated Stock stocks = 1;
 }
 
+message StockInfo {
+    string exchange_code = 1;
+    string market_code = 2;
+    string prdt_type = 3;
+    string stock_code = 4;
+    string stock_name = 5;
+    string ISIN = 6;
+    string currency = 7;
+    int32 board_lot = 8;
+    int32 status = 9;
+}
+
 message QuoteResponse {    
     message Data {
         map<string, Quotation> quotes = 1;
@@ -83,7 +98,7 @@ message QuoteResponse {
 
 message InfoResponse {    
     message Data {
-        map<string, Info> info = 1;
+        map<string, StockInfo> info = 1;
     }
     Status status = 1;
     Data data = 2;
@@ -91,12 +106,12 @@ message InfoResponse {
 
 message TickRequest {
     Stock stock = 1;
-    string date = 2;    // yyyy-mm-dd
+    string date = 2;    // 格式：yyyy-mm-dd，不传的话默认最新一个交易日
 }
 
 message TickResponse {
     message Data {
-        map<string, Tick> Ticks = 1;
+        repeated Tick ticks = 1;
     }
     Status status = 1;
     Data data = 2;
@@ -104,14 +119,14 @@ message TickResponse {
 
 message KChartRequest {
     Stock stock = 1;
-    int32 page = 2;     // start from 1
-    int32 size = 3;     // default 20
-    string type = 4;    // default day
+    int32 page = 2;     // 从1开始
+    int32 size = 3;     // 每页数量，默认20
+    string type = 4;    // K线图类型，默认day
 }
 
 message KChartResponse {
     message Data {
-        map<string, KChart> kcharts = 1;
+        repeated KChart kcharts = 1;
     }
     Status status = 1;
     Data data = 2;

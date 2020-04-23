@@ -53,13 +53,9 @@ return [
         ],
         
         'mongodb' => [
-            'default' => 'mongo',
-            'client' => [
-                'mongo' => [
-                    'dsn' => env("MONGODB_DSN", 'mongodb://127.0.0.1:27017'),
-                    'database' => env('MONGODB_DEFAULT_DB', 'trading'),
-                ]
-            ]
+            'driver' => 'mongodb',
+            'dsn' => env("MONGODB_DSN", 'mongodb://127.0.0.1:27017'),
+            'database' => env('MONGODB_DEFAULT_DB', 'trading'),
         ],
     ],
 

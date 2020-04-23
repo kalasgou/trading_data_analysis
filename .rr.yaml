@@ -1,5 +1,5 @@
 grpc:
-  listen: "tcp://127.0.0.1:9001"
+  listen: "tcp://0.0.0.0:9001"
   proto: "./protos/market.proto"
   workers:
     command: "php artisan market:data"

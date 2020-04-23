@@ -48,6 +48,9 @@ class SecurityMarketData extends Command
         foreach ($services['quotation'] as $interface => $service) {
             $server->registerService($interface, new $service());
         }
+        foreach ($services['indicator'] as $interface => $service) {
+            $server->registerService($interface, new $service());
+        }
         
         $w = new RoadRunner\Worker(new Goridge\StreamRelay(STDIN, STDOUT));
         $server->serve($w);

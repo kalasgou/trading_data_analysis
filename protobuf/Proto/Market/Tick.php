@@ -14,30 +14,44 @@ use Google\Protobuf\Internal\GPBUtil;
 class Tick extends \Google\Protobuf\Internal\Message
 {
     /**
+     * 价格
+     *
      * Generated from protobuf field <code>string price = 1;</code>
      */
     protected $price = '';
     /**
+     * 均价
+     *
      * Generated from protobuf field <code>string average = 2;</code>
      */
     protected $average = '';
     /**
+     * 涨跌额
+     *
      * Generated from protobuf field <code>string chg_ratio = 3;</code>
      */
     protected $chg_ratio = '';
     /**
+     * 涨跌幅
+     *
      * Generated from protobuf field <code>string chg_sum = 4;</code>
      */
     protected $chg_sum = '';
     /**
+     * 成交量（股数）
+     *
      * Generated from protobuf field <code>string volume = 5;</code>
      */
     protected $volume = '';
     /**
+     * 成交额
+     *
      * Generated from protobuf field <code>string turnover = 6;</code>
      */
     protected $turnover = '';
     /**
+     * 时间点，格式 2020/04/23 17:28
+     *
      * Generated from protobuf field <code>string time = 7;</code>
      */
     protected $time = '';
@@ -49,12 +63,19 @@ class Tick extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type string $price
+     *           价格
      *     @type string $average
+     *           均价
      *     @type string $chg_ratio
+     *           涨跌额
      *     @type string $chg_sum
+     *           涨跌幅
      *     @type string $volume
+     *           成交量（股数）
      *     @type string $turnover
+     *           成交额
      *     @type string $time
+     *           时间点，格式 2020/04/23 17:28
      * }
      */
     public function __construct($data = NULL) {
@@ -63,6 +84,8 @@ class Tick extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 价格
+     *
      * Generated from protobuf field <code>string price = 1;</code>
      * @return string
      */
@@ -72,6 +95,8 @@ class Tick extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 价格
+     *
      * Generated from protobuf field <code>string price = 1;</code>
      * @param string $var
      * @return $this
@@ -85,6 +110,8 @@ class Tick extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 均价
+     *
      * Generated from protobuf field <code>string average = 2;</code>
      * @return string
      */
@@ -94,6 +121,8 @@ class Tick extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 均价
+     *
      * Generated from protobuf field <code>string average = 2;</code>
      * @param string $var
      * @return $this
@@ -107,6 +136,8 @@ class Tick extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 涨跌额
+     *
      * Generated from protobuf field <code>string chg_ratio = 3;</code>
      * @return string
      */
@@ -116,6 +147,8 @@ class Tick extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 涨跌额
+     *
      * Generated from protobuf field <code>string chg_ratio = 3;</code>
      * @param string $var
      * @return $this
@@ -129,6 +162,8 @@ class Tick extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 涨跌幅
+     *
      * Generated from protobuf field <code>string chg_sum = 4;</code>
      * @return string
      */
@@ -138,6 +173,8 @@ class Tick extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 涨跌幅
+     *
      * Generated from protobuf field <code>string chg_sum = 4;</code>
      * @param string $var
      * @return $this
@@ -151,6 +188,8 @@ class Tick extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 成交量（股数）
+     *
      * Generated from protobuf field <code>string volume = 5;</code>
      * @return string
      */
@@ -160,6 +199,8 @@ class Tick extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 成交量（股数）
+     *
      * Generated from protobuf field <code>string volume = 5;</code>
      * @param string $var
      * @return $this
@@ -173,6 +214,8 @@ class Tick extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 成交额
+     *
      * Generated from protobuf field <code>string turnover = 6;</code>
      * @return string
      */
@@ -182,6 +225,8 @@ class Tick extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 成交额
+     *
      * Generated from protobuf field <code>string turnover = 6;</code>
      * @param string $var
      * @return $this
@@ -195,6 +240,8 @@ class Tick extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 时间点，格式 2020/04/23 17:28
+     *
      * Generated from protobuf field <code>string time = 7;</code>
      * @return string
      */
@@ -204,6 +251,8 @@ class Tick extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 时间点，格式 2020/04/23 17:28
+     *
      * Generated from protobuf field <code>string time = 7;</code>
      * @param string $var
      * @return $this

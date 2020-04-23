@@ -14,33 +14,71 @@ use Google\Protobuf\Internal\GPBUtil;
 class Quotation extends \Google\Protobuf\Internal\Message
 {
     /**
+     * 当前价格
+     *
      * Generated from protobuf field <code>string price = 1;</code>
      */
     protected $price = '';
     /**
+     * 当日开市价
+     *
      * Generated from protobuf field <code>string open = 2;</code>
      */
     protected $open = '';
     /**
+     * 当日收市价
+     *
      * Generated from protobuf field <code>string close = 3;</code>
      */
     protected $close = '';
     /**
+     * 当日均价
+     *
      * Generated from protobuf field <code>string average = 4;</code>
      */
     protected $average = '';
     /**
+     * 当日最高价
+     *
      * Generated from protobuf field <code>string day_high = 5;</code>
      */
     protected $day_high = '';
     /**
+     * 当日最低价
+     *
      * Generated from protobuf field <code>string day_low = 6;</code>
      */
     protected $day_low = '';
     /**
+     * 上一交易日收市价
+     *
      * Generated from protobuf field <code>string last_close = 7;</code>
      */
     protected $last_close = '';
+    /**
+     * 当日涨跌额
+     *
+     * Generated from protobuf field <code>string chg_sum = 8;</code>
+     */
+    protected $chg_sum = '';
+    /**
+     * 当日涨跌幅(%)
+     *
+     * Generated from protobuf field <code>string chg_ratio = 9;</code>
+     */
+    protected $chg_ratio = '';
+    /**
+     * 最后成交时间（时间戳）
+     *
+     * Generated from protobuf field <code>string last_trade_ts = 10;</code>
+     */
+    protected $last_trade_ts = '';
+    /**
+     * 交易状态（待定）
+     *
+     * Generated from protobuf field <code>string trade_status = 11;</code>
+     */
+    protected $trade_status = '';
 
     /**
      * Constructor.
@@ -49,12 +87,27 @@ class Quotation extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type string $price
+     *           当前价格
      *     @type string $open
+     *           当日开市价
      *     @type string $close
+     *           当日收市价
      *     @type string $average
+     *           当日均价
      *     @type string $day_high
+     *           当日最高价
      *     @type string $day_low
+     *           当日最低价
      *     @type string $last_close
+     *           上一交易日收市价
+     *     @type string $chg_sum
+     *           当日涨跌额
+     *     @type string $chg_ratio
+     *           当日涨跌幅(%)
+     *     @type string $last_trade_ts
+     *           最后成交时间（时间戳）
+     *     @type string $trade_status
+     *           交易状态（待定）
      * }
      */
     public function __construct($data = NULL) {
@@ -63,6 +116,8 @@ class Quotation extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 当前价格
+     *
      * Generated from protobuf field <code>string price = 1;</code>
      * @return string
      */
@@ -72,6 +127,8 @@ class Quotation extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 当前价格
+     *
      * Generated from protobuf field <code>string price = 1;</code>
      * @param string $var
      * @return $this
@@ -85,6 +142,8 @@ class Quotation extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 当日开市价
+     *
      * Generated from protobuf field <code>string open = 2;</code>
      * @return string
      */
@@ -94,6 +153,8 @@ class Quotation extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 当日开市价
+     *
      * Generated from protobuf field <code>string open = 2;</code>
      * @param string $var
      * @return $this
@@ -107,6 +168,8 @@ class Quotation extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 当日收市价
+     *
      * Generated from protobuf field <code>string close = 3;</code>
      * @return string
      */
@@ -116,6 +179,8 @@ class Quotation extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 当日收市价
+     *
      * Generated from protobuf field <code>string close = 3;</code>
      * @param string $var
      * @return $this
@@ -129,6 +194,8 @@ class Quotation extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 当日均价
+     *
      * Generated from protobuf field <code>string average = 4;</code>
      * @return string
      */
@@ -138,6 +205,8 @@ class Quotation extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 当日均价
+     *
      * Generated from protobuf field <code>string average = 4;</code>
      * @param string $var
      * @return $this
@@ -151,6 +220,8 @@ class Quotation extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 当日最高价
+     *
      * Generated from protobuf field <code>string day_high = 5;</code>
      * @return string
      */
@@ -160,6 +231,8 @@ class Quotation extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 当日最高价
+     *
      * Generated from protobuf field <code>string day_high = 5;</code>
      * @param string $var
      * @return $this
@@ -173,6 +246,8 @@ class Quotation extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 当日最低价
+     *
      * Generated from protobuf field <code>string day_low = 6;</code>
      * @return string
      */
@@ -182,6 +257,8 @@ class Quotation extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 当日最低价
+     *
      * Generated from protobuf field <code>string day_low = 6;</code>
      * @param string $var
      * @return $this
@@ -195,6 +272,8 @@ class Quotation extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 上一交易日收市价
+     *
      * Generated from protobuf field <code>string last_close = 7;</code>
      * @return string
      */
@@ -204,6 +283,8 @@ class Quotation extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 上一交易日收市价
+     *
      * Generated from protobuf field <code>string last_close = 7;</code>
      * @param string $var
      * @return $this
@@ -212,6 +293,110 @@ class Quotation extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->last_close = $var;
+
+        return $this;
+    }
+
+    /**
+     * 当日涨跌额
+     *
+     * Generated from protobuf field <code>string chg_sum = 8;</code>
+     * @return string
+     */
+    public function getChgSum()
+    {
+        return $this->chg_sum;
+    }
+
+    /**
+     * 当日涨跌额
+     *
+     * Generated from protobuf field <code>string chg_sum = 8;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setChgSum($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->chg_sum = $var;
+
+        return $this;
+    }
+
+    /**
+     * 当日涨跌幅(%)
+     *
+     * Generated from protobuf field <code>string chg_ratio = 9;</code>
+     * @return string
+     */
+    public function getChgRatio()
+    {
+        return $this->chg_ratio;
+    }
+
+    /**
+     * 当日涨跌幅(%)
+     *
+     * Generated from protobuf field <code>string chg_ratio = 9;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setChgRatio($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->chg_ratio = $var;
+
+        return $this;
+    }
+
+    /**
+     * 最后成交时间（时间戳）
+     *
+     * Generated from protobuf field <code>string last_trade_ts = 10;</code>
+     * @return string
+     */
+    public function getLastTradeTs()
+    {
+        return $this->last_trade_ts;
+    }
+
+    /**
+     * 最后成交时间（时间戳）
+     *
+     * Generated from protobuf field <code>string last_trade_ts = 10;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setLastTradeTs($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->last_trade_ts = $var;
+
+        return $this;
+    }
+
+    /**
+     * 交易状态（待定）
+     *
+     * Generated from protobuf field <code>string trade_status = 11;</code>
+     * @return string
+     */
+    public function getTradeStatus()
+    {
+        return $this->trade_status;
+    }
+
+    /**
+     * 交易状态（待定）
+     *
+     * Generated from protobuf field <code>string trade_status = 11;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setTradeStatus($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->trade_status = $var;
 
         return $this;
     }

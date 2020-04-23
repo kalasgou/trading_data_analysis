@@ -14,38 +14,56 @@ use Google\Protobuf\Internal\GPBUtil;
 class StockInfo extends \Google\Protobuf\Internal\Message
 {
     /**
+     * 交易所代码
+     *
      * Generated from protobuf field <code>string exchange_code = 1;</code>
      */
     protected $exchange_code = '';
     /**
+     * 市场代码
+     *
      * Generated from protobuf field <code>string market_code = 2;</code>
      */
     protected $market_code = '';
     /**
+     * 股票产品类型
+     *
      * Generated from protobuf field <code>string prdt_type = 3;</code>
      */
     protected $prdt_type = '';
     /**
+     * 股票代码
+     *
      * Generated from protobuf field <code>string stock_code = 4;</code>
      */
     protected $stock_code = '';
     /**
+     * 股票名称
+     *
      * Generated from protobuf field <code>string stock_name = 5;</code>
      */
     protected $stock_name = '';
     /**
+     * 股票ISIN码
+     *
      * Generated from protobuf field <code>string ISIN = 6;</code>
      */
     protected $ISIN = '';
     /**
+     * 股票交易货币
+     *
      * Generated from protobuf field <code>string currency = 7;</code>
      */
     protected $currency = '';
     /**
+     * 每手交易股数
+     *
      * Generated from protobuf field <code>int32 board_lot = 8;</code>
      */
     protected $board_lot = 0;
     /**
+     * 股票交易状态
+     *
      * Generated from protobuf field <code>int32 status = 9;</code>
      */
     protected $status = 0;
@@ -57,14 +75,23 @@ class StockInfo extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type string $exchange_code
+     *           交易所代码
      *     @type string $market_code
+     *           市场代码
      *     @type string $prdt_type
+     *           股票产品类型
      *     @type string $stock_code
+     *           股票代码
      *     @type string $stock_name
+     *           股票名称
      *     @type string $ISIN
+     *           股票ISIN码
      *     @type string $currency
+     *           股票交易货币
      *     @type int $board_lot
+     *           每手交易股数
      *     @type int $status
+     *           股票交易状态
      * }
      */
     public function __construct($data = NULL) {
@@ -73,6 +100,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 交易所代码
+     *
      * Generated from protobuf field <code>string exchange_code = 1;</code>
      * @return string
      */
@@ -82,6 +111,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 交易所代码
+     *
      * Generated from protobuf field <code>string exchange_code = 1;</code>
      * @param string $var
      * @return $this
@@ -95,6 +126,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 市场代码
+     *
      * Generated from protobuf field <code>string market_code = 2;</code>
      * @return string
      */
@@ -104,6 +137,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 市场代码
+     *
      * Generated from protobuf field <code>string market_code = 2;</code>
      * @param string $var
      * @return $this
@@ -117,6 +152,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 股票产品类型
+     *
      * Generated from protobuf field <code>string prdt_type = 3;</code>
      * @return string
      */
@@ -126,6 +163,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 股票产品类型
+     *
      * Generated from protobuf field <code>string prdt_type = 3;</code>
      * @param string $var
      * @return $this
@@ -139,6 +178,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 股票代码
+     *
      * Generated from protobuf field <code>string stock_code = 4;</code>
      * @return string
      */
@@ -148,6 +189,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 股票代码
+     *
      * Generated from protobuf field <code>string stock_code = 4;</code>
      * @param string $var
      * @return $this
@@ -161,6 +204,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 股票名称
+     *
      * Generated from protobuf field <code>string stock_name = 5;</code>
      * @return string
      */
@@ -170,6 +215,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 股票名称
+     *
      * Generated from protobuf field <code>string stock_name = 5;</code>
      * @param string $var
      * @return $this
@@ -183,6 +230,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 股票ISIN码
+     *
      * Generated from protobuf field <code>string ISIN = 6;</code>
      * @return string
      */
@@ -192,6 +241,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 股票ISIN码
+     *
      * Generated from protobuf field <code>string ISIN = 6;</code>
      * @param string $var
      * @return $this
@@ -205,6 +256,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 股票交易货币
+     *
      * Generated from protobuf field <code>string currency = 7;</code>
      * @return string
      */
@@ -214,6 +267,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 股票交易货币
+     *
      * Generated from protobuf field <code>string currency = 7;</code>
      * @param string $var
      * @return $this
@@ -227,6 +282,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 每手交易股数
+     *
      * Generated from protobuf field <code>int32 board_lot = 8;</code>
      * @return int
      */
@@ -236,6 +293,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 每手交易股数
+     *
      * Generated from protobuf field <code>int32 board_lot = 8;</code>
      * @param int $var
      * @return $this
@@ -249,6 +308,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 股票交易状态
+     *
      * Generated from protobuf field <code>int32 status = 9;</code>
      * @return int
      */
@@ -258,6 +319,8 @@ class StockInfo extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 股票交易状态
+     *
      * Generated from protobuf field <code>int32 status = 9;</code>
      * @param int $var
      * @return $this

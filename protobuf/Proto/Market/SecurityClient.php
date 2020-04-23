@@ -17,6 +17,20 @@ class SecurityClient extends \Grpc\BaseStub {
     }
 
     /**
+     * 搜索股票
+     * @param \Proto\Market\Criteria $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     */
+    public function search(\Proto\Market\Criteria $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/proto.market.Security/search',
+        $argument,
+        ['\Proto\Market\InfoResponse', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
      * 获取股票信息
      * @param \Proto\Market\Stocks $argument input argument
      * @param array $metadata metadata

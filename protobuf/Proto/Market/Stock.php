@@ -14,10 +14,14 @@ use Google\Protobuf\Internal\GPBUtil;
 class Stock extends \Google\Protobuf\Internal\Message
 {
     /**
+     * 交易所代码
+     *
      * Generated from protobuf field <code>string exchange_code = 1;</code>
      */
     protected $exchange_code = '';
     /**
+     * 股票代码
+     *
      * Generated from protobuf field <code>string stock_code = 2;</code>
      */
     protected $stock_code = '';
@@ -29,7 +33,9 @@ class Stock extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type string $exchange_code
+     *           交易所代码
      *     @type string $stock_code
+     *           股票代码
      * }
      */
     public function __construct($data = NULL) {
@@ -38,6 +44,8 @@ class Stock extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 交易所代码
+     *
      * Generated from protobuf field <code>string exchange_code = 1;</code>
      * @return string
      */
@@ -47,6 +55,8 @@ class Stock extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 交易所代码
+     *
      * Generated from protobuf field <code>string exchange_code = 1;</code>
      * @param string $var
      * @return $this
@@ -60,6 +70,8 @@ class Stock extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 股票代码
+     *
      * Generated from protobuf field <code>string stock_code = 2;</code>
      * @return string
      */
@@ -69,6 +81,8 @@ class Stock extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 股票代码
+     *
      * Generated from protobuf field <code>string stock_code = 2;</code>
      * @param string $var
      * @return $this

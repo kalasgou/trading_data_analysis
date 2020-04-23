@@ -14,38 +14,56 @@ use Google\Protobuf\Internal\GPBUtil;
 class KChart extends \Google\Protobuf\Internal\Message
 {
     /**
+     * 开盘价
+     *
      * Generated from protobuf field <code>string open = 1;</code>
      */
     protected $open = '';
     /**
+     * 收盘价
+     *
      * Generated from protobuf field <code>string close = 2;</code>
      */
     protected $close = '';
     /**
+     * 最高价
+     *
      * Generated from protobuf field <code>string high = 3;</code>
      */
     protected $high = '';
     /**
+     * 最低价
+     *
      * Generated from protobuf field <code>string low = 4;</code>
      */
     protected $low = '';
     /**
+     * 涨跌额
+     *
      * Generated from protobuf field <code>string chg_sum = 5;</code>
      */
     protected $chg_sum = '';
     /**
+     * 涨跌幅
+     *
      * Generated from protobuf field <code>string chg_ratio = 6;</code>
      */
     protected $chg_ratio = '';
     /**
+     * 成交量（股数）
+     *
      * Generated from protobuf field <code>string volume = 7;</code>
      */
     protected $volume = '';
     /**
+     * 成交额
+     *
      * Generated from protobuf field <code>string turnover = 8;</code>
      */
     protected $turnover = '';
     /**
+     * 日期，格式yyyy/mm/dd
+     *
      * Generated from protobuf field <code>string date = 9;</code>
      */
     protected $date = '';
@@ -57,14 +75,23 @@ class KChart extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type string $open
+     *           开盘价
      *     @type string $close
+     *           收盘价
      *     @type string $high
+     *           最高价
      *     @type string $low
+     *           最低价
      *     @type string $chg_sum
+     *           涨跌额
      *     @type string $chg_ratio
+     *           涨跌幅
      *     @type string $volume
+     *           成交量（股数）
      *     @type string $turnover
+     *           成交额
      *     @type string $date
+     *           日期，格式yyyy/mm/dd
      * }
      */
     public function __construct($data = NULL) {
@@ -73,6 +100,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 开盘价
+     *
      * Generated from protobuf field <code>string open = 1;</code>
      * @return string
      */
@@ -82,6 +111,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 开盘价
+     *
      * Generated from protobuf field <code>string open = 1;</code>
      * @param string $var
      * @return $this
@@ -95,6 +126,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 收盘价
+     *
      * Generated from protobuf field <code>string close = 2;</code>
      * @return string
      */
@@ -104,6 +137,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 收盘价
+     *
      * Generated from protobuf field <code>string close = 2;</code>
      * @param string $var
      * @return $this
@@ -117,6 +152,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 最高价
+     *
      * Generated from protobuf field <code>string high = 3;</code>
      * @return string
      */
@@ -126,6 +163,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 最高价
+     *
      * Generated from protobuf field <code>string high = 3;</code>
      * @param string $var
      * @return $this
@@ -139,6 +178,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 最低价
+     *
      * Generated from protobuf field <code>string low = 4;</code>
      * @return string
      */
@@ -148,6 +189,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 最低价
+     *
      * Generated from protobuf field <code>string low = 4;</code>
      * @param string $var
      * @return $this
@@ -161,6 +204,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 涨跌额
+     *
      * Generated from protobuf field <code>string chg_sum = 5;</code>
      * @return string
      */
@@ -170,6 +215,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 涨跌额
+     *
      * Generated from protobuf field <code>string chg_sum = 5;</code>
      * @param string $var
      * @return $this
@@ -183,6 +230,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 涨跌幅
+     *
      * Generated from protobuf field <code>string chg_ratio = 6;</code>
      * @return string
      */
@@ -192,6 +241,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 涨跌幅
+     *
      * Generated from protobuf field <code>string chg_ratio = 6;</code>
      * @param string $var
      * @return $this
@@ -205,6 +256,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 成交量（股数）
+     *
      * Generated from protobuf field <code>string volume = 7;</code>
      * @return string
      */
@@ -214,6 +267,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 成交量（股数）
+     *
      * Generated from protobuf field <code>string volume = 7;</code>
      * @param string $var
      * @return $this
@@ -227,6 +282,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 成交额
+     *
      * Generated from protobuf field <code>string turnover = 8;</code>
      * @return string
      */
@@ -236,6 +293,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 成交额
+     *
      * Generated from protobuf field <code>string turnover = 8;</code>
      * @param string $var
      * @return $this
@@ -249,6 +308,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 日期，格式yyyy/mm/dd
+     *
      * Generated from protobuf field <code>string date = 9;</code>
      * @return string
      */
@@ -258,6 +319,8 @@ class KChart extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 日期，格式yyyy/mm/dd
+     *
      * Generated from protobuf field <code>string date = 9;</code>
      * @param string $var
      * @return $this

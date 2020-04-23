@@ -3,7 +3,7 @@ namespace App\Services\gRPC;
 
 use Spiral\GRPC\ContextInterface;
 use Proto\Market\SecurityInterface;
-use Proto\Market\Info;
+use Proto\Market\Criteria;
 use Proto\Market\Quotation;
 use Proto\Market\Stock;
 use Proto\Market\Stocks;
@@ -18,6 +18,11 @@ use App\Facades\QuoteDL;
 class SecurityService implements SecurityInterface
 {
     public function __construct()
+    {
+        
+    }
+    
+    public function search(ContextInterface $ctx, Criteria $in): InfoResponse
     {
         
     }

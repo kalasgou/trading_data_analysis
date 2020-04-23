@@ -13,6 +13,15 @@ interface SecurityInterface extends GRPC\ServiceInterface
 
     /**
     * @param GRPC\ContextInterface $ctx
+    * @param Criteria $in
+    * @return InfoResponse
+    *
+    * @throws GRPC\Exception\InvokeException
+    */
+    public function search(GRPC\ContextInterface $ctx, Criteria $in): InfoResponse;
+
+    /**
+    * @param GRPC\ContextInterface $ctx
     * @param Stocks $in
     * @return InfoResponse
     *

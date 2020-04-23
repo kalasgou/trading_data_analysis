@@ -59,7 +59,7 @@ message Quotation {
     // 最后成交时间（时间戳）
     string last_trade_ts = 10;
     // 交易状态（待定）
-    string trade_status 
+    string trade_status = 11; 
 }
 
 message Tick {

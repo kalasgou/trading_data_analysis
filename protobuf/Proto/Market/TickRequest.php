@@ -18,7 +18,7 @@ class TickRequest extends \Google\Protobuf\Internal\Message
      */
     protected $stock = null;
     /**
-     * yyyy-mm-dd
+     * 格式：yyyy-mm-dd，不传的话默认最新一个交易日
      *
      * Generated from protobuf field <code>string date = 2;</code>
      */
@@ -32,7 +32,7 @@ class TickRequest extends \Google\Protobuf\Internal\Message
      *
      *     @type \Proto\Market\Stock $stock
      *     @type string $date
-     *           yyyy-mm-dd
+     *           格式：yyyy-mm-dd，不传的话默认最新一个交易日
      * }
      */
     public function __construct($data = NULL) {
@@ -63,7 +63,7 @@ class TickRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * yyyy-mm-dd
+     * 格式：yyyy-mm-dd，不传的话默认最新一个交易日
      *
      * Generated from protobuf field <code>string date = 2;</code>
      * @return string
@@ -74,7 +74,7 @@ class TickRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * yyyy-mm-dd
+     * 格式：yyyy-mm-dd，不传的话默认最新一个交易日
      *
      * Generated from protobuf field <code>string date = 2;</code>
      * @param string $var

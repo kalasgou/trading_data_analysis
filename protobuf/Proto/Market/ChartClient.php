@@ -17,6 +17,20 @@ class ChartClient extends \Grpc\BaseStub {
     }
 
     /**
+     * 获取股票某天分时图
+     * @param \Proto\Market\TickRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     */
+    public function fetchTicks(\Proto\Market\TickRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/proto.market.Chart/fetchTicks',
+        $argument,
+        ['\Proto\Market\TickResponse', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
      * 获取股票K线图（暂时先默认日K）
      * @param \Proto\Market\KChartRequest $argument input argument
      * @param array $metadata metadata

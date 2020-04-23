@@ -18,19 +18,19 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
      */
     protected $stock = null;
     /**
-     * start from 1
+     * 从1开始
      *
      * Generated from protobuf field <code>int32 page = 2;</code>
      */
     protected $page = 0;
     /**
-     * default 20
+     * 每页数量，默认20
      *
      * Generated from protobuf field <code>int32 size = 3;</code>
      */
     protected $size = 0;
     /**
-     * default day
+     * K线图类型，默认day
      *
      * Generated from protobuf field <code>string type = 4;</code>
      */
@@ -44,11 +44,11 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
      *
      *     @type \Proto\Market\Stock $stock
      *     @type int $page
-     *           start from 1
+     *           从1开始
      *     @type int $size
-     *           default 20
+     *           每页数量，默认20
      *     @type string $type
-     *           default day
+     *           K线图类型，默认day
      * }
      */
     public function __construct($data = NULL) {
@@ -79,7 +79,7 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * start from 1
+     * 从1开始
      *
      * Generated from protobuf field <code>int32 page = 2;</code>
      * @return int
@@ -90,7 +90,7 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * start from 1
+     * 从1开始
      *
      * Generated from protobuf field <code>int32 page = 2;</code>
      * @param int $var
@@ -105,7 +105,7 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * default 20
+     * 每页数量，默认20
      *
      * Generated from protobuf field <code>int32 size = 3;</code>
      * @return int
@@ -116,7 +116,7 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * default 20
+     * 每页数量，默认20
      *
      * Generated from protobuf field <code>int32 size = 3;</code>
      * @param int $var
@@ -131,7 +131,7 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * default day
+     * K线图类型，默认day
      *
      * Generated from protobuf field <code>string type = 4;</code>
      * @return string
@@ -142,7 +142,7 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * default day
+     * K线图类型，默认day
      *
      * Generated from protobuf field <code>string type = 4;</code>
      * @param string $var

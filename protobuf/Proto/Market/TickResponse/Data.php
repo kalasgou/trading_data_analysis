@@ -14,9 +14,9 @@ use Google\Protobuf\Internal\GPBUtil;
 class Data extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>map<string, .proto.market.Tick> Ticks = 1;</code>
+     * Generated from protobuf field <code>repeated .proto.market.Tick ticks = 1;</code>
      */
-    private $Ticks;
+    private $ticks;
 
     /**
      * Constructor.
@@ -24,7 +24,7 @@ class Data extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type array|\Google\Protobuf\Internal\MapField $Ticks
+     *     @type \Proto\Market\Tick[]|\Google\Protobuf\Internal\RepeatedField $ticks
      * }
      */
     public function __construct($data = NULL) {
@@ -33,23 +33,23 @@ class Data extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>map<string, .proto.market.Tick> Ticks = 1;</code>
-     * @return \Google\Protobuf\Internal\MapField
+     * Generated from protobuf field <code>repeated .proto.market.Tick ticks = 1;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getTicks()
     {
-        return $this->Ticks;
+        return $this->ticks;
     }
 
     /**
-     * Generated from protobuf field <code>map<string, .proto.market.Tick> Ticks = 1;</code>
-     * @param array|\Google\Protobuf\Internal\MapField $var
+     * Generated from protobuf field <code>repeated .proto.market.Tick ticks = 1;</code>
+     * @param \Proto\Market\Tick[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
     public function setTicks($var)
     {
-        $arr = GPBUtil::checkMapField($var, \Google\Protobuf\Internal\GPBType::STRING, \Google\Protobuf\Internal\GPBType::MESSAGE, \Proto\Market\Tick::class);
-        $this->Ticks = $arr;
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Proto\Market\Tick::class);
+        $this->ticks = $arr;
 
         return $this;
     }

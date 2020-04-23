@@ -14,7 +14,7 @@ use Google\Protobuf\Internal\GPBUtil;
 class Data extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>map<string, .proto.market.Info> info = 1;</code>
+     * Generated from protobuf field <code>map<string, .proto.market.StockInfo> info = 1;</code>
      */
     private $info;
 
@@ -33,7 +33,7 @@ class Data extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>map<string, .proto.market.Info> info = 1;</code>
+     * Generated from protobuf field <code>map<string, .proto.market.StockInfo> info = 1;</code>
      * @return \Google\Protobuf\Internal\MapField
      */
     public function getInfo()
@@ -42,13 +42,13 @@ class Data extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>map<string, .proto.market.Info> info = 1;</code>
+     * Generated from protobuf field <code>map<string, .proto.market.StockInfo> info = 1;</code>
      * @param array|\Google\Protobuf\Internal\MapField $var
      * @return $this
      */
     public function setInfo($var)
     {
-        $arr = GPBUtil::checkMapField($var, \Google\Protobuf\Internal\GPBType::STRING, \Google\Protobuf\Internal\GPBType::MESSAGE, \Proto\Market\Info::class);
+        $arr = GPBUtil::checkMapField($var, \Google\Protobuf\Internal\GPBType::STRING, \Google\Protobuf\Internal\GPBType::MESSAGE, \Proto\Market\StockInfo::class);
         $this->info = $arr;
 
         return $this;

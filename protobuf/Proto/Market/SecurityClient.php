@@ -18,11 +18,11 @@ class SecurityClient extends \Grpc\BaseStub {
 
     /**
      * 获取股票信息
-     * @param \Proto\Market\Stock $argument input argument
+     * @param \Proto\Market\Stocks $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
      */
-    public function fetchInfo(\Proto\Market\Stock $argument,
+    public function fetchInfo(\Proto\Market\Stocks $argument,
       $metadata = [], $options = []) {
         return $this->_simpleRequest('/proto.market.Security/fetchInfo',
         $argument,

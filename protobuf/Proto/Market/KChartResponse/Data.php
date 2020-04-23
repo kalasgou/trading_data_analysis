@@ -14,7 +14,7 @@ use Google\Protobuf\Internal\GPBUtil;
 class Data extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>map<string, .proto.market.KChart> kcharts = 1;</code>
+     * Generated from protobuf field <code>repeated .proto.market.KChart kcharts = 1;</code>
      */
     private $kcharts;
 
@@ -24,7 +24,7 @@ class Data extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type array|\Google\Protobuf\Internal\MapField $kcharts
+     *     @type \Proto\Market\KChart[]|\Google\Protobuf\Internal\RepeatedField $kcharts
      * }
      */
     public function __construct($data = NULL) {
@@ -33,8 +33,8 @@ class Data extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>map<string, .proto.market.KChart> kcharts = 1;</code>
-     * @return \Google\Protobuf\Internal\MapField
+     * Generated from protobuf field <code>repeated .proto.market.KChart kcharts = 1;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getKcharts()
     {
@@ -42,13 +42,13 @@ class Data extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>map<string, .proto.market.KChart> kcharts = 1;</code>
-     * @param array|\Google\Protobuf\Internal\MapField $var
+     * Generated from protobuf field <code>repeated .proto.market.KChart kcharts = 1;</code>
+     * @param \Proto\Market\KChart[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
     public function setKcharts($var)
     {
-        $arr = GPBUtil::checkMapField($var, \Google\Protobuf\Internal\GPBType::STRING, \Google\Protobuf\Internal\GPBType::MESSAGE, \Proto\Market\KChart::class);
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Proto\Market\KChart::class);
         $this->kcharts = $arr;
 
         return $this;

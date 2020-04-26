@@ -71,9 +71,9 @@ class ChartService implements ChartInterface
         $rows = KChartSrvc::getByPage(
             $exchange_code,
             $stock_code,
+            $type,
             $page,
-            $page_size,
-            $type
+            $page_size
         );
         
         $kcharts = [];

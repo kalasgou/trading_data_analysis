@@ -32,9 +32,12 @@ message Stock {
 }
 
 message Criteria {
+    // 搜索字符串（暂只支持股票代码）
     string keywords = 1;
-    string prdt_type = 2;
-    string exchange_code = 3;
+    // string prdt_type = 2;
+    // string exchange_code = 3;
+    int32 page = 2;     // 从1开始
+    int32 size = 3;     // 每页数量，默认20
 }
 
 message Quotation {
@@ -56,10 +59,16 @@ message Quotation {
     string chg_sum = 8;
     // 当日涨跌幅(%)
     string chg_ratio = 9;
+    // 成交量（股数）
+    string volume = 10;
+    // 成交额
+    string turnover = 11;
     // 最后成交时间（时间戳）
-    string last_trade_ts = 10;
-    // 交易状态（待定）
-    string trade_status = 11; 
+    string last_trade_ts = 12;
+    // 交易状态（代码）
+    string trade_status_code = 13; 
+    // 交易状态（文字）
+    string trade_status_str = 14; 
 }
 
 message Tick {

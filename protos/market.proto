@@ -176,7 +176,9 @@ message KChartRequest {
     Stock stock = 1;
     int32 page = 2;     // 从1开始
     int32 size = 3;     // 每页数量，默认20
-    string type = 4;    // K线图类型，默认day
+    int32 offset = 4;   // 偏移量 (>=0)
+    int32 limit = 5;    // 每次取数量 (1 <= n <= 250)
+    string type = 6;    // K线图类型，默认day
 }
 
 message KChartResponse {

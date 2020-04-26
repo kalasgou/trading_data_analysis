@@ -12,16 +12,12 @@ class KChart implements KChartInterface
         
     }
     
-    public function getByPage(string $exchange_code, string $stock_code, string $type, int $page = 1, int $page_size = 20) : array 
+    public function getByPage(string $exchange_code, string $stock_code, string $type, int $offset = 0, int $limit = 20) : array 
     {
-        $page = max(1, $page);
-        $page_size = max(20, $page_size);
-        $offset = $page_size * ($page - 1);
-        
         $rows = DayK::where('stock_code', $stock_code)
                 ->orderBy('ts', 'desc')
                 ->skip($offset)
-                ->limit($page_size)
+                ->limit($limit)
                 ->get();
         
         $kcharts = [];

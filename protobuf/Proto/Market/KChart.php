@@ -67,6 +67,12 @@ class KChart extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string date = 9;</code>
      */
     protected $date = '';
+    /**
+     * 时间戳
+     *
+     * Generated from protobuf field <code>int32 timestamp = 10;</code>
+     */
+    protected $timestamp = 0;
 
     /**
      * Constructor.
@@ -92,6 +98,8 @@ class KChart extends \Google\Protobuf\Internal\Message
      *           成交额
      *     @type string $date
      *           日期，格式yyyy/mm/dd
+     *     @type int $timestamp
+     *           时间戳
      * }
      */
     public function __construct($data = NULL) {
@@ -329,6 +337,32 @@ class KChart extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->date = $var;
+
+        return $this;
+    }
+
+    /**
+     * 时间戳
+     *
+     * Generated from protobuf field <code>int32 timestamp = 10;</code>
+     * @return int
+     */
+    public function getTimestamp()
+    {
+        return $this->timestamp;
+    }
+
+    /**
+     * 时间戳
+     *
+     * Generated from protobuf field <code>int32 timestamp = 10;</code>
+     * @param int $var
+     * @return $this
+     */
+    public function setTimestamp($var)
+    {
+        GPBUtil::checkInt32($var);
+        $this->timestamp = $var;
 
         return $this;
     }

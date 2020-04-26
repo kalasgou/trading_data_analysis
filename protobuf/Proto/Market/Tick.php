@@ -55,6 +55,12 @@ class Tick extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string time = 7;</code>
      */
     protected $time = '';
+    /**
+     * 时间戳
+     *
+     * Generated from protobuf field <code>int32 timestamp = 8;</code>
+     */
+    protected $timestamp = 0;
 
     /**
      * Constructor.
@@ -76,6 +82,8 @@ class Tick extends \Google\Protobuf\Internal\Message
      *           成交额
      *     @type string $time
      *           时间点，格式 2020/04/23 17:28
+     *     @type int $timestamp
+     *           时间戳
      * }
      */
     public function __construct($data = NULL) {
@@ -261,6 +269,32 @@ class Tick extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->time = $var;
+
+        return $this;
+    }
+
+    /**
+     * 时间戳
+     *
+     * Generated from protobuf field <code>int32 timestamp = 8;</code>
+     * @return int
+     */
+    public function getTimestamp()
+    {
+        return $this->timestamp;
+    }
+
+    /**
+     * 时间戳
+     *
+     * Generated from protobuf field <code>int32 timestamp = 8;</code>
+     * @param int $var
+     * @return $this
+     */
+    public function setTimestamp($var)
+    {
+        GPBUtil::checkInt32($var);
+        $this->timestamp = $var;
 
         return $this;
     }

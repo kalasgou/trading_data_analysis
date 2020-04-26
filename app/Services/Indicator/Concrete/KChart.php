@@ -35,7 +35,8 @@ class KChart implements KChartInterface
                 'chg_ratio' => round($row->chg_ratio * 100, 2),
                 'volume' => $row->volume,
                 'turnover' => $row->turnover,
-                'date' => date('Y/m/d', $row->ts)
+                'date' => date('Y-m-d', $row->ts),
+                'timestamp' => $row->ts
             ];
         }
         

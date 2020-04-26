@@ -35,7 +35,8 @@ class Tick implements TickInterface
                 'chg_ratio' => round($row->chg_ratio * 100, 2),
                 'volume' => $row->volume,
                 'turnover' => $row->turnover,
-                'time' => date('Y/m/d H:i', $row->ts)
+                'time' => date('Y-m-d H:i', $row->ts),
+                'timestamp' => $row->ts
             ];
         }
         

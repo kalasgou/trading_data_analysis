@@ -32,7 +32,7 @@ class KChart implements KChartInterface
                 'high' => $row->high,
                 'low' => $row->low,
                 'chg_sum' => $row->chg_sum,
-                'chg_ratio' => $row->chg_ratio,
+                'chg_ratio' => round($row->chg_ratio * 100, 2),
                 'volume' => $row->volume,
                 'turnover' => $row->turnover,
                 'date' => date('Y/m/d', $row->ts)

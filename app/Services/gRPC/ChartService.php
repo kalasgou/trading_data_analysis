@@ -30,18 +30,16 @@ class ChartService implements ChartInterface
         
         $date = $in->getDate();
         
-        $rows = KChartSrvc::getByPage(
+        $rows = TickSrvc::getByDate(
             $exchange_code,
             $stock_code,
-            $page,
-            $page_size,
-            $type
+            $date
         );
         
-        $kcharts = [];
+        $ticks = [];
         foreach ($rows as $one) {
-            $kchart = new KChart($one);            
-            $kcharts[$one['date']] = $kchart;
+            $tick = new Tick($one);            
+            $ticks[] = $tick;
         }
         
         $status = new Status([
@@ -49,12 +47,12 @@ class ChartService implements ChartInterface
             'msg' => 'success'
         ]);
         
-        $kchartData = new KChartRespData();
-        $kchartData->setKcharts($kcharts);
+        $tickData = new TickRespData();
+        $tickData->setTicks($ticks);
         
-        $out = new KChartResponse();
+        $out = new TickResponse();
         $out->setStatus($status);
-        $out->setData($kchartData);
+        $out->setData($tickData);
         
         return $out;
     }
@@ -79,7 +77,7 @@ class ChartService implements ChartInterface
         $kcharts = [];
         foreach ($rows as $one) {
             $kchart = new KChart($one);            
-            $kcharts[$one['date']] = $kchart;
+            $kcharts[] = $kchart;
         }
         
         $status = new Status([

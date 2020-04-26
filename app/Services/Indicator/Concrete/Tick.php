@@ -1,10 +1,10 @@
 <?php
 namespace App\Services\Indicator\Concrete;
 
-use App\Services\Indicator\Contract\KChartInterface;
+use App\Services\Indicator\Contract\TickInterface;
 use App\Models\Trend;
 
-class Tick implements KChartInterface
+class Tick implements TickInterface
 {
     
     public function __construct()
@@ -14,31 +14,32 @@ class Tick implements KChartInterface
     
     public function getByDate(string $exchange_code, string $stock_code, string $date) : array 
     {
+        $start_ts = strtotime($date);
+        if ($start_ts <= 0) {
+            $start_ts = strtotime('today');
+        }
+        $end_ts = $start_ts + 86399;
         
-        
-        $offset = $page_size * ($page - 1);
-        $rows = DayK::where('stock_code', $stock_code)
-                ->orderBy('ts', 'desc')
-                ->skip($offset)
-                ->limit($page_size)
+        $rows = Trend::where('stock_code', $stock_code)
+                ->where('ts', '>', $start_ts)
+                ->where('ts', '<', $end_ts)
+                ->orderBy('ts', 'asc')
                 ->get();
         
-        $kcharts = [];
+        $ticks = [];
         foreach ($rows as $row) {
-            $kcharts[] = [
-                'open' => $row->open,
-                'close' => $row->close,
-                'high' => $row->high,
-                'low' => $row->low,
+            $ticks[] = [
+                'price' => $row->open,
+                'average' => $row->close,
                 'chg_sum' => $row->chg_sum,
-                'chg_ratio' => $row->chg_ratio,
+                'chg_ratio' => round($row->chg_ratio * 100, 2),
                 'volume' => $row->volume,
                 'turnover' => $row->turnover,
-                'date' => date('Y/m/d', $row->ts)
+                'time' => date('Y/m/d H:i', $row->ts)
             ];
         }
         
-        return $kcharts;
+        return $ticks;
     }
     
 }

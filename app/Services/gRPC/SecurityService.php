@@ -72,7 +72,7 @@ class SecurityService implements SecurityInterface
                     'day_low' => $info['day_low'],
                     'last_close' => $info['close_price'],
                     'chg_sum' => $info['chg_sum'],
-                    'chg_ratio' => round($info['chg_sum'] * 100, 2),
+                    'chg_ratio' => round($info['chg_ratio'] * 100, 2),
                     'volume' => $info['total_volume'],
                     'turnover' => $info['total_turnover'],
                     'last_trade_ts' => $info['last_trade_ts'],

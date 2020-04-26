@@ -34,7 +34,7 @@ class SecurityService implements SecurityInterface
         $info = [];
         foreach ($stocks as $one) {
             $stock = new StockInfo($one);            
-            $info[] = $stock;
+            $info["{$one['exchange_code']}_{$one['stock_code']}"] = $stock;
         }
         
         $status = new Status([

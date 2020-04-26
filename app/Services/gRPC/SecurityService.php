@@ -28,7 +28,7 @@ class SecurityService implements SecurityInterface
     {
         $keywords = $in->getKeywords();
         $page = $in->getPage();
-        $page_size = $in->getPageSize();
+        $page_size = $in->getSize();
         $stocks = SearchSrvc::getByCode($keywords, $page, $page_size);
         
         $info = [];

@@ -14,17 +14,24 @@ use Google\Protobuf\Internal\GPBUtil;
 class Criteria extends \Google\Protobuf\Internal\Message
 {
     /**
+     * 搜索字符串（暂只支持股票代码）
+     *
      * Generated from protobuf field <code>string keywords = 1;</code>
      */
     protected $keywords = '';
     /**
-     * Generated from protobuf field <code>string prdt_type = 2;</code>
+     * string prdt_type = 2;
+     * string exchange_code = 3;
+     *
+     * Generated from protobuf field <code>int32 page = 2;</code>
      */
-    protected $prdt_type = '';
+    protected $page = 0;
     /**
-     * Generated from protobuf field <code>string exchange_code = 3;</code>
+     * 每页数量，默认20
+     *
+     * Generated from protobuf field <code>int32 size = 3;</code>
      */
-    protected $exchange_code = '';
+    protected $size = 0;
 
     /**
      * Constructor.
@@ -33,8 +40,12 @@ class Criteria extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type string $keywords
-     *     @type string $prdt_type
-     *     @type string $exchange_code
+     *           搜索字符串（暂只支持股票代码）
+     *     @type int $page
+     *           string prdt_type = 2;
+     *           string exchange_code = 3;
+     *     @type int $size
+     *           每页数量，默认20
      * }
      */
     public function __construct($data = NULL) {
@@ -43,6 +54,8 @@ class Criteria extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 搜索字符串（暂只支持股票代码）
+     *
      * Generated from protobuf field <code>string keywords = 1;</code>
      * @return string
      */
@@ -52,6 +65,8 @@ class Criteria extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 搜索字符串（暂只支持股票代码）
+     *
      * Generated from protobuf field <code>string keywords = 1;</code>
      * @param string $var
      * @return $this
@@ -65,45 +80,55 @@ class Criteria extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string prdt_type = 2;</code>
-     * @return string
+     * string prdt_type = 2;
+     * string exchange_code = 3;
+     *
+     * Generated from protobuf field <code>int32 page = 2;</code>
+     * @return int
      */
-    public function getPrdtType()
+    public function getPage()
     {
-        return $this->prdt_type;
+        return $this->page;
     }
 
     /**
-     * Generated from protobuf field <code>string prdt_type = 2;</code>
-     * @param string $var
+     * string prdt_type = 2;
+     * string exchange_code = 3;
+     *
+     * Generated from protobuf field <code>int32 page = 2;</code>
+     * @param int $var
      * @return $this
      */
-    public function setPrdtType($var)
+    public function setPage($var)
     {
-        GPBUtil::checkString($var, True);
-        $this->prdt_type = $var;
+        GPBUtil::checkInt32($var);
+        $this->page = $var;
 
         return $this;
     }
 
     /**
-     * Generated from protobuf field <code>string exchange_code = 3;</code>
-     * @return string
+     * 每页数量，默认20
+     *
+     * Generated from protobuf field <code>int32 size = 3;</code>
+     * @return int
      */
-    public function getExchangeCode()
+    public function getSize()
     {
-        return $this->exchange_code;
+        return $this->size;
     }
 
     /**
-     * Generated from protobuf field <code>string exchange_code = 3;</code>
-     * @param string $var
+     * 每页数量，默认20
+     *
+     * Generated from protobuf field <code>int32 size = 3;</code>
+     * @param int $var
      * @return $this
      */
-    public function setExchangeCode($var)
+    public function setSize($var)
     {
-        GPBUtil::checkString($var, True);
-        $this->exchange_code = $var;
+        GPBUtil::checkInt32($var);
+        $this->size = $var;
 
         return $this;
     }

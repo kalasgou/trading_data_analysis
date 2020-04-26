@@ -68,17 +68,35 @@ class Quotation extends \Google\Protobuf\Internal\Message
      */
     protected $chg_ratio = '';
     /**
+     * 成交量（股数）
+     *
+     * Generated from protobuf field <code>string volume = 10;</code>
+     */
+    protected $volume = '';
+    /**
+     * 成交额
+     *
+     * Generated from protobuf field <code>string turnover = 11;</code>
+     */
+    protected $turnover = '';
+    /**
      * 最后成交时间（时间戳）
      *
-     * Generated from protobuf field <code>string last_trade_ts = 10;</code>
+     * Generated from protobuf field <code>string last_trade_ts = 12;</code>
      */
     protected $last_trade_ts = '';
     /**
-     * 交易状态（待定）
+     * 交易状态（代码）
      *
-     * Generated from protobuf field <code>string trade_status = 11;</code>
+     * Generated from protobuf field <code>string trade_status_code = 13;</code>
      */
-    protected $trade_status = '';
+    protected $trade_status_code = '';
+    /**
+     * 交易状态（文字）
+     *
+     * Generated from protobuf field <code>string trade_status_str = 14;</code>
+     */
+    protected $trade_status_str = '';
 
     /**
      * Constructor.
@@ -104,10 +122,16 @@ class Quotation extends \Google\Protobuf\Internal\Message
      *           当日涨跌额
      *     @type string $chg_ratio
      *           当日涨跌幅(%)
+     *     @type string $volume
+     *           成交量（股数）
+     *     @type string $turnover
+     *           成交额
      *     @type string $last_trade_ts
      *           最后成交时间（时间戳）
-     *     @type string $trade_status
-     *           交易状态（待定）
+     *     @type string $trade_status_code
+     *           交易状态（代码）
+     *     @type string $trade_status_str
+     *           交易状态（文字）
      * }
      */
     public function __construct($data = NULL) {
@@ -350,9 +374,61 @@ class Quotation extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 成交量（股数）
+     *
+     * Generated from protobuf field <code>string volume = 10;</code>
+     * @return string
+     */
+    public function getVolume()
+    {
+        return $this->volume;
+    }
+
+    /**
+     * 成交量（股数）
+     *
+     * Generated from protobuf field <code>string volume = 10;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setVolume($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->volume = $var;
+
+        return $this;
+    }
+
+    /**
+     * 成交额
+     *
+     * Generated from protobuf field <code>string turnover = 11;</code>
+     * @return string
+     */
+    public function getTurnover()
+    {
+        return $this->turnover;
+    }
+
+    /**
+     * 成交额
+     *
+     * Generated from protobuf field <code>string turnover = 11;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setTurnover($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->turnover = $var;
+
+        return $this;
+    }
+
+    /**
      * 最后成交时间（时间戳）
      *
-     * Generated from protobuf field <code>string last_trade_ts = 10;</code>
+     * Generated from protobuf field <code>string last_trade_ts = 12;</code>
      * @return string
      */
     public function getLastTradeTs()
@@ -363,7 +439,7 @@ class Quotation extends \Google\Protobuf\Internal\Message
     /**
      * 最后成交时间（时间戳）
      *
-     * Generated from protobuf field <code>string last_trade_ts = 10;</code>
+     * Generated from protobuf field <code>string last_trade_ts = 12;</code>
      * @param string $var
      * @return $this
      */
@@ -376,27 +452,53 @@ class Quotation extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * 交易状态（待定）
+     * 交易状态（代码）
      *
-     * Generated from protobuf field <code>string trade_status = 11;</code>
+     * Generated from protobuf field <code>string trade_status_code = 13;</code>
      * @return string
      */
-    public function getTradeStatus()
+    public function getTradeStatusCode()
     {
-        return $this->trade_status;
+        return $this->trade_status_code;
     }
 
     /**
-     * 交易状态（待定）
+     * 交易状态（代码）
      *
-     * Generated from protobuf field <code>string trade_status = 11;</code>
+     * Generated from protobuf field <code>string trade_status_code = 13;</code>
      * @param string $var
      * @return $this
      */
-    public function setTradeStatus($var)
+    public function setTradeStatusCode($var)
     {
         GPBUtil::checkString($var, True);
-        $this->trade_status = $var;
+        $this->trade_status_code = $var;
+
+        return $this;
+    }
+
+    /**
+     * 交易状态（文字）
+     *
+     * Generated from protobuf field <code>string trade_status_str = 14;</code>
+     * @return string
+     */
+    public function getTradeStatusStr()
+    {
+        return $this->trade_status_str;
+    }
+
+    /**
+     * 交易状态（文字）
+     *
+     * Generated from protobuf field <code>string trade_status_str = 14;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setTradeStatusStr($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->trade_status_str = $var;
 
         return $this;
     }

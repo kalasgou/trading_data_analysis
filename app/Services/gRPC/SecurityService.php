@@ -54,7 +54,32 @@ class SecurityService implements SecurityInterface
     
     public function fetchInfo(ContextInterface $ctx, Stocks $in): InfoResponse
     {
+        $stock_codes = [];
+        foreach ($in->getStocks() as $one) {    
+            $stock_codes[] = sprintf('%05s', $one->getStockCode());
+        }
         
+        $stocks = SearchSrvc::getByCodes($stock_codes);
+        
+        $info = [];
+        foreach ($stocks as $one) {
+            $stock = new StockInfo($one);            
+            $info["{$one['exchange_code']}_{$one['stock_code']}"] = $stock;
+        }
+        
+        $status = new Status([
+            'code' => 0,
+            'msg' => 'success'
+        ]);
+        
+        $infoData = new InfoRespData();
+        $infoData->setInfo($info);
+        
+        $out = new InfoResponse();
+        $out->setStatus($status);
+        $out->setData($infoData);
+        
+        return $out;
     }
     
     public function fetchRealtimeQuote(ContextInterface $ctx, Stocks $in): QuoteResponse

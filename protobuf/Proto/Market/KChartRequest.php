@@ -30,9 +30,21 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
      */
     protected $size = 0;
     /**
+     * 偏移量 (>=0)
+     *
+     * Generated from protobuf field <code>int32 offset = 4;</code>
+     */
+    protected $offset = 0;
+    /**
+     * 每次取数量 (1 <= n <= 250)
+     *
+     * Generated from protobuf field <code>int32 limit = 5;</code>
+     */
+    protected $limit = 0;
+    /**
      * K线图类型，默认day
      *
-     * Generated from protobuf field <code>string type = 4;</code>
+     * Generated from protobuf field <code>string type = 6;</code>
      */
     protected $type = '';
 
@@ -47,6 +59,10 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
      *           从1开始
      *     @type int $size
      *           每页数量，默认20
+     *     @type int $offset
+     *           偏移量 (>=0)
+     *     @type int $limit
+     *           每次取数量 (1 <= n <= 250)
      *     @type string $type
      *           K线图类型，默认day
      * }
@@ -131,9 +147,61 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 偏移量 (>=0)
+     *
+     * Generated from protobuf field <code>int32 offset = 4;</code>
+     * @return int
+     */
+    public function getOffset()
+    {
+        return $this->offset;
+    }
+
+    /**
+     * 偏移量 (>=0)
+     *
+     * Generated from protobuf field <code>int32 offset = 4;</code>
+     * @param int $var
+     * @return $this
+     */
+    public function setOffset($var)
+    {
+        GPBUtil::checkInt32($var);
+        $this->offset = $var;
+
+        return $this;
+    }
+
+    /**
+     * 每次取数量 (1 <= n <= 250)
+     *
+     * Generated from protobuf field <code>int32 limit = 5;</code>
+     * @return int
+     */
+    public function getLimit()
+    {
+        return $this->limit;
+    }
+
+    /**
+     * 每次取数量 (1 <= n <= 250)
+     *
+     * Generated from protobuf field <code>int32 limit = 5;</code>
+     * @param int $var
+     * @return $this
+     */
+    public function setLimit($var)
+    {
+        GPBUtil::checkInt32($var);
+        $this->limit = $var;
+
+        return $this;
+    }
+
+    /**
      * K线图类型，默认day
      *
-     * Generated from protobuf field <code>string type = 4;</code>
+     * Generated from protobuf field <code>string type = 6;</code>
      * @return string
      */
     public function getType()
@@ -144,7 +212,7 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
     /**
      * K线图类型，默认day
      *
-     * Generated from protobuf field <code>string type = 4;</code>
+     * Generated from protobuf field <code>string type = 6;</code>
      * @param string $var
      * @return $this
      */

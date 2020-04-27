@@ -16,6 +16,7 @@ use Proto\Market\QuoteResponse\Data as QuoteRespData;
 use App\Facades\QuoteRT;
 use App\Facades\QuoteDL;
 use App\Facades\SearchSrvc;
+use App\Facades\TimetableSrvc;
 
 class SecurityService implements SecurityInterface
 {
@@ -84,10 +85,14 @@ class SecurityService implements SecurityInterface
     
     public function fetchRealtimeQuote(ContextInterface $ctx, Stocks $in): QuoteResponse
     {
+        $session = [];
         $quotes = [];
         foreach ($in->getStocks() as $stock) {
             $info = QuoteRT::getInfo($stock->getExchangeCode(), $stock->getStockCode());
             if ($info) {
+                if (!isset($session[$stock->getExchangeCode()][$info['market_code']])) {
+                    $session[$stock->getExchangeCode()][$info['market_code']] = TimetableSrvc::getTradinSession($stock->getExchangeCode(), $info['market_code']);
+                }
                 $quote = new Quotation([
                     'price' => $info['nominal_price'],
                     'open' => $info['open_price'],
@@ -101,8 +106,8 @@ class SecurityService implements SecurityInterface
                     'volume' => $info['total_volume'],
                     'turnover' => $info['total_turnover'],
                     'last_trade_ts' => $info['last_trade_ts'],
-                    'trade_status_code' => 0,
-                    'trade_status_str' => 'none'
+                    'trade_status_code' => $session[$stock->getExchangeCode()][$info['market_code']]['cur_status_code'],
+                    'trade_status_str' => $session[$stock->getExchangeCode()][$info['market_code']]['cur_status_desc']
                 ]);            
                 $quotes["{$stock->getExchangeCode()}_{$stock->getStockCode()}"] = $quote;
             }

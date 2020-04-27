@@ -3,11 +3,11 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Spiral\Goridge;
 use Spiral\RoadRunner;
 use Spiral\GRPC;
-
 
 class SecurityMarketData extends Command
 {
@@ -42,6 +42,7 @@ class SecurityMarketData extends Command
      */
     public function handle()
     {
+        App::setLocale('zh-hk');
         $services = Config::get('grpc_services');
         
         $server = new GRPC\Server();

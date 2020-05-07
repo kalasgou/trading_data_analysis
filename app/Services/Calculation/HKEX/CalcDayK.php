@@ -10,7 +10,7 @@ use App\Models\ClosingPrice;
 use App\Models\Index;
 use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
-use App\Models\DayKTmp;
+use App\Models\DayK;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 
@@ -132,7 +132,7 @@ class CalcDayK
                 $last_trade_day_ts = $today_ts;
                 
                 if (!empty($charts)) {
-                    $ret = DayKTmp::raw(function ($collection) use ($charts) {
+                    $ret = DayK::raw(function ($collection) use ($charts) {
                         $upsert_docs = [];
                         foreach ($charts as $chart) {
                             $upsert_docs[] = [
@@ -288,7 +288,7 @@ class CalcDayK
                 }
                 
                 if (!empty($charts)) {
-                    $ret = DayKTmp::raw(function ($collection) use ($charts) {
+                    $ret = DayK::raw(function ($collection) use ($charts) {
                         $upsert_docs = [];
                         foreach ($charts as $chart) {
                             $upsert_docs[] = [

@@ -5,7 +5,7 @@ namespace App\Services\Calculation\HKEX;
 bcscale(3);
 
 use App\Models\DayK;
-use App\Models\WeekKTmp;
+use App\Models\WeekK;
 use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
 use Illuminate\Support\Facades\DB;
@@ -122,7 +122,7 @@ class CalcWeekK
             }
             
             if (!empty($charts)) {
-                $ret = WeekKTmp::raw(function ($collection) use ($charts) {
+                $ret = WeekK::raw(function ($collection) use ($charts) {
                     $upsert_docs = [];
                     foreach ($charts as $chart) {
                         $upsert_docs[] = [

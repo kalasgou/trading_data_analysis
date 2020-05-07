@@ -179,4 +179,53 @@ class Timetable implements TimetableInterface
         
         return $session;
     }
+    
+    public function getTradinDaysByRange(string $start_date, string $end_date, string $orderby = 'asc') : array
+    {
+        $days = Redis::zrangebyscore($this->redis_key, strtotime($start_date), strtotime($end_date));
+        
+        return $this->sortTradinDays($days, $orderby);
+    }
+    
+    public function getTradinDaysByCount(string $date, int $step = 50, string $direction = 'backwards', string $orderby = 'asc') : array
+    {
+        $day_ts = strtotime($date);
+        
+        $idx = Redis::zrank($this->redis_key, json_encode(['ts' => $day_ts]));
+        
+        if ($direction === 'forwards') {
+            $start_idx = $idx;
+            $end_idx = min($start_idx + $step, 99999999);
+            
+        } else {
+            
+            $end_idx = $idx;
+            $start_idx = max(0, $end_idx - $step);
+        }
+        
+        $days = Redis::zrange($this->redis_key, $start_idx, $end_idx);
+        
+        return $this->sortTradinDays($days, $orderby);
+    }
+    
+    private function sortTradinDays(array $days, string $orderby) : array
+    {
+        $trading_days = [];
+        if ($orderby === 'desc') {
+            
+            foreach ($days as $day) {
+                $one = json_decode($day, true);
+                array_unshift($trading_days, $one['ts']);
+            }
+            
+        } else {
+            
+            foreach ($days as $day) {
+                $one = json_decode($day, true);
+                $trading_days[] = $one['ts'];
+            }
+        }
+        
+        return $trading_days;
+    }
 }

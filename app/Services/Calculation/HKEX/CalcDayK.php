@@ -21,7 +21,7 @@ class CalcDayK
         // Starts from 2019-06-24
     }
     
-    public function fixStock(string $prdt_type, string $start_date, string $end_date) : bool
+    public function fixStock(string $prdt_type, string $start_date, string $end_date, string $stock_code = '') : bool
     {
         if (!in_array($prdt_type, ['Equity', 'Warrant', 'Bond', 'Trust'])) {
             return false;
@@ -154,7 +154,7 @@ class CalcDayK
         return false;
     }
     
-    public function fixIndex(string $start_date, string $end_date) : bool
+    public function fixIndex(string $start_date, string $end_date, string $index_code = '') : bool
     {
         $null_val = -9223372036854775808;
         

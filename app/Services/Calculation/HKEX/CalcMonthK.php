@@ -5,13 +5,13 @@ namespace App\Services\Calculation\HKEX;
 bcscale(3);
 
 use App\Models\DayK;
-use App\Models\WeekK;
+use App\Models\MonthKTmp;
 use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 
-class CalcWeekK
+class CalcMonthK
 {
     public function __construct()
     {
@@ -43,19 +43,25 @@ class CalcWeekK
         $start_date_ts = strtotime($start_date);
         $end_date_ts = strtotime($end_date);
         
-        $days = (int)date('N', $start_date_ts);
-        $start_day_ts = $start_date_ts - 86400 * ($days - 1);
-        $days = 7 - (int)date('N', $end_date_ts);
-        $end_day_ts = $end_date_ts + 86400 * $days;
+        $start_year = (int)date('Y', $start_date_ts);
+        $start_month = (int)date('n', $start_date_ts);
         
-        $one_week_secs = 86400 * 7;
+        $end_year = (int)date('Y', $end_date_ts);
+        $end_month = (int)date('n', $end_date_ts);
         
         $close_prices = [];
+        
+        $start_day_ts = mktime(0, 0, 0, $start_month, 1, $start_year);
+        $end_day_ts = mktime(0, 0, 0, $end_month, 1, $end_year);
+        
+        $end_month_days = (int)date('t', $end_day_ts);
+        $end_day_ts = mktime(0, 0, 0, $end_month, $end_month_days, $end_year);
         
         for ($ts = $start_day_ts; $ts <= $end_day_ts; ) {
             
             $start_ts = $ts;
-            $end_ts = $start_ts + $one_week_secs;
+            $one_month_secs = 86400 * (int)date('t', $start_ts);
+            $end_ts = $start_ts + $one_month_secs;
             
             foreach ($stocks as $stock) {
                 
@@ -76,7 +82,7 @@ class CalcWeekK
                     ->where('ts', '>=', $start_ts)
                     ->where('ts', '<', $end_ts)
                     ->orderby('ts', 'asc')
-                    ->limit(5)
+                    ->limit(25)
                     ->get();
                 $rows = $rows->toArray();
                 
@@ -123,7 +129,7 @@ class CalcWeekK
             }
             
             if (!empty($charts)) {
-                $ret = WeekK::raw(function ($collection) use ($charts) {
+                $ret = MonthKTmp::raw(function ($collection) use ($charts) {
                     $upsert_docs = [];
                     foreach ($charts as $chart) {
                         $upsert_docs[] = [

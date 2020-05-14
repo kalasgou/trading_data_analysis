@@ -1,13 +1,13 @@
 <?php
 namespace App\Facades;
 
-use App\Services\Indicator\Concrete\KChart;
+use App\Services\Stock\Concrete\Search;
 use Illuminate\Support\Facades\Facade;
 
-class KChartSrvc extends Facade
+class StockSrvc extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return KChart::class;
+        return Search::class;
     }
 }

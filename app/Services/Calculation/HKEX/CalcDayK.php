@@ -44,8 +44,6 @@ class CalcDayK
                     $last_trade_day_ts = $calendar['last_trading_day'];
                 }
                 
-                $close_ts = $last_trade_day_ts + 57600;
-                
                 $last_trade_date = new \DateTime("@{$last_trade_day_ts}");
                 $tomorrow_date = new \DateTime("@{$tomorrow_ts}");
                 
@@ -160,153 +158,158 @@ class CalcDayK
         
         $indexes = SearchSrvc::getIndexes();
         
-        $start_day_ts = strtotime($start_date);
-        $end_day_ts = strtotime($end_date);
-        
-        for ($day_ts = $start_day_ts; $day_ts <= $end_day_ts; ) {
+        if (!empty($indexes)) {
             
-            $week_day = (int)date('N', $day_ts);
+            $start_day_ts = strtotime($start_date);
+            $end_day_ts = strtotime($end_date);
             
-            $charts = [];
-            
-            if ($week_day >= 1 && $week_day <= 5) {
+            for ($day_ts = $start_day_ts; $day_ts <= $end_day_ts; ) {
                 
-                $start_ts = $day_ts;
-                $end_ts = $start_ts + 86400;
+                $week_day = (int)date('N', $day_ts);
                 
-                foreach ($indexes as $index) {
-                    
-                    $insert = false;
-                    
-                    $chart['stock_code'] = $index['stock_code'];
-                    $chart['prdt_type'] = 'idx';
-                    $chart['open'] = '0';
-                    $chart['close'] = '0';
-                    $chart['last_close'] = '0';
-                    $chart['high'] = '0';
-                    $chart['low'] = '0';
-                    $chart['chg_sum'] = '0';
-                    $chart['chg_ratio'] = '0';
-                    $chart['total_volume'] = $chart['volume'] = 0;
-                    $chart['total_turnover'] = $chart['turnover'] = '0';
-                    $chart['ts'] = $day_ts;
-                    
-                    // Prev Close
-                    $rows = Index::where('code', $index['stock_code'])
-                        ->where('prev_close', '>', 0)
-                        ->where('unix_ts', '>=', $start_ts)
-                        ->where('unix_ts', '<', $end_ts)
-                        ->orderby('unix_ts', 'asc')
-                        ->limit(1)
-                        ->get(['prev_close']);
-                    $rows = $rows->toArray();
-                    if (!empty($rows)) {
-                        $insert = true;
-                        $chart['last_close'] = bcdiv($rows[0]['prev_close'], 10000, 4);
-                    }
-                    
-                    // Open
-                    $rows = Index::where('code', $index['stock_code'])
-                        ->where('open', '>', 0)
-                        ->where('unix_ts', '>=', $start_ts)
-                        ->where('unix_ts', '<', $end_ts)
-                        ->orderby('unix_ts', 'asc')
-                        ->limit(1)
-                        ->get(['open']);
-                    $rows = $rows->toArray();
-                    if (!empty($rows)) {
-                        $insert = true;
-                        $chart['open'] = bcdiv($rows[0]['open'], 10000, 4);
-                    }
-                    
-                    // Close
-                    $rows = Index::where('code', $index['stock_code'])
-                        ->where('close', '>', 0)
-                        ->where('unix_ts', '>=', $start_ts)
-                        ->where('unix_ts', '<', $end_ts)
-                        ->orderby('unix_ts', 'desc')
-                        ->limit(1)
-                        ->get(['close']);
-                    $rows = $rows->toArray();
-                    if (!empty($rows)) {
-                        $insert = true;
-                        $chart['close'] = bcdiv($rows[0]['close'], 10000, 4);
-                    }
-                    
-                    if (bccomp($chart['last_close'], '0', 4) > 0) {
-                        $chart['chg_sum'] = bcsub($chart['close'], $chart['last_close'], 4);
-                        $chart['chg_ratio'] =  bcdiv($chart['chg_sum'], $chart['last_close'], 5);
-                    }
-                    
-                    // High & Low
-                    $rows = Index::where('code', $index['stock_code'])
-                        ->where('high', '>', 0)
-                        ->where('low', '>', 0)
-                        ->where('unix_ts', '>=', $start_ts)
-                        ->where('unix_ts', '<', $end_ts)
-                        ->orderby('unix_ts', 'desc')
-                        ->limit(1)
-                        ->get(['high', 'low']);
-                    $rows = $rows->toArray();
-                    if (!empty($rows)) {
-                        $insert = true;
-                        $chart['high'] = bcdiv($rows[0]['high'], 10000, 4);
-                        $chart['low'] = bcdiv($rows[0]['low'], 10000, 4);
-                    }
-                    
-                    // Volume
-                    $rows = Index::where('code', $index['stock_code'])
-                        ->where('volume', '>', 0)
-                        ->where('unix_ts', '>=', $start_ts)
-                        ->where('unix_ts', '<', $end_ts)
-                        ->orderby('unix_ts', 'desc')
-                        ->limit(1)
-                        ->get(['volume']);
-                    $rows = $rows->toArray();
-                    if (!empty($rows)) {
-                        $insert = true;
-                        $chart['total_volume'] = $chart['volume'] = (int)$rows[0]['volume'];
-                    }
-                    
-                    // Turnover
-                    $rows = Index::where('code', $index['stock_code'])
-                        ->where('turnover', '>', 0)
-                        ->where('unix_ts', '>=', $start_ts)
-                        ->where('unix_ts', '<', $end_ts)
-                        ->orderby('unix_ts', 'desc')
-                        ->limit(1)
-                        ->get(['turnover']);
-                    $rows = $rows->toArray();
-                    if (!empty($rows)) {
-                        $insert = true;
-                        $chart['total_turnover'] = $chart['turnover'] = bcdiv($rows[0]['turnover'], 10000, 4);
-                    }
-                    
-                    if ($insert) {
-                        $charts[] = $chart;
-                    }
-                }
+                $charts = [];
                 
-                if (!empty($charts)) {
-                    $ret = DayK::raw(function ($collection) use ($charts) {
-                        $upsert_docs = [];
-                        foreach ($charts as $chart) {
-                            $upsert_docs[] = [
-                                'updateOne' => [
-                                    ['stock_code' => $chart['stock_code'], 'ts' => $chart['ts']],
-                                    ['$set' => $chart],
-                                    ['upsert' => true]
-                                ]
-                            ];
+                if ($week_day >= 1 && $week_day <= 5) {
+                    
+                    $start_ts = $day_ts;
+                    $end_ts = $start_ts + 86400;
+                    
+                    foreach ($indexes as $index) {
+                        
+                        $insert = false;
+                        
+                        $chart['stock_code'] = $index['stock_code'];
+                        $chart['prdt_type'] = 'idx';
+                        $chart['open'] = '0';
+                        $chart['close'] = '0';
+                        $chart['last_close'] = '0';
+                        $chart['high'] = '0';
+                        $chart['low'] = '0';
+                        $chart['chg_sum'] = '0';
+                        $chart['chg_ratio'] = '0';
+                        $chart['total_volume'] = $chart['volume'] = 0;
+                        $chart['total_turnover'] = $chart['turnover'] = '0';
+                        $chart['ts'] = $day_ts;
+                        
+                        // Prev Close
+                        $rows = Index::where('code', $index['stock_code'])
+                            ->where('prev_close', '>', 0)
+                            ->where('unix_ts', '>=', $start_ts)
+                            ->where('unix_ts', '<', $end_ts)
+                            ->orderby('unix_ts', 'asc')
+                            ->limit(1)
+                            ->get(['prev_close']);
+                        $rows = $rows->toArray();
+                        if (!empty($rows)) {
+                            $insert = true;
+                            $chart['last_close'] = bcdiv($rows[0]['prev_close'], 10000, 4);
                         }
-                        return $collection->bulkWrite($upsert_docs, ['ordered' => true]);
-                    });
+                        
+                        // Open
+                        $rows = Index::where('code', $index['stock_code'])
+                            ->where('open', '>', 0)
+                            ->where('unix_ts', '>=', $start_ts)
+                            ->where('unix_ts', '<', $end_ts)
+                            ->orderby('unix_ts', 'asc')
+                            ->limit(1)
+                            ->get(['open']);
+                        $rows = $rows->toArray();
+                        if (!empty($rows)) {
+                            $insert = true;
+                            $chart['open'] = bcdiv($rows[0]['open'], 10000, 4);
+                        }
+                        
+                        // Close
+                        $rows = Index::where('code', $index['stock_code'])
+                            ->where('close', '>', 0)
+                            ->where('unix_ts', '>=', $start_ts)
+                            ->where('unix_ts', '<', $end_ts)
+                            ->orderby('unix_ts', 'desc')
+                            ->limit(1)
+                            ->get(['close']);
+                        $rows = $rows->toArray();
+                        if (!empty($rows)) {
+                            $insert = true;
+                            $chart['close'] = bcdiv($rows[0]['close'], 10000, 4);
+                        }
+                        
+                        if (bccomp($chart['last_close'], '0', 4) > 0) {
+                            $chart['chg_sum'] = bcsub($chart['close'], $chart['last_close'], 4);
+                            $chart['chg_ratio'] =  bcdiv($chart['chg_sum'], $chart['last_close'], 5);
+                        }
+                        
+                        // High & Low
+                        $rows = Index::where('code', $index['stock_code'])
+                            ->where('high', '>', 0)
+                            ->where('low', '>', 0)
+                            ->where('unix_ts', '>=', $start_ts)
+                            ->where('unix_ts', '<', $end_ts)
+                            ->orderby('unix_ts', 'desc')
+                            ->limit(1)
+                            ->get(['high', 'low']);
+                        $rows = $rows->toArray();
+                        if (!empty($rows)) {
+                            $insert = true;
+                            $chart['high'] = bcdiv($rows[0]['high'], 10000, 4);
+                            $chart['low'] = bcdiv($rows[0]['low'], 10000, 4);
+                        }
+                        
+                        // Volume
+                        $rows = Index::where('code', $index['stock_code'])
+                            ->where('volume', '>', 0)
+                            ->where('unix_ts', '>=', $start_ts)
+                            ->where('unix_ts', '<', $end_ts)
+                            ->orderby('unix_ts', 'desc')
+                            ->limit(1)
+                            ->get(['volume']);
+                        $rows = $rows->toArray();
+                        if (!empty($rows)) {
+                            $insert = true;
+                            $chart['total_volume'] = $chart['volume'] = (int)$rows[0]['volume'];
+                        }
+                        
+                        // Turnover
+                        $rows = Index::where('code', $index['stock_code'])
+                            ->where('turnover', '>', 0)
+                            ->where('unix_ts', '>=', $start_ts)
+                            ->where('unix_ts', '<', $end_ts)
+                            ->orderby('unix_ts', 'desc')
+                            ->limit(1)
+                            ->get(['turnover']);
+                        $rows = $rows->toArray();
+                        if (!empty($rows)) {
+                            $insert = true;
+                            $chart['total_turnover'] = $chart['turnover'] = bcdiv($rows[0]['turnover'], 10000, 4);
+                        }
+                        
+                        if ($insert) {
+                            $charts[] = $chart;
+                        }
+                    }
+                    
+                    if (!empty($charts)) {
+                        $ret = DayK::raw(function ($collection) use ($charts) {
+                            $upsert_docs = [];
+                            foreach ($charts as $chart) {
+                                $upsert_docs[] = [
+                                    'updateOne' => [
+                                        ['stock_code' => $chart['stock_code'], 'ts' => $chart['ts']],
+                                        ['$set' => $chart],
+                                        ['upsert' => true]
+                                    ]
+                                ];
+                            }
+                            return $collection->bulkWrite($upsert_docs, ['ordered' => true]);
+                        });
+                    }
                 }
+                
+                $day_ts += 86400;
             }
             
-            $day_ts += 86400;
+            return true;
         }
         
-        return true;
+        return false;
     }
 }

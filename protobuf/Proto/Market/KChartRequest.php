@@ -42,11 +42,29 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
      */
     protected $limit = 0;
     /**
+     * 按时间排序，desc-倒序，asc-正序，默认desc
+     *
+     * Generated from protobuf field <code>string order = 6;</code>
+     */
+    protected $order = '';
+    /**
      * K线图类型，默认day
      *
-     * Generated from protobuf field <code>string type = 6;</code>
+     * Generated from protobuf field <code>string type = 7;</code>
      */
     protected $type = '';
+    /**
+     * 起始日期，格式：yyyy-mm-dd
+     *
+     * Generated from protobuf field <code>string start_date = 8;</code>
+     */
+    protected $start_date = '';
+    /**
+     * 结束日期，格式：yyyy-mm-dd
+     *
+     * Generated from protobuf field <code>string end_date = 9;</code>
+     */
+    protected $end_date = '';
 
     /**
      * Constructor.
@@ -63,8 +81,14 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
      *           偏移量 (>=0)
      *     @type int $limit
      *           每次取数量 (1 <= n <= 250)
+     *     @type string $order
+     *           按时间排序，desc-倒序，asc-正序，默认desc
      *     @type string $type
      *           K线图类型，默认day
+     *     @type string $start_date
+     *           起始日期，格式：yyyy-mm-dd
+     *     @type string $end_date
+     *           结束日期，格式：yyyy-mm-dd
      * }
      */
     public function __construct($data = NULL) {
@@ -199,9 +223,35 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * 按时间排序，desc-倒序，asc-正序，默认desc
+     *
+     * Generated from protobuf field <code>string order = 6;</code>
+     * @return string
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * 按时间排序，desc-倒序，asc-正序，默认desc
+     *
+     * Generated from protobuf field <code>string order = 6;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setOrder($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->order = $var;
+
+        return $this;
+    }
+
+    /**
      * K线图类型，默认day
      *
-     * Generated from protobuf field <code>string type = 6;</code>
+     * Generated from protobuf field <code>string type = 7;</code>
      * @return string
      */
     public function getType()
@@ -212,7 +262,7 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
     /**
      * K线图类型，默认day
      *
-     * Generated from protobuf field <code>string type = 6;</code>
+     * Generated from protobuf field <code>string type = 7;</code>
      * @param string $var
      * @return $this
      */
@@ -220,6 +270,58 @@ class KChartRequest extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->type = $var;
+
+        return $this;
+    }
+
+    /**
+     * 起始日期，格式：yyyy-mm-dd
+     *
+     * Generated from protobuf field <code>string start_date = 8;</code>
+     * @return string
+     */
+    public function getStartDate()
+    {
+        return $this->start_date;
+    }
+
+    /**
+     * 起始日期，格式：yyyy-mm-dd
+     *
+     * Generated from protobuf field <code>string start_date = 8;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setStartDate($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->start_date = $var;
+
+        return $this;
+    }
+
+    /**
+     * 结束日期，格式：yyyy-mm-dd
+     *
+     * Generated from protobuf field <code>string end_date = 9;</code>
+     * @return string
+     */
+    public function getEndDate()
+    {
+        return $this->end_date;
+    }
+
+    /**
+     * 结束日期，格式：yyyy-mm-dd
+     *
+     * Generated from protobuf field <code>string end_date = 9;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setEndDate($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->end_date = $var;
 
         return $this;
     }

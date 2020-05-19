@@ -66,25 +66,47 @@ class ChartService implements ChartInterface
         $page_size = $in->getSize();
         $offset = $in->getOffset();
         $limit = $in->getLimit();
+        $order = $in->getOrder();
         $type = $in->getType();
+        $start_date = $in->getStartDate();
+        $end_date = $in->getEndDate();
         
-        $page = max(1, $page);
-        $page_size = min(max(20, $page_size), 250);
+        $start_ts = strtotime($start_date);
+        $end_ts = strtotime($end_date);
         
-        if ($offset < 0 || $limit <= 0) {
-            $offset = $page_size * ($page - 1);
-            $limit = $page_size;
+        $rows = [];
+        if ($start_ts > 0 && $end_ts > 0) {
+            
+            $rows = KChartSrvc::getByPeriod(
+                $exchange_code,
+                $stock_code,
+                $type,
+                $start_ts,
+                $end_ts,
+                $order
+            );
+            
+        } else {
+            
+            $page = max(1, $page);
+            $page_size = min(max(20, $page_size), 250);
+            
+            if ($offset < 0 || $limit <= 0) {
+                $offset = $page_size * ($page - 1);
+                $limit = $page_size;
+            }
+            
+            $limit = min($limit, 250);
+            
+            $rows = KChartSrvc::getByPage(
+                $exchange_code,
+                $stock_code,
+                $type,
+                $offset,
+                $limit,
+                $order
+            );
         }
-        
-        $limit = min($limit, 250);
-        
-        $rows = KChartSrvc::getByPage(
-            $exchange_code,
-            $stock_code,
-            $type,
-            $offset,
-            $limit
-        );
         
         $kcharts = [];
         foreach ($rows as $one) {

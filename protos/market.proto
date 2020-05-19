@@ -178,7 +178,10 @@ message KChartRequest {
     int32 size = 3;     // 每页数量，默认20
     int32 offset = 4;   // 偏移量 (>=0)
     int32 limit = 5;    // 每次取数量 (1 <= n <= 250)
-    string type = 6;    // K线图类型，默认day
+    string order = 6;   // 按时间排序，desc-倒序，asc-正序，默认desc
+    string type = 7;    // K线图类型，默认day
+    string start_date = 8;  // 起始日期，格式：yyyy-mm-dd
+    string end_date = 9;    // 结束日期，格式：yyyy-mm-dd
 }
 
 message KChartResponse {

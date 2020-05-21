@@ -41,8 +41,13 @@ class Timetable implements TimetableInterface
     public function getCalendar(int $timestamp) : array
     {
         try {
+            $day = date('j', $timestamp);
+            $month = date('n', $timestamp);
+            $year = date('Y', $timestamp);
+            $this_day_ts = mktime(0, 0, 0, $month, $day, $year);
+            
             // Current Trading Day
-            $elems = Redis::zrangebyscore($this->redis_key, $timestamp, $timestamp);
+            $elems = Redis::zrangebyscore($this->redis_key, $this_day_ts, $this_day_ts);
             
             $calendar['is_trade_day'] = false;
             $calendar['cur_trading_day'] = 0;
@@ -53,7 +58,7 @@ class Timetable implements TimetableInterface
             }
             
             // Last Trading Day
-            $elems = Redis::zrevrangebyscore($this->redis_key, "({$timestamp}", 0, ['limit' => ['offset' => 0, 'count' => 1]]);
+            $elems = Redis::zrevrangebyscore($this->redis_key, "({$this_day_ts}", 0, ['limit' => ['offset' => 0, 'count' => 1]]);
             
             $calendar['last_trading_day'] = 0;
             if (isset($elems[0])) {
@@ -62,7 +67,7 @@ class Timetable implements TimetableInterface
             }
             
             // Last 5 Trading Days
-            $elems = Redis::zrevrangebyscore($this->redis_key, "({$timestamp}", 0, ['limit' => ['offset' => 0, 'count' => 5]]);
+            $elems = Redis::zrevrangebyscore($this->redis_key, "({$this_day_ts}", 0, ['limit' => ['offset' => 0, 'count' => 5]]);
                         
             $calendar['last_five_trading_days'] = ['start' => 0, 'end' => 0];
             if (!empty($elems)) {

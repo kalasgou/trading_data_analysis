@@ -3,6 +3,7 @@
 namespace App\Services\Stock\Concrete;
 
 use App\Models\Stock;
+use App\Facades\ElasticSearchSrvc;
 
 class Search 
 {
@@ -59,7 +60,7 @@ class Search
         
         $stocks = [];
         foreach ($rows as $one) {
-            $stocks[] = [
+            $stocks[$one->stockCode] = [
                 'exchange_code' => $one->exchangeCode,
                 'market_code' => $one->marketCode,
                 'prdt_type' => $one->type,
@@ -72,7 +73,54 @@ class Search
             ];
         }
         
-        return $stocks;
+        $sorted_stocks = [];
+        foreach ($stock_codes as $stock_code) {
+            $sorted_stocks[] = $stocks[$stock_code];
+        }
+        
+        return $sorted_stocks;
+    }
+    
+    public function getByName(string $name, int $page = 1, int $page_size = 10) : array
+    {
+        $client = ElasticSearchSrvc::connect('securities');
+        
+        $page = max(1, $page);
+        $page_size = max(10, $page_size);
+        $offset = $page_size * ($page - 1);
+        
+        $params = [
+            'index' => 'stocklist',
+            'body' => [
+                'query' => [
+                    'bool' => [
+                        'must' => [
+                            'multi_match' => [
+                                'query' => $name,
+                                'type' => 'most_fields',
+                                'fields' => ['name', 'cnname', 'enname']
+                            ]
+                        ],
+                        'filter' => [
+                            'terms' => [
+                                'type.keyword' => ['Equity', 'Bond', 'Trust']
+                            ]
+                        ]
+                    ]
+                ],
+                'from' => $offset,
+                'size' => $page_size
+            ]
+        ];
+        
+        $ret = $client->search($params);
+        
+        $stock_codes = [];
+        foreach ($ret['hits']['hits'] as $stock) {
+            $stock_codes[] = $stock['_source']['code'];
+        }
+        
+        return $this->getByCodes($stock_codes);
     }
     
     public function getByType(string $type) : array
@@ -81,7 +129,7 @@ class Search
             return [];
         }
         
-        $rows = Stock::where('type', $type)//->where('stockCode', '00700')
+        $rows = Stock::where('type', $type)->where('stockCode', '00700')
                 ->orderBy('stockCode', 'asc')
                 ->get();
         

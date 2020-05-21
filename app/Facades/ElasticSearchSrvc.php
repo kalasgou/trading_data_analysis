@@ -1,13 +1,13 @@
 <?php
 namespace App\Facades;
 
-use App\Services\Stock\Concrete\Search;
+use App\Services\SearchEngine\Concrete\ElasticSearch;
 use Illuminate\Support\Facades\Facade;
 
-class StockSrvc extends Facade
+class ElasticSearchSrvc extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return Search::class;
+        return ElasticSearch::class;
     }
 }

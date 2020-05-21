@@ -30,7 +30,12 @@ class SecurityService implements SecurityInterface
         $keywords = $in->getKeywords();
         $page = $in->getPage();
         $page_size = $in->getSize();
-        $stocks = SearchSrvc::getByCode($keywords, $page, $page_size);
+        
+        if (is_numeric($keywords)) {
+            $stocks = SearchSrvc::getByCode($keywords, $page, $page_size);
+        } else {
+            $stocks = SearchSrvc::getByName($keywords, $page, $page_size);
+        }
         
         $info = [];
         foreach ($stocks as $one) {

@@ -5,7 +5,7 @@ return [
         'default' => 'securities',
         'clients' => [
             'securities' => [
-                'index' => 'Stock',
+                'index' => 'stocklist',
                 'hosts' => [
                     [
                         'dsn' => 'es-sg-25u1bik640001u7js.public.elasticsearch.aliyuncs.com:9200',

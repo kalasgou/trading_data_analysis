@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\SearchEngine\Concretes;
+namespace App\Services\SearchEngine\Concrete;
 
 use Illuminate\Support\Facades\Config;
 use Elasticsearch\ClientBuilder;
@@ -43,25 +43,4 @@ class ElasticSearch
         return static::$clients[$db];
     }
     
-    public function search(string $index, array $fields, string $keywords)
-    {
-        $params = [
-            'index' => $index,
-            'body' => [
-                'query' => [
-                    'bool' => [
-                        'must' => [
-                            'multi_match' => [
-                                'query' => $keywords,
-                                'type' => 'most_fields',
-                                'fields' => $fields
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
-        
-        $ret = $client->search($params);
-    }
 }

@@ -153,7 +153,7 @@ message QuoteResponse {
 
 message InfoResponse {    
     message Data {
-        map<string, StockInfo> info = 1;
+        repeated StockInfo info = 1;
     }
     Status status = 1;
     Data data = 2;

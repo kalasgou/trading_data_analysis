@@ -40,7 +40,7 @@ class SecurityService implements SecurityInterface
         $info = [];
         foreach ($stocks as $one) {
             $stock = new StockInfo($one);            
-            $info["{$one['exchange_code']}_{$one['stock_code']}"] = $stock;
+            $info[] = $stock;
         }
         
         $status = new Status([
@@ -70,7 +70,8 @@ class SecurityService implements SecurityInterface
         $info = [];
         foreach ($stocks as $one) {
             $stock = new StockInfo($one);            
-            $info["{$one['exchange_code']}_{$one['stock_code']}"] = $stock;
+            // $info["{$one['exchange_code']}_{$one['stock_code']}"] = $stock;
+            $info[] = $stock;
         }
         
         $status = new Status([

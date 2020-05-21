@@ -14,7 +14,7 @@ use Google\Protobuf\Internal\GPBUtil;
 class Data extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>map<string, .proto.market.StockInfo> info = 1;</code>
+     * Generated from protobuf field <code>repeated .proto.market.StockInfo info = 1;</code>
      */
     private $info;
 
@@ -24,7 +24,7 @@ class Data extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type array|\Google\Protobuf\Internal\MapField $info
+     *     @type \Proto\Market\StockInfo[]|\Google\Protobuf\Internal\RepeatedField $info
      * }
      */
     public function __construct($data = NULL) {
@@ -33,8 +33,8 @@ class Data extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>map<string, .proto.market.StockInfo> info = 1;</code>
-     * @return \Google\Protobuf\Internal\MapField
+     * Generated from protobuf field <code>repeated .proto.market.StockInfo info = 1;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getInfo()
     {
@@ -42,13 +42,13 @@ class Data extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>map<string, .proto.market.StockInfo> info = 1;</code>
-     * @param array|\Google\Protobuf\Internal\MapField $var
+     * Generated from protobuf field <code>repeated .proto.market.StockInfo info = 1;</code>
+     * @param \Proto\Market\StockInfo[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
     public function setInfo($var)
     {
-        $arr = GPBUtil::checkMapField($var, \Google\Protobuf\Internal\GPBType::STRING, \Google\Protobuf\Internal\GPBType::MESSAGE, \Proto\Market\StockInfo::class);
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Proto\Market\StockInfo::class);
         $this->info = $arr;
 
         return $this;

@@ -98,7 +98,7 @@ class Search
                             'multi_match' => [
                                 'query' => $name,
                                 'type' => 'most_fields',
-                                'fields' => ['name', 'cnname', 'enname']
+                                'fields' => ['name*', 'cnname', 'enname']
                             ]
                         ],
                         'filter' => [
@@ -115,25 +115,12 @@ class Search
         
         $ret = $client->search($params);
         
-        // $stocks = [];
         $stock_codes = [];
         foreach ($ret['hits']['hits'] as $stock) {
             $stock_codes[] = $stock['_source']['code'];
-            // $stocks[] = [
-                // 'exchange_code' => 'HKEX',
-                // 'market_code' => 'MAIN',
-                // 'prdt_type' => 'Equity',
-                // 'stock_code' => $stock['_source']['code'],
-                // 'stock_name' => $stock['_source']['name'],
-                // 'ISIN' => '123321',
-                // 'currency' => 'HKD',
-                // 'board_lot' => 100,
-                // 'status' => 1
-            // ];
         }
         
         return $this->getByCodes($stock_codes);
-        // return $stocks;
     }
     
     public function getByType(string $type) : array

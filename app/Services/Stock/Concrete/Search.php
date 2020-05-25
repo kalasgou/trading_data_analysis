@@ -129,7 +129,7 @@ class Search
             return [];
         }
         
-        $rows = Stock::where('type', $type)->where('stockCode', '00700')
+        $rows = Stock::where('type', $type)//->where('stockCode', '00700')
                 ->orderBy('stockCode', 'asc')
                 ->get();
         

@@ -30,7 +30,7 @@ class KChartJob extends Command
         parent::__construct();
         
         $this->allow_prdt_types = ['Equity', 'Bond', 'Trust', 'Warrant', 'Index'];
-        $this->allow_dimensions = ['p1min', 'p5min', 'day', 'week', 'month', 'quarter', 'year'];
+        $this->allow_dimensions = [/*'p1min', 'p5min',*/ 'day', 'week', 'month', 'quarter', 'year'];
     }
 
     /**
@@ -47,22 +47,30 @@ class KChartJob extends Command
         $stock_code = sprintf('%05s', $options['stock_code']);
         $start_date = $options['start_date'];
         $end_date = $options['end_date'];
-        if (in_array($prdt_type, $this->allow_prdt_types)) {
+        if (in_array($prdt_type, $this->allow_prdt_types) && in_array($options['dimension'], $this->allow_dimensions)) {
             $exchange_code = strtoupper($options['exchange_code']);
             $dimension = ucfirst($options['dimension']);
             $class = "\App\Services\Calculation\\{$exchange_code}\Calc{$dimension}K";
             
             if (class_exists($class)) {
-                if ($prdt_type === 'Index') {
-                    (new $class)->fixIndex($start_date, $end_date, $stock_code);
+                
+                if ($dimension === 'Day') {
+                    if ($prdt_type === 'Index') {
+                        (new $class)->fixIndex($start_date, $end_date, $stock_code);
+                        
+                    } else {
+                        (new $class)->fixStock($prdt_type, $start_date, $end_date, $stock_code);
+                    }
                     
                 } else {
-                    (new $class)->fixStock($prdt_type, $start_date, $end_date, $stock_code);
+                    
+                    (new $class)->fix($prdt_type, $start_date, $end_date);
                 }
             }
             
+        } else {
             
-            
+            exit('Product Type or KChart Dimension Error'. PHP_EOL);
         }
     }
 }

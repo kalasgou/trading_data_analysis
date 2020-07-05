@@ -5,7 +5,7 @@ namespace App\Services\Calculation\HKEX;
 bcscale(3);
 
 use App\Models\DayK;
-use App\Models\MonthKTmp;
+use App\Models\MonthK;
 use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
 use Illuminate\Support\Facades\DB;
@@ -129,7 +129,7 @@ class CalcMonthK
             }
             
             if (!empty($charts)) {
-                $ret = MonthKTmp::raw(function ($collection) use ($charts) {
+                $ret = MonthK::raw(function ($collection) use ($charts) {
                     $upsert_docs = [];
                     foreach ($charts as $chart) {
                         $upsert_docs[] = [

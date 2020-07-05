@@ -6,7 +6,7 @@ bcscale(3);
 
 use App\Models\DayK;
 use App\Models\MonthK;
-use App\Models\QuarterKTmp;
+use App\Models\QuarterK;
 use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
 use Illuminate\Support\Facades\DB;
@@ -136,7 +136,7 @@ class CalcQuarterK
             }
             
             if (!empty($charts)) {
-                $ret = QuarterKTmp::raw(function ($collection) use ($charts) {
+                $ret = QuarterK::raw(function ($collection) use ($charts) {
                     $upsert_docs = [];
                     foreach ($charts as $chart) {
                         $upsert_docs[] = [

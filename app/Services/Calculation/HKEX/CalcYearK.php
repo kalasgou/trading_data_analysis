@@ -6,7 +6,7 @@ bcscale(3);
 
 use App\Models\DayK;
 use App\Models\MonthK;
-use App\Models\YearKTmp;
+use App\Models\YearK;
 use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
 use Illuminate\Support\Facades\DB;
@@ -120,7 +120,7 @@ class CalcYearK
             }
             
             if (!empty($charts)) {
-                $ret = YearKTmp::raw(function ($collection) use ($charts) {
+                $ret = YearK::raw(function ($collection) use ($charts) {
                     $upsert_docs = [];
                     foreach ($charts as $chart) {
                         $upsert_docs[] = [

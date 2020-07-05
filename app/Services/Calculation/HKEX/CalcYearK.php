@@ -47,8 +47,6 @@ class CalcYearK
         $start_year = (int)date('Y', $start_date_ts);
         $end_year = (int)date('Y', $end_date_ts);
         
-        $close_prices = [];
-        
         for ($year = $start_year; $year <= $end_year; $year ++) {
             
             $start_ts = mktime(0, 0, 0, 1, 1, $year);
@@ -80,24 +78,9 @@ class CalcYearK
                 if (!empty($rows)) {
                     $inserted = true;
                     
-                    if (!isset($close_prices[$stock['stock_code']])) {
-                        $rows2 = DayK::where('stock_code', $stock['stock_code'])
-                            ->where('ts', '<', $start_ts)
-                            ->orderby('ts', 'desc')
-                            ->limit(1)
-                            ->get(['close']);
-                        $rows2 = $rows2->toArray();
-                        
-                        if (!empty($rows2)) {
-                            $chart['last_close'] = $close_prices[$stock['stock_code']] = bcadd($rows2[0]['close'], '0', 3);
-                        }
-                        
-                    } else {
-                        $chart['last_close'] = $close_prices[$stock['stock_code']];
-                    }
-                    
+                    $chart['last_close'] = bcadd($rows[0]['last_close'], '0', 3);
                     $chart['open'] = bcadd($rows[0]['open'], '0', 3);
-                    $chart['close'] = $close_prices[$stock['stock_code']] = bcadd($rows[count($rows) - 1]['close'], '0', 3);
+                    $chart['close'] = bcadd($rows[count($rows) - 1]['close'], '0', 3);
                     if (bccomp($chart['last_close'], 0) > 0) {
                         $chart['chg_sum'] = bcsub($chart['close'], $chart['last_close'], 3);
                         $chart['chg_ratio'] = bcdiv($chart['chg_sum'], $chart['last_close'], 5);

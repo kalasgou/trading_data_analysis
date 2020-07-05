@@ -50,8 +50,6 @@ class CalcWeekK
         
         $one_week_secs = 86400 * 7;
         
-        $close_prices = [];
-        
         for ($ts = $start_day_ts; $ts <= $end_day_ts; ) {
             
             $start_ts = $ts;
@@ -83,24 +81,9 @@ class CalcWeekK
                 if (!empty($rows)) {
                     $inserted = true;
                     
-                    if (!isset($close_prices[$stock['stock_code']])) {
-                        $rows2 = DayK::where('stock_code', $stock['stock_code'])
-                            ->where('ts', '<', $start_ts)
-                            ->orderby('ts', 'desc')
-                            ->limit(1)
-                            ->get(['close']);
-                        $rows2 = $rows2->toArray();
-                        
-                        if (!empty($rows2)) {
-                            $chart['last_close'] = $close_prices[$stock['stock_code']] = bcadd($rows2[0]['close'], '0', 3);
-                        }
-                        
-                    } else {
-                        $chart['last_close'] = $close_prices[$stock['stock_code']];
-                    }
-                    
+                    $chart['last_close'] = bcadd($rows[0]['last_close'], '0', 3);
                     $chart['open'] = bcadd($rows[0]['open'], '0', 3);
-                    $chart['close'] = $close_prices[$stock['stock_code']] = bcadd($rows[count($rows) - 1]['close'], '0', 3);
+                    $chart['close'] = bcadd($rows[count($rows) - 1]['close'], '0', 3);
                     if (bccomp($chart['last_close'], 0) > 0) {
                         $chart['chg_sum'] = bcsub($chart['close'], $chart['last_close'], 3);
                         $chart['chg_ratio'] = bcdiv($chart['chg_sum'], $chart['last_close'], 5);

@@ -30,7 +30,7 @@ class KChartJob extends Command
         parent::__construct();
         
         $this->allow_prdt_types = ['Equity', 'Bond', 'Trust', 'Warrant', 'Index'];
-        $this->allow_dimensions = [/*'p1min', 'p5min',*/ 'day', 'week', 'month', 'quarter', 'year'];
+        $this->allow_dimensions = ['day', 'week', 'month', 'quarter', 'year'];
     }
 
     /**
@@ -55,9 +55,9 @@ class KChartJob extends Command
             if (class_exists($class)) {
                 
                 if ($dimension === 'Day') {
+                    
                     if ($prdt_type === 'Index') {
                         (new $class)->fixIndex($start_date, $end_date, $stock_code);
-                        
                     } else {
                         (new $class)->fixStock($prdt_type, $start_date, $end_date, $stock_code);
                     }

@@ -11,7 +11,6 @@ use App\Models\Index;
 use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
 use App\Models\Tick;
-use App\Models\TickTmp;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 
@@ -201,7 +200,7 @@ class CalcTick
                         }
                         
                         if (!empty($points)) {
-                            $ret = TickTmp::raw(function ($collection) use ($points) {
+                            $ret = Tick::raw(function ($collection) use ($points) {
                                 $upsert_docs = [];
                                 foreach ($points as $x => $point) {
                                     $upsert_docs[] = [

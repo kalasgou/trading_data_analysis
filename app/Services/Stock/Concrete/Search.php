@@ -39,8 +39,8 @@ class Search
                 'stock_name' => $one->stockName['zh-hk'],
                 'ISIN' => $one->ISIN,
                 'currency' => $one->currencyCode,
-                'board_lot' => $one->boardLot,
-                'status' => $one->status
+                'board_lot' => (int)$one->boardLot,
+                'status' => (int)$one->status
             ];
         }
         
@@ -68,8 +68,8 @@ class Search
                 'stock_name' => $one->stockName['zh-hk'],
                 'ISIN' => $one->ISIN,
                 'currency' => $one->currencyCode,
-                'board_lot' => $one->boardLot,
-                'status' => $one->status
+                'board_lot' => (int)$one->boardLot,
+                'status' => (int)$one->status
             ];
         }
         
@@ -143,9 +143,9 @@ class Search
                 'stock_name' => $one->stockName['zh-hk'],
                 'ISIN' => $one->ISIN,
                 'currency' => $one->currencyCode,
-                'board_lot' => $one->boardLot,
+                'board_lot' => (int)$one->boardLot,
                 'listed_date_ts' => strtotime($one->listing_date),
-                'status' => $one->status
+                'status' => (int)$one->status
             ];
         }
         
@@ -166,7 +166,7 @@ class Search
                 'stock_code' => $one->stockCode,
                 'stock_name' => $one->stockName['abrvCht'],
                 'currency' => $one->currencyCode,
-                'status' => $one->status
+                'status' => (int)$one->status
             ];
         }
         

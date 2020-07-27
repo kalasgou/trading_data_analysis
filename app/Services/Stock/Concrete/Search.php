@@ -14,10 +14,6 @@ class Search
     
     public function getByCode(string $stock_code, int $page = 1, int $page_size = 10) : array
     {
-        if (empty($stock_code)) {
-            return [];
-        }
-        
         $page = max(1, $page);
         $page_size = max(10, $page_size);
         $offset = $page_size * ($page - 1);

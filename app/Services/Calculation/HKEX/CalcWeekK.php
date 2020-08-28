@@ -4,8 +4,8 @@ namespace App\Services\Calculation\HKEX;
 
 bcscale(3);
 
-use App\Models\DayK;
-use App\Models\WeekK;
+use App\Models\Chart\DayK;
+use App\Models\Chart\WeekK;
 use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
 use Illuminate\Support\Facades\DB;

@@ -2,7 +2,7 @@
 namespace App\Services\Indicator\Concrete;
 
 use App\Services\Indicator\Contract\KChartInterface;
-use App\Models\DayK;
+use App\Models\Chart\DayK;
 
 class KChart implements KChartInterface
 {

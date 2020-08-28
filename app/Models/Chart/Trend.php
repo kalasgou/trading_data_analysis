@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Chart;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 
-class Tick extends Model
+class Trend extends Model
 {
     //
     protected $collection = 'HKEX_Security_Price_Trend';

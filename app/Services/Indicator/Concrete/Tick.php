@@ -2,7 +2,7 @@
 namespace App\Services\Indicator\Concrete;
 
 use App\Services\Indicator\Contract\TickInterface;
-use App\Models\Trend;
+use App\Models\Chart\Trend;
 
 class Tick implements TickInterface
 {

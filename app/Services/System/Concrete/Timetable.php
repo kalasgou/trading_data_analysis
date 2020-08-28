@@ -25,7 +25,8 @@ class Timetable implements TimetableInterface
                 'trading_ses_control_flag', 
                 'start_date_time', 
                 'end_date_time', 
-                'last_update_ts'
+                'last_update_ts',
+                'last_session_ts'
             ];
             $info = Redis::hmget("{$exchange_code}:Market:{$market_code}:Info", $fields);
             $info = array_combine($fields, $info);

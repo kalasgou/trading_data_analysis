@@ -4,13 +4,13 @@ namespace App\Services\Calculation\HKEX;
 
 bcscale(3);
 
-use App\Models\TradeTicker;
-use App\Models\Statistics;
-use App\Models\ClosingPrice;
-use App\Models\Index;
+use App\Models\Market\TradeTicker;
+use App\Models\Market\Statistics;
+use App\Models\Market\ClosingPrice;
+use App\Models\Market\Index;
 use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
-use App\Models\Tick;
+use App\Models\Chart\Trend;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 
@@ -200,7 +200,7 @@ class CalcTick
                         }
                         
                         if (!empty($points)) {
-                            $ret = Tick::raw(function ($collection) use ($points) {
+                            $ret = Trend::raw(function ($collection) use ($points) {
                                 $upsert_docs = [];
                                 foreach ($points as $x => $point) {
                                     $upsert_docs[] = [

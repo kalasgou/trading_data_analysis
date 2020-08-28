@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Chart;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 

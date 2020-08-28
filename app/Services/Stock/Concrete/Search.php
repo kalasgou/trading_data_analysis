@@ -2,7 +2,7 @@
 
 namespace App\Services\Stock\Concrete;
 
-use App\Models\Stock;
+use App\Models\Market\Stock;
 use App\Facades\ElasticSearchSrvc;
 
 class Search 

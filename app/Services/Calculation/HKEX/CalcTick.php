@@ -8,9 +8,11 @@ use App\Models\Market\TradeTicker;
 use App\Models\Market\Statistics;
 use App\Models\Market\ClosingPrice;
 use App\Models\Market\Index;
+use App\Models\Market\Turnover;
 use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
 use App\Models\Chart\Trend;
+use App\Models\Chart\TrendTable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 
@@ -28,7 +30,11 @@ class CalcTick
             return false;
         }
         
-        $stocks = SearchSrvc::getByType($prdt_type);
+        if ($stock_code !== '') {
+            $stocks = SearchSrvc::getByCodes([$stock_code]);            
+        } else {
+            $stocks = SearchSrvc::getByType($prdt_type);
+        }
         
         if (!empty($stocks)) {
             
@@ -90,26 +96,23 @@ class CalcTick
                         $open_price = $last_close;
                         if (!empty($trades)) {
                             $open_price = $trades[0]['price'];
-                        }
-                        
-                        $high = '-9999999999';
-                        $low = '9999999999';
+                        }                        
                         
                         $points = [];
                         
                         $point['stock_code'] = $stock['stock_code'];
                         $point['prdt_type'] = $prdt_types[$stock['prdt_type']][0];
-                        $point['price'] = '0';
-                        $point['average'] = '0';
-                        $point['day_high'] = '-9999999999';
-                        $point['day_low'] = '9999999999';
+                        $point['price'] = $last_close;
+                        $point['average'] = $last_close;
+                        $point['day_high'] = $last_close;
+                        $point['day_low'] = $last_close;
                         $point['chg_sum'] = '0';
                         $point['chg_ratio'] = '0';
                         $point['total_volume'] = $point['volume'] = 0;
                         $point['total_turnover'] = $point['turnover'] = '0';
                         $point['ts'] = $ts_0930;
                         
-                        $insert = false;
+                        // $insert = false;
                         $loop = true;
                         $offset = 0;
                         $limit = 500;
@@ -124,7 +127,7 @@ class CalcTick
                             $stats = $stats->toArray();
                             
                             if (!empty($stats)) {
-                                
+                                // $insert = true;
                                 foreach ($stats as $stat) {
                                     
                                     $min_ts = get_x_pos_min($stat['unix_ts']);
@@ -148,8 +151,8 @@ class CalcTick
                                     }
                                     
                                     $point['price'] = $stat['last_price'];
-                                    $point['day_high'] = bccomp($point['price'], $point['day_high']) > 0 ? $point['price'] : $point['day_high'];
-                                    $point['day_low'] = bccomp($point['price'], $point['day_low']) < 0 ? $point['price'] : $point['day_low'];
+                                    $point['day_high'] = $stat['high_price'];
+                                    $point['day_low'] = $stat['low_price'];
                                     $point['turnover'] = bcadd($point['turnover'], bcsub($stat['turnover'], $point['total_turnover']));
                                     $point['volume'] = $point['volume'] + ($stat['volume'] - $point['total_volume']);
                                     $point['total_turnover'] = $stat['turnover'];
@@ -174,45 +177,55 @@ class CalcTick
                             $offset += $limit;
                         }
                         
+                        $insert_points = [];
                         $prev_ts = $ts_0930;
-                        foreach ($x_pos as $ts) {
-                            if (!isset($points[$ts])) {
-                                if ($ts === $ts_0930) {
-                                    $point['price'] = $last_close;
-                                    $point['average'] = $last_close;
-                                    $point['day_high'] = '0';
-                                    $point['day_low'] = '0';
-                                    $point['chg_sum'] = '0';
-                                    $point['chg_ratio'] = '0';
-                                    
-                                } else {
+                        // if ($insert) {
+                            foreach ($x_pos as $ts) {
+                                if (!isset($points[$ts])) {
                                     $point = $points[$prev_ts];
+                                                                    
+                                    $point['volume'] = $point['total_volume'] = 0;
+                                    $point['turnover'] = $point['total_turnover'] = '0';
+                                    $point['ts'] = $ts;
+                                    
+                                    $points[$ts] = $point;
                                 }
                                 
-                                $point['volume'] = $point['total_volume'] = 0;
-                                $point['turnover'] = $point['total_turnover'] = '0';
-                                $point['ts'] = $ts;
+                                $insert_points[] = [
+                                    'stock_code' => $stock['stock_code'],
+                                    'cur_price' => $points[$ts]['price'],
+                                    'avg_price' => $points[$ts]['average'],
+                                    'chg_sum' => $points[$ts]['chg_sum'],
+                                    'chg_ratio' => $points[$ts]['chg_ratio'],
+                                    'turnover' => $points[$ts]['turnover'],
+                                    'volume' => $points[$ts]['volume'],
+                                    'ts' => $ts
+                                ];
                                 
-                                $points[$ts] = $point;
+                                $prev_ts = $ts;
                             }
-                            
-                            $prev_ts = $ts;
-                        }
+                        // }
                         
-                        if (!empty($points)) {
-                            $ret = Trend::raw(function ($collection) use ($points) {
-                                $upsert_docs = [];
-                                foreach ($points as $x => $point) {
-                                    $upsert_docs[] = [
-                                        'updateOne' => [
-                                            ['stock_code' => $point['stock_code'], 'ts' => $point['ts']],
-                                            ['$set' => $point],
-                                            ['upsert' => true]
-                                        ]
-                                    ];
-                                }
-                                return $collection->bulkWrite($upsert_docs, ['ordered' => true]);
-                            });
+                        // To MongoDB
+                        // if (!empty($points)) {
+                            // $ret = Trend::raw(function ($collection) use ($points) {
+                                // $upsert_docs = [];
+                                // foreach ($points as $x => $point) {
+                                    // $upsert_docs[] = [
+                                        // 'updateOne' => [
+                                            // ['stock_code' => $point['stock_code'], 'ts' => $point['ts']],
+                                            // ['$set' => $point],
+                                            // ['upsert' => true]
+                                        // ]
+                                    // ];
+                                // }
+                                // $collection->bulkWrite($upsert_docs, ['ordered' => true]);
+                            // });
+                        // }
+                        
+                        // To MySQL
+                        if (!empty($insert_points)) {
+                            TrendTable::insert($insert_points);
                         }
                     }
                 }
@@ -221,34 +234,235 @@ class CalcTick
             }
         }
         
-        return false;
+        return true;
     }
     
     public function fixIndex(string $start_date, string $end_date, string $index_code = '') : bool
     {
         $null_val = -9223372036854775808;
+        $zero_val = 0;
         
-        $indexes = SearchSrvc::getIndexes();
+        if ($index_code !== '') {
+            $indexes = SearchSrvc::getByCodes([$index_code]);            
+        } else {
+            $indexes = SearchSrvc::getIndexes();
+        }
         
         if (!empty($indexes)) {
+            
             $start_day_ts = strtotime($start_date);
             $end_day_ts = strtotime($end_date);
-            
-            foreach ($indexes as $index) {
-                $point['stock_code'] = $index['stock_code'];
-                $point['prdt_type'] = 'idx';
-                $point['price'] = '0';
-                $point['average'] = '0';
-                $point['day_high'] = '0';
-                $point['day_low'] = '0';
-                $point['chg_sum'] = '0';
-                $point['chg_ratio'] = '0';
-                $point['total_volume'] = $point['volume'] = 0;
-                $point['total_turnover'] = $point['turnover'] = '0';
-                $point['ts'] = $today_ts;
+                
+            for ($ts = $start_day_ts; $ts <= $end_day_ts; ) {
+                $start_ts = $ts;
+                $end_ts = $ts + 86400;
+                
+                $ts_0930 = $ts + 34200;
+                $ts_1200 = $ts + 43200;
+                $ts_1301 = $ts + 46860;
+                $ts_1600 = $ts + 57600;
+                $x_pos = array_merge(range($ts_0930, $ts_1200, 60), range($ts_1301, $ts_1600, 60));
+                
+                foreach ($indexes as $index) {
+                    
+                    // 
+                    // $stats = Index::where('code', $index['stock_code'])
+                            // ->where('unix_ts', '>=', $start_ts)
+                            // ->where('unix_ts', '<', $end_ts)
+                            // ->where('prev_close', '>', 0)
+                            // ->orderby('unix_ts', 'asc')
+                            // ->offset(0)
+                            // ->limit(1)
+                            // ->get();
+                    
+                    // $stats = $stats->toArray();
+                    
+                    $points = [];
+                    
+                    $point['stock_code'] = $index['stock_code'];
+                    $point['prdt_type'] = 'idx';
+                    $point['price'] = '0';
+                    $point['average'] = '0';
+                    $point['day_high'] = '0';
+                    $point['day_low'] = '0';
+                    $point['chg_sum'] = '0';
+                    $point['chg_ratio'] = '0';
+                    $point['total_volume'] = $point['volume'] = 0;
+                    $point['total_turnover'] = $point['turnover'] = '0';
+                    $point['ts'] = $ts_0930;
+                    
+                    $prices = [];
+                    $insert = false;
+                    $loop = true;
+                    $offset = 0;
+                    $limit = 500;
+                    while ($loop) {
+                        $stats = Index::where('code', $index['stock_code'])
+                                ->where('unix_ts', '>=', $start_ts)
+                                ->where('unix_ts', '<', $end_ts)
+                                ->orderby('unix_ts', 'asc')
+                                ->offset($offset)
+                                ->limit($limit)
+                                ->get();
+                        
+                        $stats = $stats->toArray();
+                        
+                        if (!empty($stats)) {
+                            $insert = true;
+                            foreach ($stats as $stat) {
+                                    
+                                $min_ts = get_x_pos_min($stat['unix_ts']);
+                                
+                                if ($point['ts'] < $min_ts) {
+                                    
+                                    $sum_prices = array_sum($prices);
+                                    $point['average'] = $sum_prices / count($prices);
+                                    
+                                    if ($index['stock_code'] === '0000100') {
+                                        $rows = Turnover::where('market', 'MAIN')
+                                            ->where('ccy', '')
+                                            ->where('ts', '>=', $start_ts)
+                                            ->where('ts', '<', $point['ts'])
+                                            ->orderby('ts', 'desc')
+                                            ->limit(1)
+                                            ->get(['turnover']);
+                                        
+                                        $rows = $rows->toArray();
+                                        
+                                        if (!empty($rows)) {
+                                            $point['turnover'] = bcadd($point['turnover'], bcsub($rows[0]['turnover'], $point['total_turnover']));
+                                            $point['total_turnover'] = $rows[0]['turnover'];
+                                        }
+                                    }
+                                    
+                                    $points[$point['ts']] = $point;
+                                    
+                                    $point['turnover'] = '0';
+                                    $point['volume'] = 0;
+                                    $point['ts'] = $min_ts;
+                                    
+                                }
+                                
+                                if ($stat['open'] != $null_val && $stat['open'] != $zero_val) {
+                                    $stat['open'] = bcdiv($stat['open'], 10000, 4);
+                                    if ($stat['open'] !== $point['price']) {
+                                        $point['price'] = $stat['open'];
+                                        $prices[] = $point['price'];
+                                    }
+                                }
+                                if ($stat['close'] != $null_val && $stat['close'] != $zero_val) {
+                                    $stat['close'] = bcdiv($stat['close'], 10000, 4);
+                                    if ($stat['close'] !== $point['price']) {
+                                        $point['price'] = $stat['close'];
+                                        $prices[] = $point['price'];
+                                    }
+                                }
+                                if ($stat['value'] != $null_val && $stat['value'] != $zero_val) {
+                                    $stat['value'] = bcdiv($stat['value'], 10000, 4);
+                                    if ($stat['value'] !== $point['price']) {
+                                        $point['price'] = $stat['value'];
+                                        $prices[] = $point['price'];
+                                    }
+                                }
+                                
+                                // if ($stat['EAS'] != $null_val && $stat['EAS'] != $zero_val) {
+                                    // $point['average'] = bcdiv($stat['EAS'], 100, 2);
+                                // }
+                                
+                                if ($stat['high'] != $null_val && $stat['high'] != $zero_val) {
+                                    $point['day_high'] = bcdiv($stat['high'], 10000, 4);
+                                }
+                                if ($stat['low'] != $null_val && $stat['low'] != $zero_val) {
+                                    $point['day_low'] = bcdiv($stat['low'], 10000, 4);
+                                }
+                                
+                                if ($index['stock_code'] !== '0000100') {
+                                    if ($stat['turnover'] != $null_val && $stat['turnover'] != $zero_val) {
+                                        $stat['turnover'] = bcdiv($stat['turnover'], 10000, 4);
+                                        $point['turnover'] = bcadd($point['turnover'], bcsub($stat['turnover'], $point['total_turnover']));
+                                        $point['total_turnover'] = $stat['turnover'];
+                                    }
+                                    if ($stat['volume'] != $null_val && $stat['volume'] != $zero_val) {
+                                        $stat['volume'] = (int)$stat['volume'];
+                                        $point['volume'] = $point['volume'] + ($stat['volume'] - $point['total_volume']);
+                                        $point['total_volume'] = $stat['volume'];
+                                    }
+                                }
+                                
+                                $point['chg_sum'] = bcdiv($stat['prev_net_chg'], 10000, 4);
+                                $point['chg_ratio'] = bcdiv($stat['prev_net_chg_pct'], 10000, 4);
+                            }
+                            
+                        } else {
+                            
+                            $loop = false;
+                            
+                            $sum_prices = array_sum($prices);
+                            $point['average'] = $sum_prices / count($prices);
+                            
+                            if ($index['stock_code'] === '0000100') {
+                                $rows = Turnover::where('market', 'MAIN')
+                                    ->where('ccy', '')
+                                    ->where('ts', '>=', $start_ts)
+                                    ->where('ts', '<', $end_ts)
+                                    ->orderby('ts', 'desc')
+                                    ->limit(1)
+                                    ->get(['turnover']);
+                                
+                                $rows = $rows->toArray();
+                                
+                                if (!empty($rows)) {
+                                    $point['turnover'] = bcadd($point['turnover'], bcsub($rows[0]['turnover'], $point['total_turnover']));
+                                    $point['total_turnover'] = $rows[0]['turnover'];
+                                }
+                            }
+                            
+                            $points[$point['ts']] = $point;
+                        }
+                        
+                        $offset += $limit;
+                    }
+                    
+                    $insert_points = [];
+                    $prev_ts = $ts_0930;
+                    if ($insert) {
+                        foreach ($x_pos as $ts) {
+                            if (!isset($points[$ts])) {
+                                $point = $points[$prev_ts];
+                                                                
+                                $point['volume'] = $point['total_volume'] = 0;
+                                $point['turnover'] = $point['total_turnover'] = '0';
+                                $point['ts'] = $ts;
+                                
+                                $points[$ts] = $point;
+                            }
+                            
+                            $insert_points[] = [
+                                'stock_code' => $index['stock_code'],
+                                'cur_price' => $points[$ts]['price'],
+                                'avg_price' => $points[$ts]['average'],
+                                'chg_sum' => $points[$ts]['chg_sum'],
+                                'chg_ratio' => $points[$ts]['chg_ratio'],
+                                'turnover' => $points[$ts]['turnover'],
+                                'volume' => $points[$ts]['volume'],
+                                'ts' => $ts
+                            ];
+                            
+                            $prev_ts = $ts;
+                        }
+                    }
+                    
+                    // To MySQL
+                    if (!empty($insert_points)) {
+                        TrendTable::insert($insert_points);
+                    }
+                }
+                
+                $ts += 86400;
             }
         }
         
         return false;
     }
+    
 }

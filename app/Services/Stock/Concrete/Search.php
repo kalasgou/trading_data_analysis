@@ -19,7 +19,7 @@ class Search
         $offset = $page_size * ($page - 1);
         
         $rows = Stock::where('stockCode', 'like', "%{$stock_code}%")
-                ->whereIn('type', ['Equity', 'Bond', 'Trust'])
+                // ->whereIn('type', ['Equity', 'Bond', 'Trust', 'Warrant'])
                 ->orderBy('stockCode', 'asc')
                 ->skip($offset)
                 ->limit($page_size)
@@ -36,6 +36,7 @@ class Search
                 'ISIN' => $one->ISIN,
                 'currency' => $one->currencyCode,
                 'board_lot' => (int)$one->boardLot,
+                'listed_date_ts' => (int)strtotime($one->listing_date),
                 'status' => (int)$one->status
             ];
         }
@@ -50,7 +51,7 @@ class Search
         }
         
         $rows = Stock::whereIn('stockCode', $stock_codes)
-                ->whereIn('type', ['Equity', 'Bond', 'Trust'])
+                // ->whereIn('type', ['Equity', 'Bond', 'Trust'])
                 ->orderBy('stockCode', 'asc')
                 ->get();
         
@@ -65,6 +66,7 @@ class Search
                 'ISIN' => $one->ISIN,
                 'currency' => $one->currencyCode,
                 'board_lot' => (int)$one->boardLot,
+                'listed_date_ts' => (int)strtotime($one->listing_date),
                 'status' => (int)$one->status
             ];
         }
@@ -140,7 +142,7 @@ class Search
                 'ISIN' => $one->ISIN,
                 'currency' => $one->currencyCode,
                 'board_lot' => (int)$one->boardLot,
-                'listed_date_ts' => strtotime($one->listing_date),
+                'listed_date_ts' => (int)strtotime($one->listing_date),
                 'status' => (int)$one->status
             ];
         }

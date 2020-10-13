@@ -8,6 +8,7 @@ use App\Models\Market\TradeTicker;
 use App\Models\Market\Statistics;
 use App\Models\Market\ClosingPrice;
 use App\Models\Market\Index;
+use App\Models\Market\Turnover;
 use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
 use App\Models\Chart\DayK;
@@ -27,7 +28,11 @@ class CalcDayK
             return false;
         }
         
-        $stocks = SearchSrvc::getByType($prdt_type);
+        if ($stock_code !== '') {
+            $stocks = SearchSrvc::getByCodes([$stock_code]);            
+        } else {
+            $stocks = SearchSrvc::getByType($prdt_type);
+        }
         
         if (!empty($stocks)) {
             
@@ -156,7 +161,11 @@ class CalcDayK
     {
         $null_val = -9223372036854775808;
         
-        $indexes = SearchSrvc::getIndexes();
+        if ($index_code !== '') {
+            $indexes = SearchSrvc::getByCodes([$index_code]);            
+        } else {
+            $indexes = SearchSrvc::getIndexes();
+        }
         
         if (!empty($indexes)) {
             
@@ -269,18 +278,39 @@ class CalcDayK
                         }
                         
                         // Turnover
-                        $rows = Index::where('code', $index['stock_code'])
-                            ->where('turnover', '>', 0)
-                            ->where('unix_ts', '>=', $start_ts)
-                            ->where('unix_ts', '<', $end_ts)
-                            ->orderby('unix_ts', 'desc')
-                            ->limit(1)
-                            ->get(['turnover']);
-                        $rows = $rows->toArray();
-                        if (!empty($rows)) {
-                            $insert = true;
-                            $chart['total_turnover'] = $chart['turnover'] = bcdiv($rows[0]['turnover'], 10000, 4);
+                        if ($index['stock_code'] === '0000100') {
+                            $rows = Turnover::where('market', 'MAIN')
+                                ->where('ccy', '')
+                                ->where('ts', '>=', $start_ts)
+                                ->where('ts', '<', $end_ts)
+                                ->orderby('ts', 'desc')
+                                ->limit(1)
+                                ->get(['turnover']);
+                            
+                            $rows = $rows->toArray();
+                            
+                            if (!empty($rows)) {
+                                $insert = true;
+                                $chart['total_turnover'] = $chart['turnover'] = $rows[0]['turnover'];
+                            }
+                            
+                        } else {
+                            $rows = Index::where('code', $index['stock_code'])
+                                ->where('turnover', '>', 0)
+                                ->where('unix_ts', '>=', $start_ts)
+                                ->where('unix_ts', '<', $end_ts)
+                                ->orderby('unix_ts', 'desc')
+                                ->limit(1)
+                                ->get(['turnover']);
+                                
+                            $rows = $rows->toArray();
+                            
+                            if (!empty($rows)) {
+                                $insert = true;
+                                $chart['total_turnover'] = $chart['turnover'] = bcdiv($rows[0]['turnover'], 10000, 4);
+                            }
                         }
+                        
                         
                         if ($insert) {
                             $charts[] = $chart;

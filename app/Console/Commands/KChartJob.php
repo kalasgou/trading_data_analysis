@@ -11,7 +11,7 @@ class KChartJob extends Command
      *
      * @var string
      */
-    protected $signature = 'indicator:kchart {--exchange_code=HKEX} {--stock_code=all} {--prdt_type=} {--dimension=} {--start_date=} {--end_date=}';
+    protected $signature = 'indicator:kchart {--exchange_code=HKEX} {--stock_code=} {--prdt_type=} {--dimension=} {--start_date=} {--end_date=}';
 
     /**
      * The console command description.
@@ -44,7 +44,7 @@ class KChartJob extends Command
         
         $options = $this->options();
         $prdt_type = ucfirst($options['prdt_type']);
-        $stock_code = sprintf('%05s', $options['stock_code']);
+        $stock_code = trim($options['stock_code']);
         $start_date = $options['start_date'];
         $end_date = $options['end_date'];
         if (in_array($prdt_type, $this->allow_prdt_types) && in_array($options['dimension'], $this->allow_dimensions)) {
@@ -64,7 +64,7 @@ class KChartJob extends Command
                     
                 } else {
                     
-                    (new $class)->fix($prdt_type, $start_date, $end_date);
+                    (new $class)->fix($prdt_type, $start_date, $end_date, $stock_code);
                 }
             }
             

@@ -7,34 +7,12 @@ bcscale(3);
 use App\Models\Chart\DayK;
 use App\Models\Chart\MonthK;
 use App\Models\Chart\QuarterK;
-use App\Facades\SearchSrvc;
-use App\Facades\TimetableSrvc;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Config;
 
-class CalcQuarterK
+class CalcQuarterK extends CalcMoreK
 {
     public function __construct()
     {
         
-    }
-    
-    public function fix(string $prdt_type, string $start_date, string $end_date) : bool
-    {
-        if (in_array($prdt_type, ['Equity', 'Warrant', 'Bond', 'Trust'])) {
-            
-            $stocks = SearchSrvc::getByType($prdt_type);
-            return $this->calculate($stocks, $start_date, $end_date);
-            
-        } else if ($prdt_type === 'Index') {
-            
-            $indexes = SearchSrvc::getIndexes();
-            return $this->calculate($indexes, $start_date, $end_date);
-            
-        } else {
-            
-            return false;
-        }
     }
     
     private function calculate(array $stocks, string $start_date, string $end_date)

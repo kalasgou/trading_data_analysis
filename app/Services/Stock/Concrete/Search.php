@@ -28,13 +28,13 @@ class Search
         $stocks = [];
         foreach ($rows as $one) {
             $stocks[] = [
-                'exchange_code' => $one->exchangeCode,
-                'market_code' => $one->marketCode,
-                'prdt_type' => $one->type,
-                'stock_code' => $one->stockCode,
-                'stock_name' => $one->stockName['zh-hk'],
-                'ISIN' => $one->ISIN,
-                'currency' => $one->currencyCode,
+                'exchange_code' => trim($one->exchangeCode),
+                'market_code' => trim($one->marketCode),
+                'prdt_type' => trim($one->type),
+                'stock_code' => trim($one->stockCode),
+                'stock_name' => trim($one->stockName['zh-hk']),
+                'ISIN' => trim($one->ISIN),
+                'currency' => trim($one->currencyCode),
                 'board_lot' => (int)$one->boardLot,
                 'listed_date_ts' => (int)strtotime($one->listing_date),
                 'status' => (int)$one->status
@@ -58,13 +58,13 @@ class Search
         $stocks = [];
         foreach ($rows as $one) {
             $stocks[$one->stockCode] = [
-                'exchange_code' => $one->exchangeCode,
-                'market_code' => $one->marketCode,
-                'prdt_type' => $one->type,
-                'stock_code' => $one->stockCode,
-                'stock_name' => $one->stockName['zh-hk'],
-                'ISIN' => $one->ISIN,
-                'currency' => $one->currencyCode,
+                'exchange_code' => trim($one->exchangeCode),
+                'market_code' => trim($one->marketCode),
+                'prdt_type' => trim($one->type),
+                'stock_code' => trim($one->stockCode),
+                'stock_name' => trim($one->stockName['zh-hk']),
+                'ISIN' => trim($one->ISIN),
+                'currency' => trim($one->currencyCode),
                 'board_lot' => (int)$one->boardLot,
                 'listed_date_ts' => (int)strtotime($one->listing_date),
                 'status' => (int)$one->status
@@ -134,13 +134,13 @@ class Search
         $stocks = [];
         foreach ($rows as $one) {
             $stocks[] = [
-                'exchange_code' => $one->exchangeCode,
-                'market_code' => $one->marketCode,
-                'prdt_type' => $one->type,
-                'stock_code' => $one->stockCode,
-                'stock_name' => $one->stockName['zh-hk'],
-                'ISIN' => $one->ISIN,
-                'currency' => $one->currencyCode,
+                'exchange_code' => trim($one->exchangeCode),
+                'market_code' => trim($one->marketCode),
+                'prdt_type' => trim($one->type),
+                'stock_code' => trim($one->stockCode),
+                'stock_name' => trim($one->stockName['zh-hk']),
+                'ISIN' => trim($one->ISIN),
+                'currency' => trim($one->currencyCode),
                 'board_lot' => (int)$one->boardLot,
                 'listed_date_ts' => (int)strtotime($one->listing_date),
                 'status' => (int)$one->status
@@ -159,11 +159,11 @@ class Search
         $indexes = [];
         foreach ($rows as $one) {
             $indexes[] = [
-                'exchange_code' => $one->exchangeCode,
-                'prdt_type' => $one->type,
-                'stock_code' => $one->stockCode,
-                'stock_name' => $one->stockName['abrvCht'],
-                'currency' => $one->currencyCode,
+                'exchange_code' => trim($one->exchangeCode),
+                'prdt_type' => trim($one->type),
+                'stock_code' => trim($one->stockCode),
+                'stock_name' => trim($one->stockName['abrvCht']),
+                'currency' => trim($one->currencyCode),
                 'status' => (int)$one->status
             ];
         }

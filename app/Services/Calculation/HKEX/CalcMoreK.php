@@ -30,7 +30,7 @@ class CalcMoreK
             
             return false;
         }
-        
+        var_dump($prdts);exit();
         return $this->calculate($prdts, $start_date, $end_date);
     }
     

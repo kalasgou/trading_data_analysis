@@ -39,6 +39,7 @@ class SecurityService implements SecurityInterface
         
         $info = [];
         foreach ($stocks as $one) {
+            unset($one['listed_date_ts']);
             $stock = new StockInfo($one);            
             $info[] = $stock;
         }
@@ -69,6 +70,7 @@ class SecurityService implements SecurityInterface
         
         $info = [];
         foreach ($stocks as $one) {
+            unset($one['listed_date_ts']);
             $stock = new StockInfo($one);            
             // $info["{$one['exchange_code']}_{$one['stock_code']}"] = $stock;
             $info[] = $stock;

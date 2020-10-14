@@ -127,7 +127,7 @@ class Search
             return [];
         }
         
-        $rows = Stock::where('type', $type)//->where('stockCode', '00700')
+        $rows = Stock::where('type', $type)
                 ->orderBy('stockCode', 'asc')
                 ->get();
         
@@ -152,7 +152,7 @@ class Search
     
     public function getIndexes() : array
     {
-        $rows = Stock::where('type', 'Index')//->where('stockCode', '0000100')
+        $rows = Stock::where('type', 'Index')
                 ->orderBy('stockCode', 'asc')
                 ->get();
         

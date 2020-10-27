@@ -79,7 +79,7 @@ class AliOTS
     
     public function putRows(string $db, string $table, array $pairs)
     {
-        if (empty(pairs)) {
+        if (empty($pairs)) {
             return false;
         }
         
@@ -90,8 +90,8 @@ class AliOTS
             $rows[] = [
                 'operation_type' => OperationTypeConst::CONST_PUT,
                 'condition' => RowExistenceExpectationConst::CONST_IGNORE,
-                'primary_key' => $one->keys,
-                'attribute_columns' => $one->attributes
+                'primary_key' => $one['keys'],
+                'attribute_columns' => $one['attributes']
             ];
         }
         

@@ -206,16 +206,16 @@ class CalcTick
                                 
                                 $aliots_points[] = [
                                     'keys' => [
-                                        'code' => $stock['stock_code'],
-                                        'ts' => $ts
+                                        ['code', $stock['stock_code']],
+                                        ['ts', $ts]
                                     ],
                                     'attributes' => [
-                                        'cur_price' => $points[$ts]['price'],
-                                        'avg_price' => $points[$ts]['average'],
-                                        'chg_sum' => $points[$ts]['chg_sum'],
-                                        'chg_ratio' => $points[$ts]['chg_ratio'],
-                                        'turnover' => $points[$ts]['turnover'],
-                                        'volume' => $points[$ts]['volume']
+                                        ['cur_price', $points[$ts]['price']],
+                                        ['avg_price', $points[$ts]['average']],
+                                        ['chg_sum', $points[$ts]['chg_sum']],
+                                        ['chg_ratio', $points[$ts]['chg_ratio']],
+                                        ['turnover', $points[$ts]['turnover']],
+                                        ['volume', $points[$ts]['volume']]
                                     ]
                                 ];
                                 

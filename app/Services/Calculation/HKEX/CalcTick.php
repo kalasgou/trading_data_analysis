@@ -11,8 +11,9 @@ use App\Models\Market\Index;
 use App\Models\Market\Turnover;
 use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
+use App\Facades\AliOTSSrvc;
 use App\Models\Chart\Trend;
-use App\Models\Chart\TrendTable;
+// use App\Models\Chart\TrendTable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 
@@ -177,7 +178,8 @@ class CalcTick
                             $offset += $limit;
                         }
                         
-                        $insert_points = [];
+                        // $insert_points = [];
+                        $aliots_points = [];
                         $prev_ts = $ts_0930;
                         // if ($insert) {
                             foreach ($x_pos as $ts) {
@@ -191,15 +193,30 @@ class CalcTick
                                     $points[$ts] = $point;
                                 }
                                 
-                                $insert_points[] = [
-                                    'stock_code' => $stock['stock_code'],
-                                    'cur_price' => $points[$ts]['price'],
-                                    'avg_price' => $points[$ts]['average'],
-                                    'chg_sum' => $points[$ts]['chg_sum'],
-                                    'chg_ratio' => $points[$ts]['chg_ratio'],
-                                    'turnover' => $points[$ts]['turnover'],
-                                    'volume' => $points[$ts]['volume'],
-                                    'ts' => $ts
+                                // $insert_points[] = [
+                                    // 'stock_code' => $stock['stock_code'],
+                                    // 'cur_price' => $points[$ts]['price'],
+                                    // 'avg_price' => $points[$ts]['average'],
+                                    // 'chg_sum' => $points[$ts]['chg_sum'],
+                                    // 'chg_ratio' => $points[$ts]['chg_ratio'],
+                                    // 'turnover' => $points[$ts]['turnover'],
+                                    // 'volume' => $points[$ts]['volume'],
+                                    // 'ts' => $ts
+                                // ];
+                                
+                                $aliots_points[] = [
+                                    'keys' => [
+                                        'code' => $stock['stock_code'],
+                                        'ts' => $ts
+                                    ],
+                                    'attributes' => [
+                                        'cur_price' => $points[$ts]['price'],
+                                        'avg_price' => $points[$ts]['average'],
+                                        'chg_sum' => $points[$ts]['chg_sum'],
+                                        'chg_ratio' => $points[$ts]['chg_ratio'],
+                                        'turnover' => $points[$ts]['turnover'],
+                                        'volume' => $points[$ts]['volume']
+                                    ]
                                 ];
                                 
                                 $prev_ts = $ts;
@@ -224,8 +241,13 @@ class CalcTick
                         // }
                         
                         // To MySQL
-                        if (!empty($insert_points)) {
-                            TrendTable::insert($insert_points);
+                        // if (!empty($insert_points)) {
+                            // TrendTable::insert($insert_points);
+                        // }
+                        
+                        // To AliTable
+                        if (!empty($aliots_points)) {
+                            AliOTSSrvc::putRows('hkex_securities', 'HKEX_Security_Price_Trend', $insert_points);
                         }
                     }
                 }

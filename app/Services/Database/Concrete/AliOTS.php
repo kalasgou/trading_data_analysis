@@ -85,22 +85,38 @@ class AliOTS
         
         $this->conn($db, $table);
         
+        $cnt = 200;
+        
         $rows = [];
+        $batch_rows = [];
         foreach ($pairs as $one) {
+            ++$cnt;
             $rows[] = [
                 'operation_type' => OperationTypeConst::CONST_PUT,
                 'condition' => RowExistenceExpectationConst::CONST_IGNORE,
                 'primary_key' => $one['keys'],
                 'attribute_columns' => $one['attributes']
             ];
+            
+            // Limit 200 Rows or Size < 4MB
+            if ($cnt >= 180) {
+                $batch_rows[] = $rows;
+                $rows = [];
+                $cnt = 0;
+            }
         }
         
-        $result = static::$clients[$db][$table]->batchWriteRow([
-            'tables' => [
-                ['table_name' => $table, 'rows' => $rows]
-            ]
-        ]);
+        if ($cnt > 0) {
+            $batch_rows[] = $rows;
+        }
         
-        return $result;
+        foreach ($batch_rows as $rows) {
+            static::$clients[$db][$table]->batchWriteRow([
+                'tables' => [
+                    ['table_name' => $table, 'rows' => $rows]
+                ]
+            ]);
+        }
+        
     }
 }

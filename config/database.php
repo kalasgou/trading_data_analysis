@@ -37,8 +37,8 @@ return [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
+            'database' => env('DB_DATABASE', 'chart'),
+            'username' => env('DB_USERNAME', 'root'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
@@ -57,6 +57,7 @@ return [
             'dsn' => env("MONGODB_DSN", 'mongodb://127.0.0.1:27017'),
             'database' => env('MONGODB_DEFAULT_DB', 'trading'),
         ],
+        
     ],
 
     /*
@@ -105,6 +106,23 @@ return [
             'database' => env('REDIS_CACHE_DB', 1),
         ],
 
+    ],
+    
+    'aliots' => [
+        'default' => 'hkex_securities',
+        'client' => [
+            'hkex_securities' => [
+                'end_point' => env('ALIOTS_ENDPOINT', ''),
+                'key_id' => env('ALIOTS_KEY_ID', ''),
+                'key_secret' => env('ALIOTS_KEY_SECRET', ''),
+                'inst_name' => env('ALIOTS_INST_NAME', ''),
+                'log_error' => env('ALITOS_ERROR_LOG') === true ? 'defaultOTSErrorLogHandler' : null,
+                'log_debug' => env('ALITOS_DEBUG_LOG') === true ? 'defaultOTSDebugLogHandler' : null
+            ],
+            'hkex_derivatives' => [
+                // etc
+            ]
+        ]
     ],
 
 ];

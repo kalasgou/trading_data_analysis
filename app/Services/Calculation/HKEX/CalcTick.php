@@ -247,7 +247,7 @@ class CalcTick
                         
                         // To AliTable
                         if (!empty($aliots_points)) {
-                            AliOTSSrvc::putRows('hkex_securities', 'HKEX_Security_Price_Trend', $insert_points);
+                            AliOTSSrvc::putRows('hkex_securities', 'HKEX_Security_Price_Trend', $aliots_points);
                         }
                     }
                 }

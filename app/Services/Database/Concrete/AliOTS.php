@@ -1,7 +1,7 @@
 <?php
-namespace App\Services\Database\Concretes;
+namespace App\Services\Database\Concrete;
 
-use App\Facades\Concretes\Config;
+use Illuminate\Support\Facades\Config;
 use Aliyun\OTS\Consts\ColumnTypeConst;
 use Aliyun\OTS\Consts\ReturnTypeConst;
 use Aliyun\OTS\Consts\DirectionConst;

@@ -119,4 +119,37 @@ class AliOTS
         }
         
     }
+    
+    public function getRowsByRange(string $db, string $table, array $conditions)
+    {
+        if (empty($conditions)) {
+            return false;
+        }
+        
+        $this->conn($db, $table);
+        
+        $result = static::$clients[$db][$table]->getRange([
+            'table_name' => $table, 
+            'inclusive_start_primary_key' => $conditions['inclusive_start'],
+            'exclusive_end_primary_key' => $conditions['exclusive_end'],
+            'direction' => $conditions['direction'],
+            'limit' => isset($conditions['limit']) && $conditions['limit'] > 0 ? $conditions['limit'] : 5000,
+            'max_versions' => 1,
+        ]);
+        
+        $rows = [];
+        foreach ($result['rows'] as $row) {
+            foreach ($row['primary_key'] as $key) {
+                $one[$key[0]] = $key[1];
+            }
+            
+            foreach ($row['attribute_columns'] as $key) {
+                $one[$key[0]] = $key[1];
+            }
+            
+            $rows[] = $one;
+        }
+        
+        return $rows;
+    }
 }

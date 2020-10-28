@@ -180,7 +180,8 @@ class CalcPnMinK
                             $offset += $limit;
                         }
                         
-                        $insert_charts = [];
+                        // $insert_charts = [];
+                        $aliots_points = [];
                         $prev_ts = $ts_0930;
                         // if ($insert) {
                             foreach ($x_pos as $ts) {
@@ -196,26 +197,50 @@ class CalcPnMinK
                                     $charts[$ts] = $chart;
                                 }
                                 
-                                $insert_charts[] = [
-                                    'stock_code' => $stock['stock_code'],
-                                    'open_price' => $charts[$ts]['open'],
-                                    'close_price' => $charts[$ts]['close'],
-                                    'high_price' => $charts[$ts]['high'],
-                                    'low_price' => $charts[$ts]['low'],
-                                    'last_close_price' => $charts[$ts]['last_close'],
-                                    'chg_sum' => $charts[$ts]['chg_sum'],
-                                    'chg_ratio' => $charts[$ts]['chg_ratio'],
-                                    'turnover' => $charts[$ts]['turnover'],
-                                    'volume' => $charts[$ts]['volume'],
-                                    'ts' => $ts
+                                // $insert_charts[] = [
+                                    // 'stock_code' => $stock['stock_code'],
+                                    // 'open_price' => $charts[$ts]['open'],
+                                    // 'close_price' => $charts[$ts]['close'],
+                                    // 'high_price' => $charts[$ts]['high'],
+                                    // 'low_price' => $charts[$ts]['low'],
+                                    // 'last_close_price' => $charts[$ts]['last_close'],
+                                    // 'chg_sum' => $charts[$ts]['chg_sum'],
+                                    // 'chg_ratio' => $charts[$ts]['chg_ratio'],
+                                    // 'turnover' => $charts[$ts]['turnover'],
+                                    // 'volume' => $charts[$ts]['volume'],
+                                    // 'ts' => $ts
+                                // ];
+                                
+                                $aliots_points[] = [
+                                    'keys' => [
+                                        ['code', $index['stock_code']],
+                                        ['ts', $ts]
+                                    ],
+                                    'attributes' => [
+                                        ['open', $charts[$ts]['open']],
+                                        ['close', $charts[$ts]['close']],
+                                        ['high', $charts[$ts]['high']],
+                                        ['low', $charts[$ts]['low']],
+                                        ['last_close', $charts[$ts]['last_close']],
+                                        ['chg_sum', $charts[$ts]['chg_sum']],
+                                        ['chg_ratio', $charts[$ts]['chg_ratio']],
+                                        ['turnover', $charts[$ts]['turnover']],
+                                        ['volume', $charts[$ts]['volume']],
+                                    ]
                                 ];
                                 
                                 $prev_ts = $ts;
                             }
                         // }
                         
-                        if (!empty($insert_charts)) {
-                            P1MinK::insert($insert_charts);
+                        // To MySQL
+                        // if (!empty($insert_charts)) {
+                            // P1MinK::insert($insert_charts);
+                        // }
+                        
+                        // To Ali Table
+                        if (!empty($aliots_points)) {
+                            AliOTSSrvc::putRows('hkex_securities', 'HKEX_Security_P1Min_KChart', $aliots_points);
                         }
                     }
                 }
@@ -401,7 +426,8 @@ class CalcPnMinK
                         $offset += $limit;
                     }
                     
-                    $insert_charts = [];
+                    // $insert_charts = [];
+                    $aliots_points = [];
                     $prev_ts = $ts_0930;
                     if ($insert) {
                         foreach ($x_pos as $ts) {
@@ -417,26 +443,50 @@ class CalcPnMinK
                                 $charts[$ts] = $chart;
                             }
                             
-                            $insert_charts[] = [
-                                'stock_code' => $index['stock_code'],
-                                'open_price' => $charts[$ts]['open'],
-                                'close_price' => $charts[$ts]['close'],
-                                'high_price' => $charts[$ts]['high'],
-                                'low_price' => $charts[$ts]['low'],
-                                'last_close_price' => $charts[$ts]['last_close'],
-                                'chg_sum' => $charts[$ts]['chg_sum'],
-                                'chg_ratio' => $charts[$ts]['chg_ratio'],
-                                'turnover' => $charts[$ts]['turnover'],
-                                'volume' => $charts[$ts]['volume'],
-                                'ts' => $ts
+                            // $insert_charts[] = [
+                                // 'stock_code' => $index['stock_code'],
+                                // 'open_price' => $charts[$ts]['open'],
+                                // 'close_price' => $charts[$ts]['close'],
+                                // 'high_price' => $charts[$ts]['high'],
+                                // 'low_price' => $charts[$ts]['low'],
+                                // 'last_close_price' => $charts[$ts]['last_close'],
+                                // 'chg_sum' => $charts[$ts]['chg_sum'],
+                                // 'chg_ratio' => $charts[$ts]['chg_ratio'],
+                                // 'turnover' => $charts[$ts]['turnover'],
+                                // 'volume' => $charts[$ts]['volume'],
+                                // 'ts' => $ts
+                            // ];
+                            
+                            $aliots_points[] = [
+                                'keys' => [
+                                    ['code', $index['stock_code']],
+                                    ['ts', $ts]
+                                ],
+                                'attributes' => [
+                                    ['open', $charts[$ts]['open']],
+                                    ['close', $charts[$ts]['close']],
+                                    ['high', $charts[$ts]['high']],
+                                    ['low', $charts[$ts]['low']],
+                                    ['last_close', $charts[$ts]['last_close']],
+                                    ['chg_sum', $charts[$ts]['chg_sum']],
+                                    ['chg_ratio', $charts[$ts]['chg_ratio']],
+                                    ['turnover', $charts[$ts]['turnover']],
+                                    ['volume', $charts[$ts]['volume']],
+                                ]
                             ];
                             
                             $prev_ts = $ts;
                         }
                     }
                     
-                    if (!empty($insert_charts)) {
-                        P1MinK::insert($insert_charts);
+                    // To MySql
+                    // if (!empty($insert_charts)) {
+                        // P1MinK::insert($insert_charts);
+                    // }
+                    
+                    // To Ali Table
+                    if (!empty($aliots_points)) {
+                        AliOTSSrvc::putRows('hkex_securities', 'HKEX_Security_P1Min_KChart', $aliots_points);
                     }
                 }
             }

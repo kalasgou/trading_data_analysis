@@ -11,7 +11,7 @@ class TickJob extends Command
      *
      * @var string
      */
-    protected $signature = 'indicator:tick {--exchange_code=HKEX} {--stock_code=all} {--prdt_type=} {--start_date=} {--end_date=}';
+    protected $signature = 'indicator:tick {--exchange_code=HKEX} {--stock_code=} {--prdt_type=} {--start_date=} {--end_date=}';
 
     /**
      * The console command description.

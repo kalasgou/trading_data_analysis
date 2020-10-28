@@ -11,7 +11,7 @@ class MinKChartJob extends Command
      *
      * @var string
      */
-    protected $signature = 'indicator:kchart_min {--exchange_code=HKEX} {--stock_code=all} {--prdt_type=} {--dimension=p1min} {--start_date=} {--end_date=}';
+    protected $signature = 'indicator:kchart_min {--exchange_code=HKEX} {--stock_code=} {--prdt_type=} {--dimension=p1min} {--start_date=} {--end_date=}';
 
     /**
      * The console command description.

@@ -213,7 +213,7 @@ class CalcPnMinK
                                 
                                 $aliots_points[] = [
                                     'keys' => [
-                                        ['code', $index['stock_code']],
+                                        ['code', $stock['stock_code']],
                                         ['ts', $ts]
                                     ],
                                     'attributes' => [

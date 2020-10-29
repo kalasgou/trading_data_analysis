@@ -490,6 +490,8 @@ class CalcPnMinK
                         AliOTSSrvc::putRows('hkex_securities', 'HKEX_Security_P1Min_KChart', $aliots_points);
                     }
                 }
+                
+                $ts = $end_ts;
             }
         }
         

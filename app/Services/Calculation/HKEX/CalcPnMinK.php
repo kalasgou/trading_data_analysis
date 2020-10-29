@@ -427,10 +427,16 @@ class CalcPnMinK
                         $offset += $limit;
                     }
                     
-                    // $insert_charts = [];
-                    $aliots_points = [];
-                    $prev_ts = $ts_0930;
                     if ($insert) {
+                        // $insert_charts = [];
+                        $aliots_points = [];
+                        
+                        if (!isset($charts[$ts_0930])) {
+                            $ts_0930 += 60;
+                        }
+                        
+                        $prev_ts = $ts_0930;
+                        
                         foreach ($x_pos as $ts) {
                             if (!isset($charts[$ts])) {
                                 $chart = $charts[$prev_ts];

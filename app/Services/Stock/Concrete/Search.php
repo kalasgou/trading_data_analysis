@@ -88,7 +88,7 @@ class Search
         $offset = $page_size * ($page - 1);
         
         $params = [
-            'index' => 'stocklist',
+            'index' => 'new_stocklist',
             'body' => [
                 'query' => [
                     'bool' => [

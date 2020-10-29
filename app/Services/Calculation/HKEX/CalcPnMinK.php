@@ -11,6 +11,7 @@ use App\Models\Market\Index;
 use App\Models\Market\Turnover;
 use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
+use App\Facades\AliOTSSrvc;
 use App\Models\Chart\P1MinK;
 use App\Models\Chart\P5MinK;
 use Illuminate\Support\Facades\DB;

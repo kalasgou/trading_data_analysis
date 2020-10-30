@@ -85,7 +85,7 @@ class AliOTS
         
         $this->conn($db, $table);
         
-        $cnt = 200;
+        $cnt = 0;
         
         $rows = [];
         $batch_rows = [];

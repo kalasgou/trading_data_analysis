@@ -421,27 +421,30 @@ class CalcTick
                             
                             $loop = false;
                             
-                            $sum_prices = array_sum($prices);
-                            $point['average'] = $sum_prices / count($prices);
-                            
-                            if ($index['stock_code'] === '0000100') {
-                                $rows = Turnover::where('market', 'MAIN')
-                                    ->where('ccy', '')
-                                    ->where('ts', '>=', $start_ts)
-                                    ->where('ts', '<', $end_ts)
-                                    ->orderby('ts', 'desc')
-                                    ->limit(1)
-                                    ->get(['turnover']);
+                            if (!empty($prices)) {
+                                $sum_prices = array_sum($prices);
+                                $point['average'] = $sum_prices / count($prices);
                                 
-                                $rows = $rows->toArray();
-                                
-                                if (!empty($rows)) {
-                                    $point['turnover'] = bcadd($point['turnover'], bcsub($rows[0]['turnover'], $point['total_turnover']));
-                                    $point['total_turnover'] = $rows[0]['turnover'];
+                                if ($index['stock_code'] === '0000100') {
+                                    $rows = Turnover::where('market', 'MAIN')
+                                        ->where('ccy', '')
+                                        ->where('ts', '>=', $start_ts)
+                                        ->where('ts', '<', $end_ts)
+                                        ->orderby('ts', 'desc')
+                                        ->limit(1)
+                                        ->get(['turnover']);
+                                    
+                                    $rows = $rows->toArray();
+                                    
+                                    if (!empty($rows)) {
+                                        $point['turnover'] = bcadd($point['turnover'], bcsub($rows[0]['turnover'], $point['total_turnover']));
+                                        $point['total_turnover'] = $rows[0]['turnover'];
+                                    }
                                 }
+                                
+                                $points[$point['ts']] = $point;
                             }
                             
-                            $points[$point['ts']] = $point;
                         }
                         
                         $offset += $limit;
@@ -509,7 +512,7 @@ class CalcTick
                     }
                 }
                 
-                $ts += 86400;
+                $ts = $end_ts;
             }
         }
         

@@ -112,7 +112,7 @@ class CalcPnMinK
                         $chart['chg_ratio'] = '0';
                         $chart['total_volume'] = $chart['volume'] = 0;
                         $chart['total_turnover'] = $chart['turnover'] = '0';
-                        $chart['ts'] = 0;
+                        $chart['ts'] = $ts_0930;
                         
                         // $insert = false;
                         $loop = true;
@@ -315,7 +315,7 @@ class CalcPnMinK
                         $stats = $stats->toArray();
                         
                         if (!empty($stats)) {
-                            $insert = true;
+                            
                             foreach ($stats as $stat) {
                                 
                                 $min_ts = get_x_pos_min($stat['unix_ts']);
@@ -371,6 +371,7 @@ class CalcPnMinK
                                     $chart['close'] = $stat['close'];
                                 }
                                 if ($stat['value'] != $null_val && $stat['value'] != $zero_val) {
+                                    $insert = true;
                                     $stat['value'] = bcdiv($stat['value'], 10000, 4);
                                     $chart['close'] = $stat['value'];
                                 }

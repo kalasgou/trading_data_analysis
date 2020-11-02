@@ -330,7 +330,7 @@ class CalcTick
                         $stats = $stats->toArray();
                         
                         if (!empty($stats)) {
-                            $insert = true;
+                            
                             foreach ($stats as $stat) {
                                     
                                 $min_ts = get_x_pos_min($stat['unix_ts']);
@@ -338,6 +338,7 @@ class CalcTick
                                 if ($point['ts'] < $min_ts) {
                                     
                                     if (!empty($prices)) {
+                                        $insert = true;
                                         $sum_prices = array_sum($prices);
                                         $point['average'] = $sum_prices / count($prices);
                                         

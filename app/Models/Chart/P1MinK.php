@@ -2,25 +2,10 @@
 
 namespace App\Models\Chart;
 
-use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model;
 
 class P1MinK extends Model
 {
     //
-    protected $connection = 'mysql';
-    protected $table = 'hkex_security_p1min_kchart';
-    
-    protected $fillable = [
-        'stock_code',
-        'open_price',
-        'close_price',
-        'high_price',
-        'low_price',
-        'last_close_price',
-        'chg_sum',
-        'chg_ratio',
-        'turnover',
-        'volume',
-        'ts'
-    ];
+    protected $collection = 'HKEX_Security_P1Min_KChart';
 }

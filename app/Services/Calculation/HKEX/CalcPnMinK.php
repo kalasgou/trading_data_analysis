@@ -12,8 +12,8 @@ use App\Models\Market\Turnover;
 use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
 use App\Facades\AliOTSSrvc;
-use App\Models\Chart\P1MinK;
-use App\Models\Chart\P5MinK;
+use App\Models\Chart\P1MinKTable;
+use App\Models\Chart\P5MinKTable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 
@@ -236,7 +236,7 @@ class CalcPnMinK
                         
                         // To MySQL
                         // if (!empty($insert_charts)) {
-                            // P1MinK::insert($insert_charts);
+                            // P1MinKTable::insert($insert_charts);
                         // }
                         
                         // To Ali Table
@@ -489,7 +489,7 @@ class CalcPnMinK
                     
                     // To MySql
                     // if (!empty($insert_charts)) {
-                        // P1MinK::insert($insert_charts);
+                        // P1MinKTable::insert($insert_charts);
                     // }
                     
                     // To Ali Table

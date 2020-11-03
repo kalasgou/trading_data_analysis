@@ -152,4 +152,24 @@ class AliOTS
         
         return $rows;
     }
+    
+    public function deleteRow(string $db, string $table, array $condition)
+    {
+        if (empty($conditions)) {
+            return false;
+        }
+        
+        $this->conn($db, $table);
+        
+        $result = static::$clients[$db][$table]->deleteRow([
+            'table_name' => $table, 
+            'condition' => RowExistenceExpectationConst::CONST_IGNORE,
+            'primary_key' => $condition['keys'],
+            'return_content' => [
+                'return_type' => ReturnTypeConst::CONST_PK
+            ]
+        ]);
+        
+        return $result;
+    }
 }

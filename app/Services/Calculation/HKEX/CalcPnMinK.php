@@ -534,6 +534,8 @@ class CalcPnMinK
             foreach ($tradin_days as $today_ts) {
                 $tomorrow_ts = $today_ts + 86400;
                 
+                $ts_0930 = $today_ts + 34200;
+                
                 if ($last_trade_day_ts <= 0) {
                     $calendar = TimetableSrvc::getCalendar($today_ts);
                     $last_trade_day_ts = $calendar['last_trading_day'];
@@ -595,7 +597,7 @@ class CalcPnMinK
                         $loop = true;
                         $offset = 0;
                         $limit = 500;
-                        $start_ts = $open_trade_ts - 60;
+                        $start_ts = $open_trade_ts === $ts_0930 ? $open_trade_ts - 1800 : $open_trade_ts - 60;
                         $end_ts = $open_trade_ts;
                         while ($loop) {
                             $stats = Statistics::where('stock_code', $stock['stock_code'])

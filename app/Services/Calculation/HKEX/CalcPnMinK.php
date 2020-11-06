@@ -635,28 +635,28 @@ class CalcPnMinK
                             $offset += $limit;
                         }
 
+                        $aliots_points = [];
                         $aliots_points[] = [
                             'keys' => [
                                 ['code', $stock['stock_code']],
-                                ['ts', $ts]
+                                ['ts', $chart['ts']]
                             ],
                             'attributes' => [
-                                ['open', $chart['open'],
-                                ['close', $chart['close'],
-                                ['high', $chart['high'],
-                                ['low', $chart['low'],
-                                ['last_close', $chart['last_close'],
-                                ['chg_sum', $chart['chg_sum'],
-                                ['chg_ratio', $chart['chg_ratio'],
-                                ['turnover', $chart['turnover'],
-                                ['volume', $chart['volume'],
+                                ['open', $chart['open']],
+                                ['close', $chart['close']],
+                                ['high', $chart['high']],
+                                ['low', $chart['low']],
+                                ['last_close', $chart['last_close']],
+                                ['chg_sum', $chart['chg_sum']],
+                                ['chg_ratio', $chart['chg_ratio']],
+                                ['turnover', $chart['turnover']],
+                                ['volume', $chart['volume']],
                             ]
                         ];
                         
                         // To Ali Table
                         if (!empty($aliots_points)) {
-                            // AliOTSSrvc::putRows('hkex_securities', 'HKEX_Security_P1Min_KChart', $aliots_points);
-                            var_dump($alitos_points);
+                            AliOTSSrvc::putRows('hkex_securities', 'HKEX_Security_P1Min_KChart', $aliots_points);
                         }
                     }
                 }

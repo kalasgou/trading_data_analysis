@@ -91,23 +91,28 @@ class CalcPnMinK
                             ->where('time', '<', $tomorrow_ts)
                             ->orderBy('time', 'asc')
                             ->limit(1)
-                            ->get(['price']);
+                            ->get(['price', 'time']);
                         $trades = $trades->toArray();
                         
-                        $open_price = $last_close;
+                        $open_trade_ts = $ts_0930;
+                        $open_price = $real_open_price = $last_close;
                         if (!empty($trades)) {
-                            $open_price = $trades[0]['price'];
+                            $real_open_price = $trades[0]['price'];
+                            $open_trade_ts = get_x_pos_min($trades[0]['time']);
+                            if ($open_trade_ts === $ts_0930) {
+                                $open_price = $real_open_price;
+                            }
                         }
                         
                         $charts = [];
                         
                         $chart['stock_code'] = $stock['stock_code'];
                         $chart['prdt_type'] = $prdt_types[$stock['prdt_type']][0];
-                        $chart['open'] = $last_close;
-                        $chart['close'] = $last_close;
+                        $chart['open'] = $open_price;
+                        $chart['close'] = $open_price;
                         $chart['last_close'] = $last_close;
-                        $chart['high'] = $last_close;
-                        $chart['low'] = $last_close;
+                        $chart['high'] = $open_price;
+                        $chart['low'] = $open_price;
                         $chart['chg_sum'] = '0';
                         $chart['chg_ratio'] = '0';
                         $chart['total_volume'] = $chart['volume'] = 0;
@@ -146,7 +151,11 @@ class CalcPnMinK
                                             $charts[$chart['ts']] = $chart;
                                         }
                                         
-                                        $chart['open'] = $chart['high'] = $chart['low'] = $stat['last_price'];
+                                        if ($min_ts === $open_trade_ts) {
+                                            $chart['open'] = $chart['high'] = $chart['low'] = $real_open_price;
+                                        } else {
+                                            $chart['open'] = $chart['high'] = $chart['low'] = $stat['last_price'];
+                                        }                                        
                                         $chart['last_close'] = $last_close = $chart['close'];
                                         $chart['turnover'] = '0';
                                         $chart['volume'] = 0;
@@ -499,6 +508,160 @@ class CalcPnMinK
                 }
                 
                 $ts = $end_ts;
+            }
+        }
+        
+        return true;
+    }
+    
+    public function fixStocks(string $prdt_type, string $start_date, string $end_date, int $interval = 60, string $stock_code = '') : bool
+    {
+        if (!in_array($prdt_type, ['Equity', 'Warrant', 'Bond', 'Trust'])) {
+            return false;
+        }
+        
+        if ($stock_code !== '') {
+            $stocks = SearchSrvc::getByCodes([$stock_code]);            
+        } else {
+            $stocks = SearchSrvc::getByType($prdt_type);
+        }
+        
+        if (!empty($stocks)) {
+            $prdt_types = Config::get('product_types');
+            $last_trade_day_ts = 0;
+            
+            $tradin_days = TimetableSrvc::getTradinDaysByRange($start_date, $end_date);
+            foreach ($tradin_days as $today_ts) {
+                $tomorrow_ts = $today_ts + 86400;
+                
+                if ($last_trade_day_ts <= 0) {
+                    $calendar = TimetableSrvc::getCalendar($today_ts);
+                    $last_trade_day_ts = $calendar['last_trading_day'];
+                }
+                
+                $last_trade_date = new \DateTime("@{$last_trade_day_ts}");
+                $today_date = new \DateTime("@{$today_ts}");
+                
+                foreach ($stocks as $stock) {
+                    if ($today_ts >= $stock['listed_date_ts']) {
+                        $closings = ClosingPrice::where('stock_code', $stock['stock_code'])
+                            ->where('date', '>=', $last_trade_date)
+                            ->where('date', '<', $today_date)
+                            ->orderBy('date', 'asc')
+                            ->get(['price', 'date']);
+                        $closings = $closings->toArray();
+                        
+                        $last_close = '0';
+                        if (!empty($closings)) {
+                            $len = count($closings);
+
+                            foreach ($closings as $one) {
+                                $tts = (int)((string)$one['date'] / 1000);
+                                if ($tts >= $last_trade_day_ts && $tts < $today_ts) {
+                                    $last_close = $one['price'];
+                                }
+                            }                           
+                        }
+                        
+                        $trades = TradeTicker::where('code', $stock['stock_code'])
+                            ->whereIn('type', [0, 103])
+                            ->where('cancel', 'N')
+                            ->where('time', '>=', $today_ts)
+                            ->where('time', '<', $tomorrow_ts)
+                            ->orderBy('time', 'asc')
+                            ->limit(1)
+                            ->get(['price', 'time']);
+                        $trades = $trades->toArray();
+                        
+                        if (!empty($trades)) {
+                            $open_price = $trades[0]['price'];
+                            $open_trade_ts = get_x_pos_min($trades[0]['time']);
+                            
+                            $chart['stock_code'] = $stock['stock_code'];
+                            $chart['prdt_type'] = $prdt_types[$stock['prdt_type']][0];
+                            $chart['open'] = $open_price;
+                            $chart['close'] = $open_price;
+                            $chart['last_close'] = $last_close;
+                            $chart['high'] = $open_price;
+                            $chart['low'] = $open_price;
+                            $chart['chg_sum'] = '0';
+                            $chart['chg_ratio'] = '0';
+                            $chart['total_volume'] = $chart['volume'] = 0;
+                            $chart['total_turnover'] = $chart['turnover'] = '0';
+                            $chart['ts'] = $open_trade_ts;
+                        }
+                        
+                        // $insert = false;
+                        $loop = true;
+                        $offset = 0;
+                        $limit = 500;
+                        $start_ts = $open_trade_ts - 60;
+                        $end_ts = $open_trade_ts;
+                        while ($loop) {
+                            $stats = Statistics::where('stock_code', $stock['stock_code'])
+                                ->where('unix_ts', '>=', $start_ts)
+                                ->where('unix_ts', '<', $end_ts)
+                                ->orderby('unix_ts', 'asc')
+                                ->offset($offset)
+                                ->limit($limit)
+                                ->get();
+                            $stats = $stats->toArray();
+                            
+                            if (!empty($stats)) {
+                                // $insert = true;
+                                foreach ($stats as $stat) {
+                                    
+                                    $chart['close'] = $stat['last_price'];
+                                    $chart['high'] = bccomp($stat['last_price'], $chart['high']) > 0 ? $stat['last_price'] : $chart['high'];
+                                    $chart['low'] = bccomp($stat['last_price'], $chart['low']) < 0 ? $stat['last_price'] : $chart['low'];
+                                    $chart['turnover'] = bcadd($chart['turnover'], bcsub($stat['turnover'], $chart['total_turnover']));
+                                    $chart['volume'] = $chart['volume'] + ($stat['volume'] - $chart['total_volume']);
+                                    $chart['total_turnover'] = $stat['turnover'];
+                                    $chart['total_volume'] = $stat['volume'];
+                                    
+                                }
+                                
+                            } else {
+                                
+                                $loop = false;
+                                
+                                if (bccomp($last_close, '0') > 0) {
+                                    $chart['chg_sum'] = bcsub($chart['close'], $last_close);
+                                    $chart['chg_ratio'] = bcdiv($chart['chg_sum'], $last_close, 5);
+                                }
+                                
+                            }
+                            
+                            $offset += $limit;
+                        }
+
+                        $aliots_points[] = [
+                            'keys' => [
+                                ['code', $stock['stock_code']],
+                                ['ts', $ts]
+                            ],
+                            'attributes' => [
+                                ['open', $chart['open'],
+                                ['close', $chart['close'],
+                                ['high', $chart['high'],
+                                ['low', $chart['low'],
+                                ['last_close', $chart['last_close'],
+                                ['chg_sum', $chart['chg_sum'],
+                                ['chg_ratio', $chart['chg_ratio'],
+                                ['turnover', $chart['turnover'],
+                                ['volume', $chart['volume'],
+                            ]
+                        ];
+                        
+                        // To Ali Table
+                        if (!empty($aliots_points)) {
+                            // AliOTSSrvc::putRows('hkex_securities', 'HKEX_Security_P1Min_KChart', $aliots_points);
+                            var_dump($alitos_points);
+                        }
+                    }
+                }
+                
+                $last_trade_day_ts = $today_ts;
             }
         }
         

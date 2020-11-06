@@ -591,74 +591,74 @@ class CalcPnMinK
                             $chart['total_volume'] = $chart['volume'] = 0;
                             $chart['total_turnover'] = $chart['turnover'] = '0';
                             $chart['ts'] = $open_trade_ts;
-                        }
-                        
-                        // $insert = false;
-                        $loop = true;
-                        $offset = 0;
-                        $limit = 500;
-                        $start_ts = $open_trade_ts === $ts_0930 ? $today_ts + 33600 : $open_trade_ts - 60;
-                        $end_ts = $open_trade_ts;
-                        while ($loop) {
-                            $stats = Statistics::where('stock_code', $stock['stock_code'])
-                                ->where('unix_ts', '>=', $start_ts)
-                                ->where('unix_ts', '<', $end_ts)
-                                ->orderby('unix_ts', 'asc')
-                                ->offset($offset)
-                                ->limit($limit)
-                                ->get();
-                            $stats = $stats->toArray();
                             
-                            if (!empty($stats)) {
-                                // $insert = true;
-                                foreach ($stats as $stat) {
+                            // $insert = false;
+                            $loop = true;
+                            $offset = 0;
+                            $limit = 500;
+                            $start_ts = $open_trade_ts === $ts_0930 ? $today_ts + 33600 : $open_trade_ts - 60;
+                            $end_ts = $open_trade_ts;
+                            while ($loop) {
+                                $stats = Statistics::where('stock_code', $stock['stock_code'])
+                                    ->where('unix_ts', '>=', $start_ts)
+                                    ->where('unix_ts', '<', $end_ts)
+                                    ->orderby('unix_ts', 'asc')
+                                    ->offset($offset)
+                                    ->limit($limit)
+                                    ->get();
+                                $stats = $stats->toArray();
+                                
+                                if (!empty($stats)) {
+                                    // $insert = true;
+                                    foreach ($stats as $stat) {
+                                        
+                                        $chart['close'] = $stat['last_price'];
+                                        $chart['high'] = bccomp($stat['last_price'], $chart['high']) > 0 ? $stat['last_price'] : $chart['high'];
+                                        $chart['low'] = bccomp($stat['last_price'], $chart['low']) < 0 ? $stat['last_price'] : $chart['low'];
+                                        $chart['turnover'] = bcadd($chart['turnover'], bcsub($stat['turnover'], $chart['total_turnover']));
+                                        $chart['volume'] = $chart['volume'] + ($stat['volume'] - $chart['total_volume']);
+                                        $chart['total_turnover'] = $stat['turnover'];
+                                        $chart['total_volume'] = $stat['volume'];
+                                        
+                                    }
                                     
-                                    $chart['close'] = $stat['last_price'];
-                                    $chart['high'] = bccomp($stat['last_price'], $chart['high']) > 0 ? $stat['last_price'] : $chart['high'];
-                                    $chart['low'] = bccomp($stat['last_price'], $chart['low']) < 0 ? $stat['last_price'] : $chart['low'];
-                                    $chart['turnover'] = bcadd($chart['turnover'], bcsub($stat['turnover'], $chart['total_turnover']));
-                                    $chart['volume'] = $chart['volume'] + ($stat['volume'] - $chart['total_volume']);
-                                    $chart['total_turnover'] = $stat['turnover'];
-                                    $chart['total_volume'] = $stat['volume'];
+                                } else {
+                                    
+                                    $loop = false;
+                                    
+                                    if (bccomp($last_close, '0') > 0) {
+                                        $chart['chg_sum'] = bcsub($chart['close'], $last_close);
+                                        $chart['chg_ratio'] = bcdiv($chart['chg_sum'], $last_close, 5);
+                                    }
                                     
                                 }
                                 
-                            } else {
-                                
-                                $loop = false;
-                                
-                                if (bccomp($last_close, '0') > 0) {
-                                    $chart['chg_sum'] = bcsub($chart['close'], $last_close);
-                                    $chart['chg_ratio'] = bcdiv($chart['chg_sum'], $last_close, 5);
-                                }
-                                
+                                $offset += $limit;
                             }
-                            
-                            $offset += $limit;
-                        }
 
-                        $aliots_points = [];
-                        $aliots_points[] = [
-                            'keys' => [
-                                ['code', $stock['stock_code']],
-                                ['ts', $chart['ts']]
-                            ],
-                            'attributes' => [
-                                ['open', $chart['open']],
-                                ['close', $chart['close']],
-                                ['high', $chart['high']],
-                                ['low', $chart['low']],
-                                ['last_close', $chart['last_close']],
-                                ['chg_sum', $chart['chg_sum']],
-                                ['chg_ratio', $chart['chg_ratio']],
-                                ['turnover', $chart['turnover']],
-                                ['volume', $chart['volume']],
-                            ]
-                        ];
-                        
-                        // To Ali Table
-                        if (!empty($aliots_points)) {
-                            AliOTSSrvc::putRows('hkex_securities', 'HKEX_Security_P1Min_KChart', $aliots_points);
+                            $aliots_points = [];
+                            $aliots_points[] = [
+                                'keys' => [
+                                    ['code', $stock['stock_code']],
+                                    ['ts', $chart['ts']]
+                                ],
+                                'attributes' => [
+                                    ['open', $chart['open']],
+                                    ['close', $chart['close']],
+                                    ['high', $chart['high']],
+                                    ['low', $chart['low']],
+                                    ['last_close', $chart['last_close']],
+                                    ['chg_sum', $chart['chg_sum']],
+                                    ['chg_ratio', $chart['chg_ratio']],
+                                    ['turnover', $chart['turnover']],
+                                    ['volume', $chart['volume']],
+                                ]
+                            ];
+                            
+                            // To Ali Table
+                            if (!empty($aliots_points)) {
+                                AliOTSSrvc::putRows('hkex_securities', 'HKEX_Security_P1Min_KChart', $aliots_points);
+                            }
                         }
                     }
                 }

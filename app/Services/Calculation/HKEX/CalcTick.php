@@ -168,8 +168,8 @@ class CalcTick
                                     $point['chg_ratio'] = bcdiv($point['chg_sum'], $last_close, 5);
                                 }
                                 
-                                if ($point['volume'] > 0) {
-                                    $point['average'] = bcdiv($point['turnover'], $point['volume']);
+                                if ($point['total_volume'] > 0) {
+                                    $point['average'] = bcdiv($point['total_turnover'], $point['total_volume']);
                                 }
                                 
                                 $points[$point['ts']] = $point;

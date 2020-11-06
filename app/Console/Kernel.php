@@ -34,7 +34,7 @@ class Kernel extends ConsoleKernel
         $today_ts = mktime(0,0,0);
         $start_date = $end_date = date('Y-m-d', $today_ts);
         
-        foreach (['Equity', 'Index', 'Trust', 'Bond'] as $prdt_type) {
+        foreach (['Equity', 'Index', 'Trust'] as $prdt_type) {
             // Price Trend Tick
             $schedule->command("indicator:tick --start_date={$start_date} --end_date={$end_date} --prdt_type={$prdt_type}")
                     ->dailyAt('19:00')

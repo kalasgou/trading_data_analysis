@@ -597,7 +597,7 @@ class CalcPnMinK
                         $loop = true;
                         $offset = 0;
                         $limit = 500;
-                        $start_ts = $open_trade_ts === $ts_0930 ? $open_trade_ts - 1800 : $open_trade_ts - 60;
+                        $start_ts = $open_trade_ts === $ts_0930 ? $today_ts + 33600 : $open_trade_ts - 60;
                         $end_ts = $open_trade_ts;
                         while ($loop) {
                             $stats = Statistics::where('stock_code', $stock['stock_code'])

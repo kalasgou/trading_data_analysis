@@ -455,11 +455,15 @@ class CalcTick
                         // $insert_points = [];
                         $aliots_points = [];
                         
+                        $prev_ts = $ts_0930;
                         if (!isset($points[$ts_0930])) {
-                            $ts_0930 += 60;
+                            $prev_ts += 60;
                         }
                         
-                        $prev_ts = $ts_0930;
+                        if (!isset($points[$prev_ts])) {
+                            echo $index['stock_code'], '@', $prev_ts, PHP_EOL;
+                            continue;
+                        }
                         
                         foreach ($x_pos as $ts) {
                             if (!isset($points[$ts])) {

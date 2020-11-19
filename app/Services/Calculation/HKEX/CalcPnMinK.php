@@ -441,12 +441,16 @@ class CalcPnMinK
                         // $insert_charts = [];
                         $aliots_points = [];
                         
+                        $prev_ts = $ts_0930;
                         if (!isset($charts[$ts_0930])) {
-                            $ts_0930 += 60;
+                            $prev_ts += 60;
                         }
                         
-                        $prev_ts = $ts_0930;
-                        
+                        if (!isset($charts[$prev_ts])) {
+                            echo $index['stock_code'], '@', $prev_ts, PHP_EOL;
+                            continue;
+                        }
+                          
                         foreach ($x_pos as $ts) {
                             if (!isset($charts[$ts])) {
                                 $chart = $charts[$prev_ts];

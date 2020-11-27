@@ -38,13 +38,13 @@ class Kernel extends ConsoleKernel
             // Price Trend Tick
             $schedule->command("indicator:tick --start_date={$start_date} --end_date={$end_date} --prdt_type={$prdt_type}")
                     ->dailyAt('19:00')
-                    ->appendOutputTo('daily_trend.log')
+                    ->appendOutputTo("daily_trend.{$prdt_type}.log")
                     ->runInBackground();
             
             // P1Min KChart
             $schedule->command("indicator:kchart_min --dimension=p1min --start_date={$start_date} --end_date={$end_date} --prdt_type={$prdt_type}")
                     ->dailyAt('19:00')
-                    ->appendOutputTo('daily_kchart_min.log')
+                    ->appendOutputTo("daily_kchart_min.{$prdt_type}.log")
                     ->runInBackground();
         }
         

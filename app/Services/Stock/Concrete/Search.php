@@ -72,8 +72,10 @@ class Search
         }
         
         $sorted_stocks = [];
-        foreach ($stock_codes as $stock_code) {
-            $sorted_stocks[] = $stocks[$stock_code];
+        if (!empty($stocks)) {
+            foreach ($stock_codes as $stock_code) {
+                $sorted_stocks[] = $stocks[$stock_code];
+            }
         }
         
         return $sorted_stocks;

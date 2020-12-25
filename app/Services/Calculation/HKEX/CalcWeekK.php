@@ -14,7 +14,7 @@ class CalcWeekK extends CalcMoreK
         
     }
     
-    private function calculate(array $stocks, string $start_date, string $end_date)
+    public function calculate(array $stocks, string $start_date, string $end_date)
     {
         $prdt_types = Config::get('product_types');
         

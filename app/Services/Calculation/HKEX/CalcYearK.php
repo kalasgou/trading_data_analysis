@@ -15,7 +15,7 @@ class CalcYearK extends CalcMoreK
         
     }
     
-    private function calculate(array $stocks, string $start_date, string $end_date) : bool
+    public function calculate(array $stocks, string $start_date, string $end_date) : bool
     {
         $prdt_types = Config::get('product_types');
         

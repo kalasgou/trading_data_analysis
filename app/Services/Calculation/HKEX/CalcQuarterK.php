@@ -7,6 +7,9 @@ bcscale(3);
 use App\Models\Chart\DayK;
 use App\Models\Chart\MonthK;
 use App\Models\Chart\QuarterK;
+use App\Facades\TimetableSrvc;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Config;
 
 class CalcQuarterK extends CalcMoreK
 {

@@ -6,6 +6,9 @@ bcscale(3);
 
 use App\Models\Chart\DayK;
 use App\Models\Chart\WeekK;
+use App\Facades\TimetableSrvc;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Config;
 
 class CalcWeekK
 {

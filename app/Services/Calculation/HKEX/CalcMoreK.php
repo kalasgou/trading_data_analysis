@@ -3,9 +3,6 @@
 namespace App\Services\Calculation\HKEX;
 
 use App\Facades\SearchSrvc;
-use App\Facades\TimetableSrvc;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Config;
 
 trait CalcMoreK
 {

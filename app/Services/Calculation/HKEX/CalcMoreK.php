@@ -7,7 +7,7 @@ use App\Facades\TimetableSrvc;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 
-class CalcMoreK
+trait CalcMoreK
 {
     
     public function fix(string $prdt_type, string $start_date, string $end_date, string $prdt_code = '') : bool

@@ -9,6 +9,8 @@ use App\Models\Chart\MonthK;
 
 class CalcMonthK extends CalcMoreK
 {
+    use CalcMoreK;
+    
     public function __construct()
     {
         

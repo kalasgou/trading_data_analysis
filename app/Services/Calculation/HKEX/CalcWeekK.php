@@ -7,8 +7,10 @@ bcscale(3);
 use App\Models\Chart\DayK;
 use App\Models\Chart\WeekK;
 
-class CalcWeekK extends CalcMoreK
+class CalcWeekK
 {
+    use CalcMoreK;
+    
     public function __construct()
     {
         

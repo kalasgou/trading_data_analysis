@@ -10,6 +10,8 @@ use App\Models\Chart\YearK;
 
 class CalcYearK extends CalcMoreK
 {
+    use CalcMoreK;
+    
     public function __construct()
     {
         

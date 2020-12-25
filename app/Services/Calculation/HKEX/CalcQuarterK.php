@@ -10,6 +10,8 @@ use App\Models\Chart\QuarterK;
 
 class CalcQuarterK extends CalcMoreK
 {
+    use CalcMoreK;
+    
     public function __construct()
     {
         

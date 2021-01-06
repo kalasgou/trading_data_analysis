@@ -33,14 +33,13 @@ class CalcWeekK
         
         $one_week_secs = 86400 * 7;
         
+        $last_close = [];
         for ($ts = $start_day_ts; $ts <= $end_day_ts; ) {
             
             $start_ts = $ts;
             $end_ts = $start_ts + $one_week_secs;
             
             foreach ($stocks as $stock) {
-                
-                $last_close = '0';
                 
                 $chart['stock_code'] = $stock['stock_code'];
                 $chart['prdt_type'] = $prdt_types[$stock['prdt_type']][0];
@@ -67,7 +66,7 @@ class CalcWeekK
                     $inserted = true;
                     
                     if (!isset($rows[0]['last_close'])) {
-                        if ($last_close === '0') {
+                        if (!isset($last_close[$stock['stock_code']])) {
                             $rows2 = DayK::where('stock_code', $stock['stock_code'])
                                 ->where('ts', '<', $start_ts)
                                 ->orderby('ts', 'desc')
@@ -79,14 +78,15 @@ class CalcWeekK
                                 continue;
                             }
                             
-                            $last_close = bcadd($rows2[0]['close'], '0', 3);
+                            $last_close[$stock['stock_code']] = bcadd($rows2[0]['close'], '0', 3);
                         }
                         
                     } else {
-                        $last_close = bcadd($rows[0]['last_close'], '0', 3);
+                        
+                        $last_close[$stock['stock_code']] = bcadd($rows[0]['last_close'], '0', 3);
                     }
                     
-                    $chart['last_close'] = $last_close;
+                    $chart['last_close'] = $last_close[$stock['stock_code']];
                     $chart['open'] = bcadd($rows[0]['open'], '0', 3);
                     $chart['close'] = bcadd($rows[count($rows) - 1]['close'], '0', 3);
                     if (bccomp($chart['last_close'], 0) > 0) {
@@ -108,7 +108,7 @@ class CalcWeekK
 
                     $charts[] = $chart;
                     
-                    $last_close = $chart['close'];
+                    $last_close[$stock['stock_code']] = $chart['close'];
                 }
             }
             

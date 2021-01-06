@@ -38,6 +38,7 @@ class CalcMonthK extends CalcMoreK
         $end_month_days = (int)date('t', $end_day_ts);
         $end_day_ts = mktime(0, 0, 0, $end_month, $end_month_days, $end_year);
         
+        $last_close = [];
         for ($ts = $start_day_ts; $ts <= $end_day_ts; ) {
             
             $start_ts = $ts;
@@ -70,7 +71,28 @@ class CalcMonthK extends CalcMoreK
                 if (!empty($rows)) {
                     $inserted = true;
                     
-                    $chart['last_close'] = bcadd($rows[0]['last_close'], '0', 3);
+                    if (!isset($rows[0]['last_close'])) {
+                        if (!isset($last_close[$stock['stock_code']])) {
+                            $rows2 = DayK::where('stock_code', $stock['stock_code'])
+                                ->where('ts', '<', $start_ts)
+                                ->orderby('ts', 'desc')
+                                ->limit(1)
+                                ->get();
+                            $rows2 = $rows2->toArray();
+                            
+                            if (!isset($rows2[0]['close'])) {
+                                continue;
+                            }
+                            
+                            $last_close[$stock['stock_code']] = bcadd($rows2[0]['close'], '0', 3);
+                        }
+                        
+                    } else {
+                        
+                        $last_close[$stock['stock_code']] = bcadd($rows[0]['last_close'], '0', 3);
+                    }
+                    
+                    $chart['last_close'] = $last_close[$stock['stock_code']];                    
                     $chart['open'] = bcadd($rows[0]['open'], '0', 3);
                     $chart['close'] = bcadd($rows[count($rows) - 1]['close'], '0', 3);
                     if (bccomp($chart['last_close'], 0) > 0) {
@@ -91,6 +113,8 @@ class CalcMonthK extends CalcMoreK
                     $chart['turnover'] = $chart['total_turnover'];
 
                     $charts[] = $chart;
+                    
+                    $last_close[$stock['stock_code']] = $chart['close'];
                 }
             }
             

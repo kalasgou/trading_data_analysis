@@ -40,7 +40,7 @@ class CalcWeekK
             
             foreach ($stocks as $stock) {
                 
-                $last_close === '0';
+                $last_close = '0';
                 
                 $chart['stock_code'] = $stock['stock_code'];
                 $chart['prdt_type'] = $prdt_types[$stock['prdt_type']][0];

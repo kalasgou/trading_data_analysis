@@ -10,7 +10,7 @@ use App\Facades\TimetableSrvc;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 
-class CalcMonthK extends CalcMoreK
+class CalcMonthK
 {
     use CalcMoreK;
     

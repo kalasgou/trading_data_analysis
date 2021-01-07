@@ -11,7 +11,7 @@ use App\Facades\TimetableSrvc;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 
-class CalcQuarterK extends CalcMoreK
+class CalcQuarterK
 {
     use CalcMoreK;
     

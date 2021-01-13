@@ -13,7 +13,6 @@ use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
 use App\Facades\AliOTSSrvc;
 use App\Models\Chart\Trend;
-// use App\Models\Chart\TrendTable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 
@@ -25,7 +24,7 @@ class CalcTick
         // Nominal Price Starts from 2019-07-16
     }
     
-    public function fixStock(string $prdt_type, string $start_date, string $end_date, string $stock_code = '') : bool
+    public function fixStock(string $prdt_type, string $start_date, string $end_date, string $stock_code = '', bool $update_mongodb = false) : bool
     {
         if (!in_array($prdt_type, ['Equity', 'Warrant', 'Bond', 'Trust'])) {
             return false;
@@ -178,7 +177,6 @@ class CalcTick
                             $offset += $limit;
                         }
                         
-                        // $insert_points = [];
                         $aliots_points = [];
                         $prev_ts = $ts_0930;
                         // if ($insert) {
@@ -192,17 +190,6 @@ class CalcTick
                                     
                                     $points[$ts] = $point;
                                 }
-                                
-                                // $insert_points[] = [
-                                    // 'stock_code' => $stock['stock_code'],
-                                    // 'cur_price' => $points[$ts]['price'],
-                                    // 'avg_price' => $points[$ts]['average'],
-                                    // 'chg_sum' => $points[$ts]['chg_sum'],
-                                    // 'chg_ratio' => $points[$ts]['chg_ratio'],
-                                    // 'turnover' => $points[$ts]['turnover'],
-                                    // 'volume' => $points[$ts]['volume'],
-                                    // 'ts' => $ts
-                                // ];
                                 
                                 $aliots_points[] = [
                                     'keys' => [
@@ -224,26 +211,21 @@ class CalcTick
                         // }
                         
                         // To MongoDB
-                        // if (!empty($points)) {
-                            // $ret = Trend::raw(function ($collection) use ($points) {
-                                // $upsert_docs = [];
-                                // foreach ($points as $x => $point) {
-                                    // $upsert_docs[] = [
-                                        // 'updateOne' => [
-                                            // ['stock_code' => $point['stock_code'], 'ts' => $point['ts']],
-                                            // ['$set' => $point],
-                                            // ['upsert' => true]
-                                        // ]
-                                    // ];
-                                // }
-                                // $collection->bulkWrite($upsert_docs, ['ordered' => true]);
-                            // });
-                        // }
-                        
-                        // To MySQL
-                        // if (!empty($insert_points)) {
-                            // TrendTable::insert($insert_points);
-                        // }
+                        if (!empty($points) && $update_mongodb) {
+                            $ret = Trend::raw(function ($collection) use ($points) {
+                                $upsert_docs = [];
+                                foreach ($points as $x => $point) {
+                                    $upsert_docs[] = [
+                                        'updateOne' => [
+                                            ['stock_code' => $point['stock_code'], 'ts' => $point['ts']],
+                                            ['$set' => $point],
+                                            ['upsert' => true]
+                                        ]
+                                    ];
+                                }
+                                $collection->bulkWrite($upsert_docs, ['ordered' => true]);
+                            });
+                        }
                         
                         // To AliTable
                         if (!empty($aliots_points)) {
@@ -259,7 +241,7 @@ class CalcTick
         return true;
     }
     
-    public function fixIndex(string $start_date, string $end_date, string $index_code = '') : bool
+    public function fixIndex(string $start_date, string $end_date, string $index_code = '', bool $update_mongodb = false) : bool
     {
         $null_val = -9223372036854775808;
         $zero_val = 0;
@@ -452,7 +434,6 @@ class CalcTick
                     }
                     
                     if ($insert) {
-                        // $insert_points = [];
                         $aliots_points = [];
                         
                         $prev_ts = $ts_0930;
@@ -476,17 +457,6 @@ class CalcTick
                                 $points[$ts] = $point;
                             }
                             
-                            // $insert_points[] = [
-                                // 'stock_code' => $index['stock_code'],
-                                // 'cur_price' => $points[$ts]['price'],
-                                // 'avg_price' => $points[$ts]['average'],
-                                // 'chg_sum' => $points[$ts]['chg_sum'],
-                                // 'chg_ratio' => $points[$ts]['chg_ratio'],
-                                // 'turnover' => $points[$ts]['turnover'],
-                                // 'volume' => $points[$ts]['volume'],
-                                // 'ts' => $ts
-                            // ];
-                            
                             $aliots_points[] = [
                                 'keys' => [
                                     ['code', $index['stock_code']],
@@ -506,10 +476,22 @@ class CalcTick
                         }
                     }
                     
-                    // To MySQL
-                    // if (!empty($insert_points)) {
-                        // TrendTable::insert($insert_points);
-                    // }
+                    // To MongoDB
+                    if (!empty($points) && $update_mongodb) {
+                        $ret = Trend::raw(function ($collection) use ($points) {
+                            $upsert_docs = [];
+                            foreach ($points as $x => $point) {
+                                $upsert_docs[] = [
+                                    'updateOne' => [
+                                        ['stock_code' => $point['stock_code'], 'ts' => $point['ts']],
+                                        ['$set' => $point],
+                                        ['upsert' => true]
+                                    ]
+                                ];
+                            }
+                            $collection->bulkWrite($upsert_docs, ['ordered' => true]);
+                        });
+                    }
                     
                     // To AliTable
                     if (!empty($aliots_points)) {

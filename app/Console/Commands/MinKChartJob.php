@@ -11,7 +11,7 @@ class MinKChartJob extends Command
      *
      * @var string
      */
-    protected $signature = 'indicator:kchart_min {--exchange_code=HKEX} {--stock_code=} {--prdt_type=} {--dimension=p1min} {--start_date=} {--end_date=}';
+    protected $signature = 'indicator:kchart_min {--exchange_code=HKEX} {--stock_code=} {--prdt_type=} {--dimension=p1min} {--start_date=} {--end_date=} {--to_mongodb=no}';
 
     /**
      * The console command description.
@@ -44,6 +44,7 @@ class MinKChartJob extends Command
         $prdt_type = ucfirst($options['prdt_type']);
         $stock_code = trim($options['stock_code']);
         $dimension = trim($options['dimension']);
+        $to_mongodb = trim($options['to_mongodb']) === 'yes' ? true : false;
         $start_date = $options['start_date'];
         $end_date = $options['end_date'];
         if (in_array($prdt_type, $this->allow_prdt_types) || in_array($dimension, $this->allow_dimensions)) {
@@ -51,10 +52,10 @@ class MinKChartJob extends Command
             $class = "\App\Services\Calculation\\{$exchange_code}\CalcPnMinK";
             
             if ($prdt_type === 'Index') {
-                (new $class)->fixIndex($start_date, $end_date, $this->allow_dimensions[$dimension], $stock_code);
+                (new $class)->fixIndex($start_date, $end_date, $this->allow_dimensions[$dimension], $stock_code, $to_mongodb);
                 
             } else {
-                (new $class)->fixStock($prdt_type, $start_date, $end_date, $this->allow_dimensions[$dimension], $stock_code);
+                (new $class)->fixStock($prdt_type, $start_date, $end_date, $this->allow_dimensions[$dimension], $stock_code, $to_mongodb);
             }
             
         } else {

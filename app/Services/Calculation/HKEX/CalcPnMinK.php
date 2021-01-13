@@ -12,8 +12,6 @@ use App\Models\Market\Turnover;
 use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
 use App\Facades\AliOTSSrvc;
-use App\Models\Chart\P1MinKTable;
-use App\Models\Chart\P5MinKTable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 
@@ -24,7 +22,7 @@ class CalcPnMinK
         // Starts from 2019-06-24
     }
     
-    public function fixStock(string $prdt_type, string $start_date, string $end_date, int $interval = 60, string $stock_code = '') : bool
+    public function fixStock(string $prdt_type, string $start_date, string $end_date, int $interval = 60, string $stock_code = '', bool $update_mongodb = false) : bool
     {
         if (!in_array($prdt_type, ['Equity', 'Warrant', 'Bond', 'Trust'])) {
             return false;
@@ -57,7 +55,9 @@ class CalcPnMinK
                 $ts_1301 = $today_ts + 46860;
                 $ts_1600 = $today_ts + 57600;
                 
-                if ($interval !== 60) {
+                $dimension = 'P1Min';
+                if ($interval === 300) {
+                    $dimension = 'P5Min';
                     $ts_0930 = $today_ts + 34500;
                     $ts_1301 = $today_ts + 47100;
                 }
@@ -190,7 +190,6 @@ class CalcPnMinK
                             $offset += $limit;
                         }
                         
-                        // $insert_charts = [];
                         $aliots_points = [];
                         $prev_ts = $ts_0930;
                         // if ($insert) {
@@ -206,20 +205,6 @@ class CalcPnMinK
                                     
                                     $charts[$ts] = $chart;
                                 }
-                                
-                                // $insert_charts[] = [
-                                    // 'stock_code' => $stock['stock_code'],
-                                    // 'open_price' => $charts[$ts]['open'],
-                                    // 'close_price' => $charts[$ts]['close'],
-                                    // 'high_price' => $charts[$ts]['high'],
-                                    // 'low_price' => $charts[$ts]['low'],
-                                    // 'last_close_price' => $charts[$ts]['last_close'],
-                                    // 'chg_sum' => $charts[$ts]['chg_sum'],
-                                    // 'chg_ratio' => $charts[$ts]['chg_ratio'],
-                                    // 'turnover' => $charts[$ts]['turnover'],
-                                    // 'volume' => $charts[$ts]['volume'],
-                                    // 'ts' => $ts
-                                // ];
                                 
                                 $aliots_points[] = [
                                     'keys' => [
@@ -243,14 +228,27 @@ class CalcPnMinK
                             }
                         // }
                         
-                        // To MySQL
-                        // if (!empty($insert_charts)) {
-                            // P1MinKTable::insert($insert_charts);
-                        // }
+                        // To MongoDB
+                        if (!empty($charts) && $update_mongodb) {
+                            $table = "App\Models\Chart\{$dimension}K";
+                            $ret = $table::raw(function ($collection) use ($charts) {
+                                $upsert_docs = [];
+                                foreach ($charts as $x => $chart) {
+                                    $upsert_docs[] = [
+                                        'updateOne' => [
+                                            ['stock_code' => $chart['stock_code'], 'ts' => $chart['ts']],
+                                            ['$set' => $chart],
+                                            ['upsert' => true]
+                                        ]
+                                    ];
+                                }
+                                $collection->bulkWrite($upsert_docs, ['ordered' => true]);
+                            });
+                        }
                         
                         // To Ali Table
                         if (!empty($aliots_points)) {
-                            AliOTSSrvc::putRows('hkex_securities', 'HKEX_Security_P1Min_KChart', $aliots_points);
+                            AliOTSSrvc::putRows('hkex_securities', "HKEX_Security_{$dimension}_KChart", $aliots_points);
                         }
                     }
                 }
@@ -262,7 +260,7 @@ class CalcPnMinK
         return true;
     }
     
-    public function fixIndex(string $start_date, string $end_date, int $interval = 60, string $index_code = '') : bool
+    public function fixIndex(string $start_date, string $end_date, int $interval = 60, string $index_code = '', bool $update_mongodb = false) : bool
     {
         $null_val = -9223372036854775808;
         $zero_val = 0;
@@ -286,7 +284,9 @@ class CalcPnMinK
                 $ts_1301 = $ts + 46860;
                 $ts_1600 = $ts + 57600;
                 
-                if ($interval !== 60) {
+                $dimension = 'P1Min';
+                if ($interval === 300) {
+                    $dimension = 'P5Min';
                     $ts_0930 = $today_ts + 34500;
                     $ts_1301 = $today_ts + 47100;
                 }
@@ -438,7 +438,6 @@ class CalcPnMinK
                     }
                     
                     if ($insert) {
-                        // $insert_charts = [];
                         $aliots_points = [];
                         
                         $prev_ts = $ts_0930;
@@ -464,20 +463,6 @@ class CalcPnMinK
                                 $charts[$ts] = $chart;
                             }
                             
-                            // $insert_charts[] = [
-                                // 'stock_code' => $index['stock_code'],
-                                // 'open_price' => $charts[$ts]['open'],
-                                // 'close_price' => $charts[$ts]['close'],
-                                // 'high_price' => $charts[$ts]['high'],
-                                // 'low_price' => $charts[$ts]['low'],
-                                // 'last_close_price' => $charts[$ts]['last_close'],
-                                // 'chg_sum' => $charts[$ts]['chg_sum'],
-                                // 'chg_ratio' => $charts[$ts]['chg_ratio'],
-                                // 'turnover' => $charts[$ts]['turnover'],
-                                // 'volume' => $charts[$ts]['volume'],
-                                // 'ts' => $ts
-                            // ];
-                            
                             $aliots_points[] = [
                                 'keys' => [
                                     ['code', $index['stock_code']],
@@ -500,14 +485,27 @@ class CalcPnMinK
                         }
                     }
                     
-                    // To MySql
-                    // if (!empty($insert_charts)) {
-                        // P1MinKTable::insert($insert_charts);
-                    // }
+                    // To MongoDB
+                    if (!empty($charts) && $update_mongodb) {
+                        $class = "App\Models\Chart\{$dimension}K";
+                        $ret = $class::raw(function ($collection) use ($charts) {
+                            $upsert_docs = [];
+                            foreach ($charts as $x => $chart) {
+                                $upsert_docs[] = [
+                                    'updateOne' => [
+                                        ['stock_code' => $chart['stock_code'], 'ts' => $chart['ts']],
+                                        ['$set' => $chart],
+                                        ['upsert' => true]
+                                    ]
+                                ];
+                            }
+                            $collection->bulkWrite($upsert_docs, ['ordered' => true]);
+                        });
+                    }
                     
                     // To Ali Table
                     if (!empty($aliots_points)) {
-                        AliOTSSrvc::putRows('hkex_securities', 'HKEX_Security_P1Min_KChart', $aliots_points);
+                        AliOTSSrvc::putRows('hkex_securities', "HKEX_Security_{$dimension}_KChart", $aliots_points);
                     }
                 }
                 

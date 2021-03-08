@@ -19,49 +19,43 @@ class MarketSummary
         $gem = 'HKEX:GEM:Stock:Eqty:Ranking:ChgRatio';
         
         $pipeline = Redis::pipeline();
-        // 0 ~ 10
-        $pipeline->zRangeByScore($main, '-1', '-0.15');
-        $pipeline->zRangeByScore($main, '(-0.15', '-0.1');
-        $pipeline->zRangeByScore($main, '(-0.1', '-0.05');
-        $pipeline->zRangeByScore($main, '(-0.05', '-0.02');
-        $pipeline->zRangeByScore($main, '(-0.02', '(0');
-        $pipeline->zRangeByScore($main, '0', '0');   // 5
-        $pipeline->zRangeByScore($main, '(0', '0.02');
-        $pipeline->zRangeByScore($main, '(0.02', '0.05');
-        $pipeline->zRangeByScore($main, '(0.05', '0.1');
-        $pipeline->zRangeByScore($main, '(0.1', '0.15');
-        $pipeline->zRangeByScore($main, '(0.15', '1');
-        // 11 ~ 21
-        $pipeline->zRangeByScore($gem, '-1', '-0.15');
-        $pipeline->zRangeByScore($gem, '(-0.15', '-0.1');
-        $pipeline->zRangeByScore($gem, '(-0.1', '-0.05');
-        $pipeline->zRangeByScore($gem, '(-0.05', '-0.02');
-        $pipeline->zRangeByScore($gem, '(-0.02', '(0');
-        $pipeline->zRangeByScore($gem, '0', '0');   // 16
-        $pipeline->zRangeByScore($gem, '(0', '0.02');
-        $pipeline->zRangeByScore($gem, '(0.02', '0.05');
-        $pipeline->zRangeByScore($gem, '(0.05', '0.1');
-        $pipeline->zRangeByScore($gem, '(0.1', '0.15');
-        $pipeline->zRangeByScore($gem, '(0.15', '1');
+        // 0 ~ 8
+        $pipeline->zRangeByScore($main, '-1', '(-0.07');
+        $pipeline->zRangeByScore($main, '-0.07', '(-0.05');
+        $pipeline->zRangeByScore($main, '-0.05', '(-0.03');
+        $pipeline->zRangeByScore($main, '-0.03', '(0');
+        $pipeline->zRangeByScore($main, '0', '0');   // 4
+        $pipeline->zRangeByScore($main, '(0', '0.03');
+        $pipeline->zRangeByScore($main, '(0.03', '0.05');
+        $pipeline->zRangeByScore($main, '(0.05', '0.07');
+        $pipeline->zRangeByScore($main, '(0.07', '1');
+        // 9 ~ 17
+        $pipeline->zRangeByScore($gem, '-1', '(-0.07');
+        $pipeline->zRangeByScore($gem, '-0.07', '(-0.05');
+        $pipeline->zRangeByScore($gem, '-0.05', '(-0.03');
+        $pipeline->zRangeByScore($gem, '-0.03', '(0');
+        $pipeline->zRangeByScore($gem, '0', '0');   // 13
+        $pipeline->zRangeByScore($gem, '(0', '0.03');
+        $pipeline->zRangeByScore($gem, '(0.03', '0.05');
+        $pipeline->zRangeByScore($gem, '(0.05', '0.07');
+        $pipeline->zRangeByScore($gem, '(0.07', '1');
         $ret = $pipeline->exec();
         
         $breadth = [
             'drop' => [
-                ['title' => '< -15', 'val' => count($ret[0]) + count($ret[11])],
-                ['title' => '-15 ~ -10', 'val' => count($ret[1]) + count($ret[12])],
-                ['title' => '-10 ~ -5', 'val' => count($ret[2]) + count($ret[3])],
-                ['title' => '-5 ~ -2', 'val' => count($ret[3]) + count($ret[14])],
-                ['title' => '-2 ~ 0', 'val' => count($ret[4]) + count($ret[15])]
+                ['title' => '< -7', 'val' => count($ret[0]) + count($ret[9])],
+                ['title' => '-7 ~ -5', 'val' => count($ret[1]) + count($ret[10])],
+                ['title' => '-5 ~ -3', 'val' => count($ret[2]) + count($ret[11])],
+                ['title' => '-3 ~ 0', 'val' => count($ret[3]) + count($ret[12])]
             ],
             'even' => [
-                ['title' => '0', 'val' => count($ret[5]) + count($ret[16])]
+                ['title' => '0', 'val' => count($ret[4]) + count($ret[13])]
             ],
             'rise' => [
-                ['title' => '0 ~ 2', 'val' => count($ret[6]) + count($ret[17])],
-                ['title' => '2 ~ 5', 'val' => count($ret[7]) + count($ret[18])],
-                ['title' => '5 ~ 10', 'val' => count($ret[8]) + count($ret[19])],
-                ['title' => '10 ~ 15', 'val' => count($ret[9]) + count($ret[20])],
-                ['title' => '> 15', 'val' => count($ret[10]) + count($ret[21])]
+                ['title' => '0 ~ 3', 'val' => count($ret[5]) + count($ret[14])],
+                ['title' => '3 ~ 5', 'val' => count($ret[6]) + count($ret[15])],
+                ['title' => '5 ~ 7', 'val' => count($ret[7]) + count($ret[16])],
+                ['title' => '> 7', 'val' => count($ret[8]) + count($ret[17])]
             ],
             'drop_total' => 0,
             'rise_total' => 0,

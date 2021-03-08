@@ -1,7 +1,7 @@
 <?php
 namespace App\Services\Indicator\Concrete;
 
-bcscale(3);
+bcscale(2);
 
 use Illuminate\Support\Facades\Redis;
 

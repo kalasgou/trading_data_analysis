@@ -39,6 +39,8 @@ class RankingJob extends Command
      */
     public function handle()
     {
-        var_dump(MarketSummarySrvc::volume());
+        $stocks = MarketSummarySrvc::volume();
+        
+        Redis::hSet('Market_Summary', 'HKEX_Securities_Top_By_Volume', json_encode($stocks));
     }
 }

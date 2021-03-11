@@ -87,4 +87,18 @@ class MarketSummary
         ];
     }
     
+    public function volume()
+    {
+        $keys = Redis::keys('HKEX:Eqty:*:Info');
+        
+        $pipeline = Redis::pipeline();
+        foreach ($keys as $key) {
+            $pipeline->hMGet($key, ['stock_code', 'total_volume']);
+        }
+        $ret = $pipeline->exec();
+        
+        foreach ($ret as $one) {
+            var_dump($one);
+        }
+    }
 }

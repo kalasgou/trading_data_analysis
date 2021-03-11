@@ -97,8 +97,14 @@ class MarketSummary
         }
         $ret = $pipeline->exec();
         
-        foreach ($ret as $one) {
-            var_dump($one);
-        }
+        usort($ret, function($a, $b) {
+            if ($a['total_volume'] === $b['total_volume']) {
+                return 0;
+            }
+            
+            return $a['total_volume'] > $b['total_volume'] ? -1 : 1;
+        })
+        
+        return array_slice($ret, 0, 50);               
     }
 }

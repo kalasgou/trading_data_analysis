@@ -39,6 +39,6 @@ class RankingJob extends Command
      */
     public function handle()
     {
-        MarketSummarySrvc::volume();
+        var_dump(MarketSummarySrvc::volume());
     }
 }

@@ -54,19 +54,19 @@ class MarketSummary
         
         $breadth = [
             'drop' => [
-                ['title' => '<-7', 'val' => count($ret[0]) + count($ret[9]) + count($ret[18]],
-                ['title' => '-7~-5', 'val' => count($ret[1]) + count($ret[10]) + count($ret[19]],
-                ['title' => '-5~-3', 'val' => count($ret[2]) + count($ret[11]) + count($ret[20]],
-                ['title' => '-3~0', 'val' => count($ret[3]) + count($ret[12]) + count($ret[21]]
+                ['title' => '<-7', 'val' => count($ret[0]) + count($ret[9]) + count($ret[18])],
+                ['title' => '-7~-5', 'val' => count($ret[1]) + count($ret[10]) + count($ret[19])],
+                ['title' => '-5~-3', 'val' => count($ret[2]) + count($ret[11]) + count($ret[20])],
+                ['title' => '-3~0', 'val' => count($ret[3]) + count($ret[12]) + count($ret[21])]
             ],
             'even' => [
-                ['title' => '0', 'val' => count($ret[4]) + count($ret[13]) + count($ret[22]]
+                ['title' => '0', 'val' => count($ret[4]) + count($ret[13]) + count($ret[22])]
             ],
             'rise' => [
-                ['title' => '0~3', 'val' => count($ret[5]) + count($ret[14]) + count($ret[23]],
-                ['title' => '3~5', 'val' => count($ret[6]) + count($ret[15]) + count($ret[24]],
-                ['title' => '5~7', 'val' => count($ret[7]) + count($ret[16]) + count($ret[25]],
-                ['title' => '>7', 'val' => count($ret[8]) + count($ret[17]) + count($ret[26]]
+                ['title' => '0~3', 'val' => count($ret[5]) + count($ret[14]) + count($ret[23])],
+                ['title' => '3~5', 'val' => count($ret[6]) + count($ret[15]) + count($ret[24])],
+                ['title' => '5~7', 'val' => count($ret[7]) + count($ret[16]) + count($ret[25])],
+                ['title' => '>7', 'val' => count($ret[8]) + count($ret[17]) + count($ret[26])]
             ],
             'drop_total' => 0,
             'rise_total' => 0,

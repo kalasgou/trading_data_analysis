@@ -70,18 +70,30 @@ class MarketSummary
             ],
             'drop_total' => 0,
             'rise_total' => 0,
+            'even_total' => 0,
+            'total' => 0,
+            'drop_ratio' => 0,
+            'rise_ratio' => 0,
+            'even_ratio' => 0,
         ];
         
         foreach ($breadth['drop'] as $row) {
             $breadth['drop_total'] += $row['val'];
         }
-        
+        foreach ($breadth['even'] as $row) {
+            $breadth['even_total'] += $row['val'];
+        }
         foreach ($breadth['rise'] as $row) {
             $breadth['rise_total'] += $row['val'];
         }
         
-        return $breadth;
+        $breadth['total'] = $breadth['drop_total'] + $breadth['even_total'] + $breadth['rise_total'];
         
+        $breadth['drop_ratio'] = $breadth['drop_total'] / $breadth['total'];
+        $breadth['even_ratio'] = $breadth['even_total'] / $breadth['total'];
+        $breadth['rise_ratio'] = $breadth['rise_total'] / $breadth['total'];
+        
+        return $breadth;
     }
     
     public function turnover()

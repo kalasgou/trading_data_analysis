@@ -17,6 +17,7 @@ class MarketSummary
     {
         $main = 'HKEX:MAIN:Stock:Eqty:Ranking:ChgRatio';
         $gem = 'HKEX:GEM:Stock:Eqty:Ranking:ChgRatio';
+        $trust = 'HKEX:MAIN:Stock:Trst:Ranking:ChgRatio';
         
         $pipeline = Redis::pipeline();
         // 0 ~ 8
@@ -39,23 +40,33 @@ class MarketSummary
         $pipeline->zRangeByScore($gem, '(0.03', '0.05');
         $pipeline->zRangeByScore($gem, '(0.05', '0.07');
         $pipeline->zRangeByScore($gem, '(0.07', '1');
+        // 18 ~ 26
+        $pipeline->zRangeByScore($trust, '-1', '(-0.07');
+        $pipeline->zRangeByScore($trust, '-0.07', '(-0.05');
+        $pipeline->zRangeByScore($trust, '-0.05', '(-0.03');
+        $pipeline->zRangeByScore($trust, '-0.03', '(0');
+        $pipeline->zRangeByScore($trust, '0', '0');   // 22
+        $pipeline->zRangeByScore($trust, '(0', '0.03');
+        $pipeline->zRangeByScore($trust, '(0.03', '0.05');
+        $pipeline->zRangeByScore($trust, '(0.05', '0.07');
+        $pipeline->zRangeByScore($trust, '(0.07', '1');
         $ret = $pipeline->exec();
         
         $breadth = [
             'drop' => [
-                ['title' => '<-7', 'val' => count($ret[0]) + count($ret[9])],
-                ['title' => '-7~-5', 'val' => count($ret[1]) + count($ret[10])],
-                ['title' => '-5~-3', 'val' => count($ret[2]) + count($ret[11])],
-                ['title' => '-3~0', 'val' => count($ret[3]) + count($ret[12])]
+                ['title' => '<-7', 'val' => count($ret[0]) + count($ret[9]) + count($ret[18]],
+                ['title' => '-7~-5', 'val' => count($ret[1]) + count($ret[10]) + count($ret[19]],
+                ['title' => '-5~-3', 'val' => count($ret[2]) + count($ret[11]) + count($ret[20]],
+                ['title' => '-3~0', 'val' => count($ret[3]) + count($ret[12]) + count($ret[21]]
             ],
             'even' => [
-                ['title' => '0', 'val' => count($ret[4]) + count($ret[13])]
+                ['title' => '0', 'val' => count($ret[4]) + count($ret[13]) + count($ret[22]]
             ],
             'rise' => [
-                ['title' => '0~3', 'val' => count($ret[5]) + count($ret[14])],
-                ['title' => '3~5', 'val' => count($ret[6]) + count($ret[15])],
-                ['title' => '5~7', 'val' => count($ret[7]) + count($ret[16])],
-                ['title' => '>7', 'val' => count($ret[8]) + count($ret[17])]
+                ['title' => '0~3', 'val' => count($ret[5]) + count($ret[14]) + count($ret[23]],
+                ['title' => '3~5', 'val' => count($ret[6]) + count($ret[15]) + count($ret[24]],
+                ['title' => '5~7', 'val' => count($ret[7]) + count($ret[16]) + count($ret[25]],
+                ['title' => '>7', 'val' => count($ret[8]) + count($ret[17]) + count($ret[26]]
             ],
             'drop_total' => 0,
             'rise_total' => 0,
@@ -87,7 +98,7 @@ class MarketSummary
         ];
     }
     
-    public function volume()
+    public function volume(int $top_n = 20)
     {
         $keys = Redis::keys('HKEX:Eqty:*:Info');
         
@@ -105,6 +116,6 @@ class MarketSummary
             return $a['total_volume'] > $b['total_volume'] ? -1 : 1;
         });
         
-        return array_slice($ret, 0, 50);               
+        return array_slice($ret, 0, $top_n);
     }
 }

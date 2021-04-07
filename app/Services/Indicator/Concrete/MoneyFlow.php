@@ -33,7 +33,7 @@ class MoneyFlow
             }
             
             $info = explode(':', $key);            
-            Redis::hMSet("HKEX:Trade:{$info[2]}:Orders:Time", [
+            Redis::hMSet("HKEX:Trade:{$info[2]}:MoneyFlow", [
                 'in' => $in_amt,
                 'out' => $out_amt,
                 'even' => $even_amt,

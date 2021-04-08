@@ -17,9 +17,13 @@ class MoneyFlow
         $keys = Redis::keys('HKEX:Trade:*:Orders:Time');
         
         foreach ($keys as $key) {
-            $in_amt = '0';
-            $out_amt = '0';
-            $even_amt = '0';
+            $info = explode(':', $key);
+            $money_flow_key = "HKEX:Trade:{$info[2]}:MoneyFlow";
+            
+            $ret = Redis::hGetAll($money_flow_key);
+            $in_amt = isset($ret['in']) ? $ret['in'] : '0';
+            $out_amt = isset($ret['out']) ? $ret['out'] : '0';
+            $even_amt = isset($ret['even']) ? $ret['even'] : '0';
             
             $rows = Redis::zRangeByScore($key, "{$start_ts}", "({$end_ts}");
             foreach ($rows as $row) {
@@ -32,8 +36,7 @@ class MoneyFlow
                 }
             }
             
-            $info = explode(':', $key);            
-            Redis::hMSet("HKEX:Trade:{$info[2]}:MoneyFlow", [
+            Redis::hMSet($money_flow_key, [
                 'in' => $in_amt,
                 'out' => $out_amt,
                 'even' => $even_amt,

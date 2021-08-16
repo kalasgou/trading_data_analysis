@@ -1,0 +1,32 @@
+git merge --squash
+
+git commit --amend -m 
+git commit --amend
+
+git log --stat
+
+git cheery-pick commit-hash
+
+git reset --soft commit-hash
+git reset --mixed commit-hash
+git reset --hard commit-hash
+
+git clean -df
+
+git reflog
+
+git revert commit-hash
+
+git diff chash1 chash2
+
+git stash save
+git stash list
+git stash apply id
+git stash drop id
+git stash pop
+
+git reset
+
+git add -A / --all
+git add --no-all (--ignore-removal)
+git add -u / --update

@@ -125,7 +125,7 @@ class CalcDayK
                             $chart['total_turnover'] = $chart['turnover'] = $stats[0]['turnover'];
                             
                         } else {
-                            $chart['open'] = $chart['high'] = $chart['low'] = $chart['close'] = $chart['last_close'];
+                            $chart['open'] = $chart['high'] = $chart['low'] = $chart['close'];
                         }
                         
                         $charts[] = $chart;

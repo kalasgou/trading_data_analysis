@@ -16,7 +16,7 @@ class RankingETFSlow extends Command
      *
      * @var string
      */
-    protected $signature = 'rank:etf_slow';
+    protected $signature = 'ranking:etf_slow';
 
     /**
      * The console command description.

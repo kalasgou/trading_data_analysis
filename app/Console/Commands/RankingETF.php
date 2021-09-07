@@ -13,7 +13,7 @@ class RankingETF extends Command
      *
      * @var string
      */
-    protected $signature = 'rank:etf';
+    protected $signature = 'ranking:etf';
 
     /**
      * The console command description.

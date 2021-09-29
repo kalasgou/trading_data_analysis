@@ -84,7 +84,7 @@ class CalcDayK
                         $stats = Statistics::where('stock_code', $stock['stock_code'])
                             ->where('unix_ts', '>=', $today_ts)
                             ->where('unix_ts', '<', $tomorrow_ts)
-                            ->orderBy('unix_ts', 'desc')
+                            ->orderBy('ts', 'desc')
                             ->limit(1)
                             ->get();
                         $stats = $stats->toArray();

@@ -31,7 +31,7 @@ class CalcTick
         }
         
         if ($stock_code !== '') {
-            $stocks = SearchSrvc::getByCodes([$stock_code]);            
+            $stocks = SearchSrvc::getByCodes([$stock_code]);
         } else {
             $stocks = SearchSrvc::getByType($prdt_type);
         }
@@ -120,7 +120,7 @@ class CalcTick
                             $stats = Statistics::where('stock_code', $stock['stock_code'])
                                 ->where('unix_ts', '>=', $today_ts)
                                 ->where('unix_ts', '<', $tomorrow_ts)
-                                ->orderby('unix_ts', 'asc')
+                                ->orderby('ts', 'asc')
                                 ->offset($offset)
                                 ->limit($limit)
                                 ->get();

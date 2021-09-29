@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 use App\Facades\MarketSummarySrvc;
 
-class MarkerBreadth extends Command
+class MarketBreadth extends Command
 {
     /**
      * The name and signature of the console command.

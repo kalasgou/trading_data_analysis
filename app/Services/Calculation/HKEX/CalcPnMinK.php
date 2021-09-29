@@ -29,7 +29,7 @@ class CalcPnMinK
         }
         
         if ($stock_code !== '') {
-            $stocks = SearchSrvc::getByCodes([$stock_code]);            
+            $stocks = SearchSrvc::getByCodes([$stock_code]);
         } else {
             $stocks = SearchSrvc::getByType($prdt_type);
         }
@@ -128,7 +128,7 @@ class CalcPnMinK
                             $stats = Statistics::where('stock_code', $stock['stock_code'])
                                 ->where('unix_ts', '>=', $today_start_ts)
                                 ->where('unix_ts', '<', $tomorrow_ts)
-                                ->orderby('unix_ts', 'asc')
+                                ->orderby('ts', 'asc')
                                 ->offset($offset)
                                 ->limit($limit)
                                 ->get();
@@ -155,7 +155,7 @@ class CalcPnMinK
                                             $chart['open'] = $chart['high'] = $chart['low'] = $real_open_price;
                                         } else {
                                             $chart['open'] = $chart['high'] = $chart['low'] = $stat['last_price'];
-                                        }                                        
+                                        }
                                         $chart['last_close'] = $last_close = $chart['close'];
                                         $chart['turnover'] = '0';
                                         $chart['volume'] = 0;
@@ -604,7 +604,7 @@ class CalcPnMinK
                                 $stats = Statistics::where('stock_code', $stock['stock_code'])
                                     ->where('unix_ts', '>=', $start_ts)
                                     ->where('unix_ts', '<', $end_ts)
-                                    ->orderby('unix_ts', 'asc')
+                                    ->orderby('ts', 'asc')
                                     ->offset($offset)
                                     ->limit($limit)
                                     ->get();

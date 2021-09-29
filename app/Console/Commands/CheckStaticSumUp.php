@@ -61,11 +61,11 @@ class CheckStaticSumUp extends Command
         
         $turnover = '0';
         $volume = 0;
-        for ($ts = $start_ts; $ts <= $end_ts; $ts += 86400) {            
+        for ($ts = $start_ts; $ts <= $end_ts; $ts += 86400) {
             $row = Statistics::where('stock_code', $stock_code)
                 ->where('unix_ts', '>=', $ts)
                 ->where('unix_ts', '<', $ts + 86400)
-                ->orderBy('unix_ts', 'desc')
+                ->orderBy('ts', 'desc')
                 ->limit(1)
                 ->first(['turnover', 'volume']);
             

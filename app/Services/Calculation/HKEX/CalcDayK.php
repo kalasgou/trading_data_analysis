@@ -123,9 +123,14 @@ class CalcDayK
                             $chart['low'] = $stats[0]['low_price'];
                             $chart['total_volume'] = $chart['volume'] = (int)$stats[0]['volume'];
                             $chart['total_turnover'] = $chart['turnover'] = $stats[0]['turnover'];
-                            
-                        } else {
-                            $chart['open'] = $chart['high'] = $chart['low'] = $chart['close'];
+                        }
+                        
+                        if (bccomp($chart['open'], '0', 3) <= 0) {
+                            $chart['open'] = $chart['close'];
+                        }
+                        
+                        if (bccomp($chart['high'], '0', 3) <= 0 || bccomp($chart['low'], '0', 3) <= 0) {
+                            $chart['high'] = $chart['low'] = $chart['close'];
                         }
                         
                         $charts[] = $chart;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Market;
+namespace App\Models\Company;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 

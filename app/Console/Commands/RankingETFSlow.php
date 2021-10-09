@@ -7,7 +7,7 @@ bcscale(3);
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 use App\Models\Market\Stock;
-use App\Models\Market\Company;
+use App\Models\Company\Company;
 
 class RankingETFSlow extends Command
 {

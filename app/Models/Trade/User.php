@@ -4,10 +4,12 @@ namespace App\Models\Trade;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 
-class Account extends Model
+class User extends Model
 {
     const CREATED_AT = 'createdAt';
     const UPDATED_AT = 'updatedAt';
     
-    protected $collection = 'Account';
+    protected $collection = 'User';
+    
+    protected $guarded = [];
 }

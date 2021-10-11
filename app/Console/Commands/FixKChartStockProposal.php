@@ -78,7 +78,7 @@ class FixKChartStockProposal extends Command
                         ]);
                     }
                     
-                    echo 'new: '$row->stock_code_new;
+                    echo 'new: ', $row->stock_code_new;
                 }
                 
                 echo PHP_EOL;

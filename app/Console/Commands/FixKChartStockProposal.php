@@ -42,39 +42,40 @@ class FixKChartStockProposal extends Command
         $dimensions = ['day', 'week', 'month', 'quarter', 'year'];
         $ex_code = 'HKEX';
         
-        $today_ts = strtotime('2019-06-22'); // mktime(0,0,0);
-        $first_hkex_ts = strtotime('2019-06-21');
+        $today_ts = mktime(0,0,0);
         
         $rows = CompanyPly::where('exchange_code', '=', $ex_code)->where('list.end_time', '>=', $today_ts)->get();
         
         foreach ($rows as $row) {
             foreach ($row->list as $one) {
-                if ($one['start_time'] > $first_hkex_ts && $one['start_time'] <= time()) {
-                    $date = date('Y-m-d', $one['start_time']);
+                $end_date = date('Y-m-d', min($one['end_time'], $today_ts));
+                
+                if ($one['start_time'] <= $today_ts) {
+                    $start_date = date('Y-m-d', $one['start_time']);
                     foreach ($dimensions as $dim) {
                         Artisan::call('indicator:kchart', [
                             '--exchange_code' => $ex_code, 
                             '--stock_code' => $one['stock_code_temporary'], 
                             '--prdt_type' => 'Equity', 
                             '--dimension' => $dim, 
-                            '--start_date' => $date, 
-                            '--end_date' => $date
+                            '--start_date' => $start_date, 
+                            '--end_date' => $end_date
                         ]);
                     }
                     
                     echo 'tmp: ', $one['stock_code_temporary'], '#';
                 }
                 
-                if ($one['middle_time'] > $first_hkex_ts && $one['middle_time'] <= time()) {
-                    $date = date('Y-m-d', $one['middle_time']);
+                if ($one['middle_time'] <= $today_ts) {
+                    $start_date = date('Y-m-d', $one['middle_time']);
                     foreach ($dimensions as $dim) {
                         Artisan::call('indicator:kchart', [
                             '--exchange_code' => $ex_code, 
                             '--stock_code' => $row->stock_code_new, 
                             '--prdt_type' => 'Equity', 
                             '--dimension' => $dim, 
-                            '--start_date' => $date, 
-                            '--end_date' => $date
+                            '--start_date' => $start_date, 
+                            '--end_date' => $end_date
                         ]);
                     }
                     

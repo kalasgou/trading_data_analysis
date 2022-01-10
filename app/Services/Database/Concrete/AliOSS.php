@@ -33,7 +33,8 @@ class AliOSS
                 $config['client'][$db]['endpoint']
             );
 
-            static::$clients[$db][$bucket] = $ossClient;
+            static::$clients[$db][$bucket]['conn'] = $ossClient;
+            static::$clients[$db][$bucket]['bucket'] = $bucket;
         }
         
         return static::$clients[$db][$bucket];
@@ -48,7 +49,7 @@ class AliOSS
         $client = $this->conn($db, $bucket);
         
         try {
-            $result = $client->uploadFile($bucket, $object, $file_path);
+            $result = $client['conn']->uploadFile($client['bucket'], $object, $file_path);
 
             return $result;
             
@@ -66,7 +67,7 @@ class AliOSS
         $client = $this->conn($db, $bucket);
         
         try {
-            $result = $client->putObject($bucket, $object, $content);
+            $result = $client['conn']->putObject($client['bucket'], $object, $content);
 
             return $result;
             

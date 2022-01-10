@@ -670,7 +670,7 @@ class CalcPnMinK
             }
             
         } catch (\Exception $e) {
-            echo $e->getMessage(), ' ', $e->getFile(), ' ,', $e->getLine(), PHP_EOL, $e->getTraceAsString(), PHP_EOL;
+            echo $e->getMessage(), ' ', $e->getFile(), ' ', $e->getLine(), PHP_EOL, $e->getTraceAsString(), PHP_EOL;
         }
     }
 }

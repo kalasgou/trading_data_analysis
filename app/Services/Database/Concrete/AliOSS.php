@@ -36,6 +36,7 @@ class AliOSS
             static::$clients[$db][$bucket] = $ossClient;
         }
         
+        return static::$clients[$db][$bucket];
     }
     
     public function uploadFile(string $object, string $file_path, string $db = '', string $bucket = '')
@@ -44,10 +45,10 @@ class AliOSS
             return false;
         }
         
-        $this->conn($db, $bucket);
+        $client = $this->conn($db, $bucket);
         
         try {
-            $result = static::$clients[$db][$bucket]->uploadFile($bucket, $object, $file_path);
+            $result = $client->uploadFile($bucket, $object, $file_path);
 
             return $result;
             
@@ -62,10 +63,10 @@ class AliOSS
             return false;
         }
         
-        $this->conn($db, $bucket);
+        $client = $this->conn($db, $bucket);
         
         try {
-            $result = static::$clients[$db][$bucket]->putObject($bucket, $object, $content);
+            $result = $client->putObject($bucket, $object, $content);
 
             return $result;
             

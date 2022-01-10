@@ -22,9 +22,11 @@ class CalcTick
     {
         // Starts from 2019-06-24
         // Nominal Price Starts from 2019-07-16
+        
+        $this->exchangeCode = 'HKEX';
     }
     
-    public function fixStock(string $prdt_type, string $start_date, string $end_date, string $stock_code = '', bool $update_mongodb = false) : bool
+    public function fixStock(string $prdt_type, string $start_date, string $end_date, string $stock_code = '', bool $update_mongodb = false, string $cloud_backup = '') : bool
     {
         if (!in_array($prdt_type, ['Equity', 'Warrant', 'Bond', 'Trust'])) {
             return false;
@@ -179,58 +181,37 @@ class CalcTick
                         
                         $aliots_points = [];
                         $prev_ts = $ts_0930;
-                        // if ($insert) {
-                            foreach ($x_pos as $ts) {
-                                if (!isset($points[$ts])) {
-                                    $point = $points[$prev_ts];
-                                                                    
-                                    $point['volume'] = $point['total_volume'] = 0;
-                                    $point['turnover'] = $point['total_turnover'] = '0';
-                                    $point['ts'] = $ts;
-                                    
-                                    $points[$ts] = $point;
-                                }
+                        
+                        foreach ($x_pos as $ts) {
+                            if (!isset($points[$ts])) {
+                                $point = $points[$prev_ts];
+                                                                
+                                $point['volume'] = $point['total_volume'] = 0;
+                                $point['turnover'] = $point['total_turnover'] = '0';
+                                $point['ts'] = $ts;
                                 
-                                $aliots_points[] = [
-                                    'keys' => [
-                                        ['code', $stock['stock_code']],
-                                        ['ts', $ts]
-                                    ],
-                                    'attributes' => [
-                                        ['price', $points[$ts]['price']],
-                                        ['average', $points[$ts]['average']],
-                                        ['chg_sum', $points[$ts]['chg_sum']],
-                                        ['chg_ratio', $points[$ts]['chg_ratio']],
-                                        ['turnover', $points[$ts]['turnover']],
-                                        ['volume', $points[$ts]['volume']]
-                                    ]
-                                ];
-                                
-                                $prev_ts = $ts;
+                                $points[$ts] = $point;
                             }
-                        // }
-                        
-                        // To MongoDB
-                        if (!empty($points) && $update_mongodb) {
-                            $ret = Trend::raw(function ($collection) use ($points) {
-                                $upsert_docs = [];
-                                foreach ($points as $x => $point) {
-                                    $upsert_docs[] = [
-                                        'updateOne' => [
-                                            ['stock_code' => $point['stock_code'], 'ts' => $point['ts']],
-                                            ['$set' => $point],
-                                            ['upsert' => true]
-                                        ]
-                                    ];
-                                }
-                                $collection->bulkWrite($upsert_docs, ['ordered' => true]);
-                            });
+                            
+                            $aliots_points[] = [
+                                'keys' => [
+                                    ['code', $stock['stock_code']],
+                                    ['ts', $ts]
+                                ],
+                                'attributes' => [
+                                    ['price', $points[$ts]['price']],
+                                    ['average', $points[$ts]['average']],
+                                    ['chg_sum', $points[$ts]['chg_sum']],
+                                    ['chg_ratio', $points[$ts]['chg_ratio']],
+                                    ['turnover', $points[$ts]['turnover']],
+                                    ['volume', $points[$ts]['volume']]
+                                ]
+                            ];
+                            
+                            $prev_ts = $ts;
                         }
                         
-                        // To AliTable
-                        if (!empty($aliots_points)) {
-                            AliOTSSrvc::putRows('hkex_securities', 'HKEX_Security_Price_Trend', $aliots_points);
-                        }
+                        $this->storeNow($points, $aliots_points, $update_mongodb, $cloud_backup);
                     }
                 }
                 
@@ -241,7 +222,7 @@ class CalcTick
         return true;
     }
     
-    public function fixIndex(string $start_date, string $end_date, string $index_code = '', bool $update_mongodb = false) : bool
+    public function fixIndex(string $start_date, string $end_date, string $index_code = '', bool $update_mongodb = false, string $cloud_backup = '') : bool
     {
         $null_val = -9223372036854775808;
         $zero_val = 0;
@@ -268,19 +249,6 @@ class CalcTick
                 $x_pos = array_merge(range($ts_0930, $ts_1200, 60), range($ts_1301, $ts_1600, 60));
                 
                 foreach ($indexes as $index) {
-                    
-                    // 
-                    // $stats = Index::where('code', $index['stock_code'])
-                            // ->where('unix_ts', '>=', $start_ts)
-                            // ->where('unix_ts', '<', $end_ts)
-                            // ->where('prev_close', '>', 0)
-                            // ->orderby('unix_ts', 'asc')
-                            // ->offset(0)
-                            // ->limit(1)
-                            // ->get();
-                    
-                    // $stats = $stats->toArray();
-                    
                     $points = [];
                     
                     $point['stock_code'] = $index['stock_code'];
@@ -476,27 +444,7 @@ class CalcTick
                         }
                     }
                     
-                    // To MongoDB
-                    if (!empty($points) && $update_mongodb) {
-                        $ret = Trend::raw(function ($collection) use ($points) {
-                            $upsert_docs = [];
-                            foreach ($points as $x => $point) {
-                                $upsert_docs[] = [
-                                    'updateOne' => [
-                                        ['stock_code' => $point['stock_code'], 'ts' => $point['ts']],
-                                        ['$set' => $point],
-                                        ['upsert' => true]
-                                    ]
-                                ];
-                            }
-                            $collection->bulkWrite($upsert_docs, ['ordered' => true]);
-                        });
-                    }
-                    
-                    // To AliTable
-                    if (!empty($aliots_points)) {
-                        AliOTSSrvc::putRows('hkex_securities', 'HKEX_Security_Price_Trend', $aliots_points);
-                    }
+                    $this->storeNow($points, $aliots_points, $update_mongodb, $cloud_backup);
                 }
                 
                 $ts = $end_ts;
@@ -506,4 +454,49 @@ class CalcTick
         return false;
     }
     
+    private function storeNow($points, $aliots_points, $update_mongodb, $cloud_backup)
+    {
+        try {
+            // To MongoDB
+            if (!empty($points) && $update_mongodb) {
+                $ret = Trend::raw(function ($collection) use ($points) {
+                    $upsert_docs = [];
+                    foreach ($points as $x => $point) {
+                        $upsert_docs[] = [
+                            'updateOne' => [
+                                ['stock_code' => $point['stock_code'], 'ts' => $point['ts']],
+                                ['$set' => $point],
+                                ['upsert' => true]
+                            ]
+                        ];
+                    }
+                    $collection->bulkWrite($upsert_docs, ['ordered' => true]);
+                });
+            }
+            
+            // To AliOTS
+            if (!empty($aliots_points) && $cloud_backup === 'aliots') {
+                AliOTSSrvc::putRows('hkex_securities', 'HKEX_Security_Price_Trend', $aliots_points);
+            }
+            
+            // To AliOSS
+            if (!empty($points) && $cloud_backup === 'alioss') {
+                ksort($points, SORT_NUMERIC);
+                $points = array_values($points);
+                $stock_code = $points[0]['stock_code'];
+                $date = date('Y/md', $points[0]['ts']);
+                $object = "stock_charts/{$this->exchangeCode}/{$stock_code}/{$date}_trend.json";
+                
+                $content = '';
+                foreach ($points as $point) {
+                    $content .= json_encode($point). PHP_EOL;
+                }
+                
+                AliOSSSrvc::putObject($object, $content);
+            }
+            
+        } catch (\Exception $e) {
+            echo $e->getMessage(), PHP_EOL;
+        }
+    }
 }

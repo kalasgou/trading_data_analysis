@@ -38,16 +38,34 @@ class AliOSS
         
     }
     
-    public function uploadFile(string $db, string $bucket, string $object, string $file)
+    public function uploadFile(string $object, string $file_path, string $db = '', string $bucket = '')
     {
-        if (empty($object) || empty($file)) {
+        if (empty($object) || empty($file_path)) {
             return false;
         }
         
         $this->conn($db, $bucket);
         
         try {
-            $result = static::$clients[$db][$bucket]->uploadFile($bucket, $object, $file);
+            $result = static::$clients[$db][$bucket]->uploadFile($bucket, $object, $file_path);
+
+            return $result;
+            
+        } catch (OssException $e) {
+            echo $e->getMessage(), PHP_EOL;
+        }
+    }
+    
+    public function putObject(string $object, string $content, string $db = '', string $bucket = '')
+    {
+        if (empty($object) || empty($content)) {
+            return false;
+        }
+        
+        $this->conn($db, $bucket);
+        
+        try {
+            $result = static::$clients[$db][$bucket]->putObject($bucket, $object, $content);
 
             return $result;
             

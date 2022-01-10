@@ -28,22 +28,19 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
-        
         $today_ts = mktime(0,0,0);
         $start_date = $end_date = date('Y-m-d', $today_ts);
         
         foreach (['Equity', 'Index', 'Trust'] as $prdt_type) {
             // Price Trend Tick
-            $schedule->command("indicator:tick --start_date={$start_date} --end_date={$end_date} --prdt_type={$prdt_type}")
-                    ->dailyAt('19:00')
+            $schedule->command("indicator:tick --start_date={$start_date} --end_date={$end_date} --prdt_type={$prdt_type} --to_cloud=alioss")
+                    ->dailyAt('21:30')
                     ->appendOutputTo("daily_trend.{$prdt_type}.log")
                     ->runInBackground();
             
             // P1Min KChart
-            $schedule->command("indicator:kchart_min --dimension=p1min --start_date={$start_date} --end_date={$end_date} --prdt_type={$prdt_type}")
-                    ->dailyAt('19:00')
+            $schedule->command("indicator:kchart_min --dimension=p1min --start_date={$start_date} --end_date={$end_date} --prdt_type={$prdt_type} --to_cloud=alioss")
+                    ->dailyAt('21:30')
                     ->appendOutputTo("daily_kchart_min.{$prdt_type}.log")
                     ->runInBackground();
         }

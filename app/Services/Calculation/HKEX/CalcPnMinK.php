@@ -20,9 +20,11 @@ class CalcPnMinK
     public function __construct()
     {
         // Starts from 2019-06-24
+        
+        $this->exchangeCode = 'HKEX';
     }
     
-    public function fixStock(string $prdt_type, string $start_date, string $end_date, int $interval = 60, string $stock_code = '', bool $update_mongodb = false) : bool
+    public function fixStock(string $prdt_type, string $start_date, string $end_date, int $interval = 60, string $stock_code = '', bool $update_mongodb = false, string $cloud_backup = '') : bool
     {
         if (!in_array($prdt_type, ['Equity', 'Warrant', 'Bond', 'Trust'])) {
             return false;
@@ -119,7 +121,6 @@ class CalcPnMinK
                         $chart['total_turnover'] = $chart['turnover'] = '0';
                         $chart['ts'] = $ts_0930;
                         
-                        // $insert = false;
                         $loop = true;
                         $offset = 0;
                         $limit = 500;
@@ -135,7 +136,6 @@ class CalcPnMinK
                             $stats = $stats->toArray();
                             
                             if (!empty($stats)) {
-                                // $insert = true;
                                 foreach ($stats as $stat) {
                                     
                                     $min_ts = get_x_pos_min($stat['unix_ts']);
@@ -192,64 +192,42 @@ class CalcPnMinK
                         
                         $aliots_points = [];
                         $prev_ts = $ts_0930;
-                        // if ($insert) {
-                            foreach ($x_pos as $ts) {
-                                if (!isset($charts[$ts])) {
-                                    $chart = $charts[$prev_ts];
-                                    
-                                    $chart['open'] = $chart['high'] = $chart['low'] = $chart['last_close'] = $chart['close'];
-                                    $chart['chg_sum'] = $chart['chg_ratio'] = '0';
-                                    $chart['volume'] = $chart['total_volume'] = 0;
-                                    $chart['turnover'] = $chart['total_turnover'] = '0';
-                                    $chart['ts'] = $ts;
-                                    
-                                    $charts[$ts] = $chart;
-                                }
+                        
+                        foreach ($x_pos as $ts) {
+                            if (!isset($charts[$ts])) {
+                                $chart = $charts[$prev_ts];
                                 
-                                $aliots_points[] = [
-                                    'keys' => [
-                                        ['code', $stock['stock_code']],
-                                        ['ts', $ts]
-                                    ],
-                                    'attributes' => [
-                                        ['open', $charts[$ts]['open']],
-                                        ['close', $charts[$ts]['close']],
-                                        ['high', $charts[$ts]['high']],
-                                        ['low', $charts[$ts]['low']],
-                                        ['last_close', $charts[$ts]['last_close']],
-                                        ['chg_sum', $charts[$ts]['chg_sum']],
-                                        ['chg_ratio', $charts[$ts]['chg_ratio']],
-                                        ['turnover', $charts[$ts]['turnover']],
-                                        ['volume', $charts[$ts]['volume']],
-                                    ]
-                                ];
+                                $chart['open'] = $chart['high'] = $chart['low'] = $chart['last_close'] = $chart['close'];
+                                $chart['chg_sum'] = $chart['chg_ratio'] = '0';
+                                $chart['volume'] = $chart['total_volume'] = 0;
+                                $chart['turnover'] = $chart['total_turnover'] = '0';
+                                $chart['ts'] = $ts;
                                 
-                                $prev_ts = $ts;
+                                $charts[$ts] = $chart;
                             }
-                        // }
-                        
-                        // To MongoDB
-                        if (!empty($charts) && $update_mongodb) {
-                            $table = "App\Models\Chart\{$dimension}K";
-                            $ret = $table::raw(function ($collection) use ($charts) {
-                                $upsert_docs = [];
-                                foreach ($charts as $x => $chart) {
-                                    $upsert_docs[] = [
-                                        'updateOne' => [
-                                            ['stock_code' => $chart['stock_code'], 'ts' => $chart['ts']],
-                                            ['$set' => $chart],
-                                            ['upsert' => true]
-                                        ]
-                                    ];
-                                }
-                                $collection->bulkWrite($upsert_docs, ['ordered' => true]);
-                            });
+                            
+                            $aliots_points[] = [
+                                'keys' => [
+                                    ['code', $stock['stock_code']],
+                                    ['ts', $ts]
+                                ],
+                                'attributes' => [
+                                    ['open', $charts[$ts]['open']],
+                                    ['close', $charts[$ts]['close']],
+                                    ['high', $charts[$ts]['high']],
+                                    ['low', $charts[$ts]['low']],
+                                    ['last_close', $charts[$ts]['last_close']],
+                                    ['chg_sum', $charts[$ts]['chg_sum']],
+                                    ['chg_ratio', $charts[$ts]['chg_ratio']],
+                                    ['turnover', $charts[$ts]['turnover']],
+                                    ['volume', $charts[$ts]['volume']],
+                                ]
+                            ];
+                            
+                            $prev_ts = $ts;
                         }
                         
-                        // To Ali Table
-                        if (!empty($aliots_points)) {
-                            AliOTSSrvc::putRows('hkex_securities', "HKEX_Security_{$dimension}_KChart", $aliots_points);
-                        }
+                        $this->storeNow($dimension, $charts, $aliots_points, $update_mongodb, $cloud_backup);
                     }
                 }
                 
@@ -260,7 +238,7 @@ class CalcPnMinK
         return true;
     }
     
-    public function fixIndex(string $start_date, string $end_date, int $interval = 60, string $index_code = '', bool $update_mongodb = false) : bool
+    public function fixIndex(string $start_date, string $end_date, int $interval = 60, string $index_code = '', bool $update_mongodb = false, string $cloud_backup = '') : bool
     {
         $null_val = -9223372036854775808;
         $zero_val = 0;
@@ -485,28 +463,7 @@ class CalcPnMinK
                         }
                     }
                     
-                    // To MongoDB
-                    if (!empty($charts) && $update_mongodb) {
-                        $class = "App\Models\Chart\{$dimension}K";
-                        $ret = $class::raw(function ($collection) use ($charts) {
-                            $upsert_docs = [];
-                            foreach ($charts as $x => $chart) {
-                                $upsert_docs[] = [
-                                    'updateOne' => [
-                                        ['stock_code' => $chart['stock_code'], 'ts' => $chart['ts']],
-                                        ['$set' => $chart],
-                                        ['upsert' => true]
-                                    ]
-                                ];
-                            }
-                            $collection->bulkWrite($upsert_docs, ['ordered' => true]);
-                        });
-                    }
-                    
-                    // To Ali Table
-                    if (!empty($aliots_points)) {
-                        AliOTSSrvc::putRows('hkex_securities', "HKEX_Security_{$dimension}_KChart", $aliots_points);
-                    }
+                    $this->storeNow($dimension, $charts, $aliots_points, $update_mongodb, $cloud_backup);
                 }
                 
                 $ts = $end_ts;
@@ -516,7 +473,8 @@ class CalcPnMinK
         return true;
     }
     
-    public function fixStocks(string $prdt_type, string $start_date, string $end_date, int $interval = 60, string $stock_code = '') : bool
+    // Deprecated at 2022-01-10
+    public function fixStockLastOne(string $prdt_type, string $start_date, string $end_date, int $interval = 60, string $stock_code = '') : bool
     {
         if (!in_array($prdt_type, ['Equity', 'Warrant', 'Bond', 'Trust'])) {
             return false;
@@ -594,7 +552,6 @@ class CalcPnMinK
                             $chart['total_turnover'] = $chart['turnover'] = '0';
                             $chart['ts'] = $open_trade_ts;
                             
-                            // $insert = false;
                             $loop = true;
                             $offset = 0;
                             $limit = 500;
@@ -611,9 +568,7 @@ class CalcPnMinK
                                 $stats = $stats->toArray();
                                 
                                 if (!empty($stats)) {
-                                    // $insert = true;
                                     foreach ($stats as $stat) {
-                                        
                                         $chart['close'] = $stat['last_price'];
                                         $chart['high'] = bccomp($stat['last_price'], $chart['high']) > 0 ? $stat['last_price'] : $chart['high'];
                                         $chart['low'] = bccomp($stat['last_price'], $chart['low']) < 0 ? $stat['last_price'] : $chart['low'];
@@ -621,11 +576,9 @@ class CalcPnMinK
                                         $chart['volume'] = $chart['volume'] + ($stat['volume'] - $chart['total_volume']);
                                         $chart['total_turnover'] = $stat['turnover'];
                                         $chart['total_volume'] = $stat['volume'];
-                                        
                                     }
                                     
                                 } else {
-                                    
                                     $loop = false;
                                     
                                     if (bccomp($last_close, '0') > 0) {
@@ -670,5 +623,53 @@ class CalcPnMinK
         }
         
         return true;
+    }
+    
+    private function storeNow($dimension, $charts, $aliots_points, $update_mongodb, $cloud_backup)
+    {
+        try {
+            // To MongoDB
+            if (!empty($charts) && $update_mongodb) {
+                $class = "App\Models\Chart\{$dimension}K";
+                $ret = $class::raw(function ($collection) use ($charts) {
+                    $upsert_docs = [];
+                    foreach ($charts as $x => $chart) {
+                        $upsert_docs[] = [
+                            'updateOne' => [
+                                ['stock_code' => $chart['stock_code'], 'ts' => $chart['ts']],
+                                ['$set' => $chart],
+                                ['upsert' => true]
+                            ]
+                        ];
+                    }
+                    $collection->bulkWrite($upsert_docs, ['ordered' => true]);
+                });
+            }
+            
+            // To AliOTS
+            if (!empty($aliots_points) && $cloud_backup === 'aliots') {
+                AliOTSSrvc::putRows('hkex_securities', "HKEX_Security_{$dimension}_KChart", $aliots_points);
+            }
+            
+            // To AliOSS
+            if (!empty($charts) && $cloud_backup === 'alioss') {
+                ksort($charts, SORT_NUMERIC);
+                $charts = array_values($charts);
+                $stock_code = $charts[0]['stock_code'];
+                $date = date('Y/md', $charts[0]['ts']);
+                $chart_type = strtolower("{$dimension}K");
+                $object = "stock_charts/{$this->exchangeCode}/{$stock_code}/{$date}_{$chart_type}.json";
+                
+                $content = '';
+                foreach ($charts as $chart) {
+                    $content .= json_encode($chart). PHP_EOL;
+                }
+                
+                AliOSSSrvc::putObject($object, $content);
+            }
+            
+        } catch (\Exception $e) {
+            echo $e->getMessage(), PHP_EOL;
+        }
     }
 }

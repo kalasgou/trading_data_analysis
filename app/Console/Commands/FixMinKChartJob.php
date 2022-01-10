@@ -40,6 +40,7 @@ class FixMinKChartJob extends Command
      */
     public function handle()
     {
+        // Deprecated at 2022-01-10
         $options = $this->options();
         $prdt_type = ucfirst($options['prdt_type']);
         $stock_code = trim($options['stock_code']);
@@ -50,7 +51,7 @@ class FixMinKChartJob extends Command
             $exchange_code = strtoupper($options['exchange_code']);
             $class = "\App\Services\Calculation\\{$exchange_code}\CalcPnMinK";
             
-            (new $class)->fixStocks($prdt_type, $start_date, $end_date, $this->allow_dimensions[$dimension], $stock_code);
+            (new $class)->fixStockLastOne($prdt_type, $start_date, $end_date, $this->allow_dimensions[$dimension], $stock_code);
             
         } else {
             

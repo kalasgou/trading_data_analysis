@@ -12,6 +12,7 @@ use App\Models\Market\Turnover;
 use App\Facades\SearchSrvc;
 use App\Facades\TimetableSrvc;
 use App\Facades\AliOTSSrvc;
+use App\Facades\AliOSSSrvc;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 

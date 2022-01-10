@@ -112,12 +112,27 @@ return [
         'default' => 'hkex_securities',
         'client' => [
             'hkex_securities' => [
-                'end_point' => env('ALIOTS_ENDPOINT', ''),
-                'key_id' => env('ALIOTS_KEY_ID', ''),
-                'key_secret' => env('ALIOTS_KEY_SECRET', ''),
-                'inst_name' => env('ALIOTS_INST_NAME', ''),
+                'end_point' => env('ALIOTS_ENDPOINT', 'test'),
+                'key_id' => env('ALIOTS_KEY_ID', '123456789'),
+                'key_secret' => env('ALIOTS_KEY_SECRET', '123456789'),
+                'inst_name' => env('ALIOTS_INST_NAME', 'test'),
                 'log_error' => env('ALITOS_ERROR_LOG') === true ? 'defaultOTSErrorLogHandler' : null,
                 'log_debug' => env('ALITOS_DEBUG_LOG') === true ? 'defaultOTSDebugLogHandler' : null
+            ],
+            'hkex_derivatives' => [
+                // etc
+            ]
+        ]
+    ],
+    
+    'alioss' => [
+        'default' => 'hkex_securities',
+        'client' => [
+            'hkex_securities' => [
+                'access_key_id' => env('ALI_OSS_KEY_ID', '12345678'),
+                'access_key_secret' => env('ALI_OSS_KEY_SECRET', '12345678'),
+                'endpoint' => env('ALI_OSS_ENDPOINT', 'https://oss.aliyuncs.com'),
+                'bucket' => env('ALI_OSS_BUCKET', 'test')
             ],
             'hkex_derivatives' => [
                 // etc

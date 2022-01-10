@@ -30,3 +30,24 @@ function get_x_pos_min(int $unix_ts) :int {
     
     return $min_ts;
 }
+
+function ayers_request($content, $url, $port) {
+    $ch = curl_init();
+    
+    $requestString = json_encode($content);
+    
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_PORT, $port);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $requestString);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Content-Length: ' . strlen($requestString)
+    ]);
+    
+    $result = curl_exec($ch);
+    
+    return $result;
+}

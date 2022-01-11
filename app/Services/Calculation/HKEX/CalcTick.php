@@ -484,15 +484,17 @@ class CalcTick
             if (!empty($points) && $cloud_backup === 'alioss') {
                 ksort($points, SORT_NUMERIC);
                 $points = array_values($points);
+                
+                $content = 'price,average,chg_sum,chg_ratio,volume,turnover,total_volume,total_turnover,ts'.PHP_EOL;
+                
                 $stock_code = $points[0]['stock_code'];
                 $date = date('Y/md', $points[0]['ts']);
-                $object = "stock_charts/{$this->exchangeCode}/{$stock_code}/{$date}_trend.json";
                 
-                $content = '';
                 foreach ($points as $point) {
-                    $content .= json_encode($point). PHP_EOL;
+                    $content .= "{$point['price']},{$point['average']},{$point['chg_sum']},{$point['chg_ratio']},{$point['volume']},{$point['turnover']},{$point['total_volume']},{$point['total_turnover']},{$point['ts']}". PHP_EOL;
                 }
                 
+                $object = "stock_charts/{$this->exchangeCode}/{$stock_code}/{$date}_trend.csv";
                 AliOSSSrvc::putObject($object, $content);
             }
             

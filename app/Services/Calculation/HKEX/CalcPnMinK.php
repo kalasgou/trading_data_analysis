@@ -656,16 +656,18 @@ class CalcPnMinK
             if (!empty($charts) && $cloud_backup === 'alioss') {
                 ksort($charts, SORT_NUMERIC);
                 $charts = array_values($charts);
+                
+                $content = 'open,close,high,low,chg_sum,chg_ratio,last_close,volume,turnover,total_volume,total_turnover,ts'.PHP_EOL;
+                
                 $stock_code = $charts[0]['stock_code'];
                 $date = date('Y/md', $charts[0]['ts']);
                 $chart_type = strtolower("{$dimension}K");
-                $object = "stock_charts/{$this->exchangeCode}/{$stock_code}/{$date}_{$chart_type}.json";
                 
-                $content = '';
                 foreach ($charts as $chart) {
-                    $content .= json_encode($chart). PHP_EOL;
+                    $content .= "{$chart['open']},{$chart['close']},{$chart['high']},{$chart['low']},{$chart['chg_sum']},{$chart['chg_ratio']},{$chart['last_close']},{$chart['volume']},{$chart['turnover']},{$chart['total_volume']},{$chart['total_turnover']},{$chart['ts']}". PHP_EOL;
                 }
                 
+                $object = "stock_charts/{$this->exchangeCode}/{$stock_code}/{$date}_{$chart_type}.csv";
                 AliOSSSrvc::putObject($object, $content);
             }
             
